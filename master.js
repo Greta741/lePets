@@ -1,6 +1,7 @@
 const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
+const veislynai = require('./services/veislynuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -71,8 +72,8 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
           '<li><a href="#">Prenumerata</a></li>' +
           '<li><a href="#">Atsijungti</a></li>' +
         '</ul></li>' +
-    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Register</a></li>' +
-    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>' +
+    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
+    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
 server.route({
@@ -82,6 +83,40 @@ server.route({
         reply.view('index.html', {htmlData});
     },
 });
+
+
+/* Veislynų valdiklio routes  */
+server.route({
+    method: 'GET',
+    path: '/naujasveislynas',
+    handler: veislynai.registerView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/naujasveislynas',
+    handler: veislynai.register,
+});
+
+server.route({
+    method: 'GET',
+    path: '/redaguotiveislyna',
+    handler: veislynai.editView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/redaguotiveislyna',
+    handler: veislynai.edit,
+});
+
+server.route({
+    method: 'POST',
+    path: '/editContactInfo',
+    handler: veislynai.editContactInfo
+})
+
+/* Veislynų valdiklio routes pabaiga */
 
 server.start((err) => {
 

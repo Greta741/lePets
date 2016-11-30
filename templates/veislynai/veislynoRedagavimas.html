@@ -1,0 +1,63 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+
+<div id="main-content">
+    {{{data.errors}}}
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+            <div>
+                <label class="field" for=id">Id</label>
+                {{{data.id}}}
+            </div>
+            <div>
+                <label class="field" for="pavadinimas">Pavadinimas</label>
+                {{{data.pavadinimas}}}
+            </div>
+            <div>
+                <label class="field" for="aprasymas">Aprašymas</label>
+                {{{data.aprasymas}}}
+            </div>
+            <div>
+                <label class="field" for="veiklos_pradzia">Veiklos pradžia</label>
+                {{{data.veiklos_pradzia}}}
+            </div>
+            <div>
+                <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                {{{data.nuotraukos_url}}}
+            </div>
+            <div class="inner-form">
+                <label class="field" for="adresai">Adresai</label>
+                {{#each data.adresai}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+            <div class="inner-form">
+                <label class="field" for="telefonai">Telefonai</label>
+                {{#each data.telefonai}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+            <div class="inner-form">
+                <label class="field" for="pastai">Paštai</label>
+                {{#each data.pastai}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+
+            <input type="submit" class="submit btn btn-success" name="submit" value="Išsaugoti">
+
+    </form>
+    </div>
+</div>
+
+<script>
+    function edit(buttonId, id, type, state) {
+        $.post('./editContactInfo', {id, type, state} function(data) {
+            console.log(data);
+        });
+    }
+</script>
+
+
+</body>

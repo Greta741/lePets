@@ -1,0 +1,99 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+
+<div id="main-content">
+    {{{data.errors}}}
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+            <div>
+                <label class="field" for="pavadinimas">Pavadinimas</label>
+                {{#if data.pavadinimas}}
+                    {{{data.pavadinimas}}}
+                {{else}}
+                    <input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="">
+                {{/if}}
+            </div>
+            <div>
+                <label class="field" for="aprasymas">Aprašymas</label>
+                {{#if data.aprasymas}}
+                    {{{data.aprasymas}}}
+                {{else}}
+                    <textarea id="aprasymas" name="aprasymas" rows="15" class="form-control input-sm" required="true"></textarea>
+                {{/if}}
+            </div>
+            <div>
+                <label class="field" for="veiklos_pradzia">Veiklos pradžia</label>
+                {{#if data.veiklos_pradzia}}
+                    {{{data.veiklos_pradzia}}}
+                {{else}}
+                    <textarea id="veiklos_pradzia" name="veiklos_pradzia" rows="10" class="form-control input-sm" required="true"></textarea>
+                {{/if}}
+            </div>
+            <div>
+                <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                {{#if data.nuotraukos_url}}
+                    {{{data.nuotraukos_url}}}
+                {{else}}
+                    <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" required="true" value="">
+                {{/if}}
+            </div>
+            <div class="inner-form">
+                <label class="field" for="adresai">Adresas</label>
+                <div>
+                    <label class="field" for="salis">Šalis</label>
+                    {{#if data.salis}}
+                        {{{data.salis}}}
+                    {{else}}
+                        <input type="text" id="salis" name="salis" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+                <div>
+                    <label class="field" for="miestas">Miestas</label>
+                     {{#if data.miestas}}
+                        {{{data.miestas}}}
+                    {{else}}
+                        <input type="text" id="miestas" name="miestas" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+                <div>
+                    <label class="field" for="adresas">Adresas</label>
+                     {{#if data.adresas}}
+                        {{{data.adresas}}}
+                    {{else}}
+                        <input type="text" id="adresas" name="adresas" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+            </div>
+
+            <div class="inner-form">
+                <label class="field" for="telefonas">Telefonas</label>
+                <div>
+                    <label class="field" for="telefono_nr">Telefono numeris</label>
+                     {{#if data.telefono_nr}}
+                        {{{data.telefono_nr}}}
+                    {{else}}
+                        <input type="text" id="telefono_nr" name="telefono_nr" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+            </div>
+
+             <div class="inner-form">
+                <label class="field" for="pastas">Paštas</label>
+                <div>
+                    <label class="field" for="pasto_adresas">Elektroninio pašto adresas</label>
+                     {{#if data.pasto_adresas}}
+                        {{{data.pasto_adresas}}}
+                    {{else}}
+                        <input type="email" id="pasto_adresas" name="pasto_adresas" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+            </div>
+
+            <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
+
+    </form>
+    </div>
+</div>
+
+</body>
