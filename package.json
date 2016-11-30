@@ -1,0 +1,26 @@
+{
+  "name": "lepets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --use_strict master.js",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://greta741@github.com/Greta741/lePets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Greta741/lePets/issues"
+  },
+  "homepage": "https://github.com/Greta741/lePets#readme",
+  "dependencies": {
+    "handlebars": "^4.0.6",
+    "hapi": "^16.0.0",
+    "inert": "^4.0.3",
+    "vision": "^4.1.1"
+  }
+}
