@@ -113,8 +113,21 @@ server.route({
 server.route({
     method: 'POST',
     path: '/editContactInfo',
-    handler: veislynai.editContactInfo
-})
+    handler: veislynai.editContactInfo,
+});
+
+server.route({
+    method: 'POST',
+    path: '/deleteContactInfo',
+    handler: veislynai.deleteContactInfo,
+});
+
+server.route({
+    method: 'POST',
+    path: '/addContactInfo',
+    handler: veislynai.addContactInfo,
+});
+
 
 /* Veislynų valdiklio routes pabaiga */
 

@@ -75,7 +75,7 @@ const getMaxId = (callback) => {
 
 const insertNew = (data, maxId, callback) => {
   const today = new Date();
-  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`
+  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
   const veislynas = {
     id: ++maxId,
     pavadinimas: data.pavadinimas,
@@ -151,7 +151,7 @@ const register = (request, reply) => {
 
 const generateEditDivs = (data, adresai, telefonai, pastai) => {
   let temp = {};
-  temp.id = `<input type="text" id="id" name="id" class="form-control input-sm" value="${data.id}">`;
+  temp.id = `<input type="text" id="id" name="id" class="form-control input-sm" value="${data.id}" style="display: none">`;
   temp.pavadinimas = `<input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="${data.pavadinimas}">`;
   temp.aprasymas = `<textarea id="aprasymas" name="aprasymas" rows="15" class="form-control input-sm" required="true">${data.aprasymas}</textarea>`;
   temp.veiklos_pradzia = `<textarea id="veiklos_pradzia" name="veiklos_pradzia" rows="10" class="form-control input-sm" required="true">${data.veiklos_pradzia}</textarea>`;
@@ -161,44 +161,44 @@ const generateEditDivs = (data, adresai, telefonai, pastai) => {
   let emailDiv = [];
   let i = 0;
   adresai.forEach((item) => {
-      let line = `<div class="inner-div"><div id="error-address-${i}" class="error"></div>` +
+      let line = `<div id="address-div-${i}" class="inner-div"><div id="error-address-${i}" class="error"></div>` +
         `Šalis: ${item.salis}<br>` +
           `Miestas: ${item.miestas}<br>`+
           `Adresas: ${item.adresas}<br>`;
       if (item.rodomas) {
-        line += '<button onClick="edit()" class="btn btn-primary">Padaryti nerodomą</button>';
+        line += `<button id="address-button-${i}" onClick="edit('address-button-${i}', '${item.id}', 'address', '${item.rodomas}')" class="btn btn-primary">Padaryti nerodomą</button>`;
       } else {
-        line += '<button class="btn btn-primary">Padaryti rodomą</button>';
+        line += `<button id="address-button-${i}" onClick="edit('address-button-${i}', '${item.id}', 'address', '${item.rodomas}')" class="btn btn-primary">Padaryti rodomą</button>`;
       }        
-    line +=  '<button class="btn btn-primary">Ištrinti</button></div>';
+    line +=  `<button onclick="remove('address-div-${i}', 'error-address-${i}', '${item.id}', '${item.veislyno_id}', 'address')" class="btn btn-primary">Ištrinti</button></div>`;
     addressDiv.push(line);
     i++;
   });
 
   i = 0;
   telefonai.forEach((item) => {
-    let line = `<div class="inner-div"><div id="error-phone-${i}" class="error"></div>` +
+    let line = `<div id="phone-div-${i}" class="inner-div"><div id="error-phone-${i}" class="error"></div>` +
         `Numeris: ${item.telefono_nr}<br>`;
     if (item.rodomas) {
-        line += '<button class="btn btn-primary">Padaryti nerodomą</button>';
+        line += `<button id="phone-button-${i}" onClick="edit('phone-button-${i}', '${item.id}', 'phone', '${item.rodomas}')" class="btn btn-primary">Padaryti nerodomą</button>`;
     } else {
-        line += '<button class="btn btn-primary">Padaryti rodomą</button>';
+        line += `<button id="phone-button-${i}" onClick="edit('phone-button-${i}', '${item.id}', 'phone', '${item.rodomas}')" class="btn btn-primary">Padaryti rodomą</button>`;
     }        
-    line +=  '<button class="btn btn-primary">Ištrinti</button></div>';
+    line +=  `<button onclick="remove('phone-div-${i}', 'error-phone-${i}', '${item.id}', '${item.veislyno_id}', 'phone')"  class="btn btn-primary">Ištrinti</button></div>`;
     phoneDiv.push(line);
     i++;
   });
   
   i = 0;
   pastai.forEach((item) => {
-    let line = `<div class="inner-div"><div id="error-email-${i}" class="error"></div>` +
+    let line = `<div id="email-div-${i}" class="inner-div"><div id="error-email-${i}" class="error"></div>` +
           `Pašto adresas: ${item.pasto_adresas}<br>`;
     if (item.rodomas) {
-        line += '<button class="btn btn-primary">Padaryti nerodomą</button>';
+        line += `<button id="email-button-${i}" onClick="edit('email-button-${i}', '${item.id}', 'email', '${item.rodomas}')" class="btn btn-primary">Padaryti nerodomą</button>`;
     } else {
-        line += '<button class="btn btn-primary">Padaryti rodomą</button>';
+        line += `<button id="email-button-${i}" onClick="edit('email-button-${i}', '${item.id}', 'email', '${item.rodomas}')" class="btn btn-primary">Padaryti rodomą</button>`;
     }        
-    line +=  '<button class="btn btn-primary">Ištrinti</button></div>';
+    line +=  `<button onclick="remove('email-div-${i}', 'error-email-${i}', '${item.id}', '${item.veislyno_id}', 'email')"  class="btn btn-primary">Ištrinti</button></div>`;
     emailDiv.push(line);
     i++;
   });
@@ -232,8 +232,121 @@ const edit = (request, reply) => {
 };
 
 const editContactInfo = (request, reply) => {
-  console.log(request.payload);
+  let newState;
+  if (request.payload.state === '1') {
+    newState = false;
+  } else {
+    newState = true;
+  }
+  switch (request.payload.type) {
+    case 'address': 
+          connection.query('update adresai set rodomas = ? where id = ?',
+                [newState, request.payload.id], (err, result) => {
+                  reply('done');
+          });
+          break;
+    case 'phone':
+        connection.query('update telefonai set rodomas = ? where id = ?',
+                [newState, request.payload.id], (err, result) => {
+                  reply('done');
+          });
+          break;
+    case 'email':
+          connection.query('update pastai set rodomas = ? where id = ?',
+                [newState, request.payload.id], (err, result) => {
+                  reply('done');
+          });
+          break;
+  }
+};
 
+const deleteContactInfo = (request, reply) => {
+  switch (request.payload.type) {
+    case 'address': 
+          connection.query('select count(id) from adresai where veislyno_id = ?', request.payload.vId, (err, result) => {
+            if (result[0]['count(id)'] !== 1) {
+              connection.query('delete from adresai where id = ?', request.payload.id, (err, result) => {
+                reply('done');
+              });
+            } else {
+              reply('Cannot delete');
+            }
+          });
+          break;
+    case 'phone':
+         connection.query('select count(id) from telefonai where veislyno_id = ?', request.payload.vId, (err, result) => {
+            if (result[0]['count(id)'] !== 1) {
+              connection.query('delete from telefonai where id = ?', request.payload.id, (err, result) => {
+                reply('done');
+              });
+            } else {
+              reply('Cannot delete');
+            }
+          });
+          break;
+    case 'email':
+          connection.query('select count(id) from pastai where veislyno_id = ?', request.payload.vId, (err, result) => {
+            if (result[0]['count(id)'] !== 1) {
+              connection.query('delete from pastai where id = ?', request.payload.id, (err, result) => {
+                reply('done');
+              });
+            } else {
+              reply('Cannot delete');
+            }
+          });
+          break;
+  }
+};
+
+const addContactInfo = (request, reply) => {
+  console.log(request.payload);
+  const today = new Date();
+  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
+  const id = 11;
+   switch (request.payload.type) {
+    case 'address': 
+          const adresas = {
+            veislyno_id: id,
+            salis: request.payload['data[salis]'],
+            miestas: request.payload['data[miestas]'],
+            adresas: request.payload['data[adresas]'],
+            data: todayString,
+            rodomas: true,
+          };
+          connection.query('insert into adresai set ?', adresas, (error, result) => {
+            reply('done');
+          });
+          break;
+    case 'phone':
+          if (!/^\+?(0|[1-9]\d*)$/.test(request.payload['data[telefono_nr]'])) {
+            reply('Bad phone number');
+            return;
+          } else if (request.payload['data[telefono_nr]'].toString().length !== 9) {
+            reply('Bad phone number');
+            return;
+          }
+          const telefonas = {
+            veislyno_id: id,
+            telefono_nr: request.payload['data[telefono_nr]'],
+            data: todayString,
+            rodomas: true,
+          };
+          connection.query('insert into telefonai set ?', telefonas, (error, result) => {
+            reply('done');
+          });
+          break;
+    case 'email':
+          const pastas = {
+            veislyno_id: id,
+            pasto_adresas: request.payload['data[pasto_adresas]'],
+            data: todayString,
+            rodomas: true,
+          };
+          connection.query('insert into pastai set ?', pastas, (error, result) => {
+            reply('done');
+          });
+          break;
+  }
 };
 
 module.exports = {
@@ -242,4 +355,6 @@ module.exports = {
   editView,
   edit,
   editContactInfo,
+  deleteContactInfo,
+  addContactInfo,
 }
