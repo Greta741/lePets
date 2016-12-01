@@ -1,4 +1,29 @@
 {{{htmlData.head}}}
 <body>
 {{{htmlData.navbar}}}
+
+<div id="main-content">
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+            <div>
+                <label class="field" for="antraste">Antraštė</label>
+                <textarea id="antraste" name="antraste" rows="3" class="form-control input-sm" required="true"></textarea>
+            </div>
+            <div>
+                <label class="field" for="tekstas">Žinutė</label>
+                <textarea id="tekstas" name="tekstas" rows="15" class="form-control input-sm" required="true"></textarea>
+            </div>
+            <div>
+                <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
+            </div>
+            <div>
+                <input type="checkbox" name="ar_svarbus" value="true"> Svarbus įrašas <br>
+            </div>
+            <input type="submit" class="submit btn btn-success" name="submit" value="Skelbti">
+    </form>
+    </div>
+</div>
+
+
 </body>

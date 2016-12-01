@@ -134,6 +134,18 @@ server.route({
     handler: veislynai.showPage,
 });
 
+server.route({
+    method: 'GET',
+    path: '/note',
+    handler: veislynai.noteView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/note',
+    handler: veislynai.note,
+});
+
 
 /* Veislynų valdiklio routes pabaiga */
 

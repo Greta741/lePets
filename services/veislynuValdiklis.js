@@ -128,7 +128,6 @@ const registerView = (request, reply) => {
 };
 
 const register = (request, reply) => {
-  console.log(request.payload)
   let error;
   if (!/^\+?(0|[1-9]\d*)$/.test(request.payload.telefono_nr)) {
     error = '<div class="error">Blogas telefono numeris</div>';
@@ -299,7 +298,6 @@ const deleteContactInfo = (request, reply) => {
 };
 
 const addContactInfo = (request, reply) => {
-  console.log(request.payload);
   const today = new Date();
   const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
   const id = 11;
@@ -361,9 +359,9 @@ const generateImageDivs = (data) => {
 const showPage = (request, reply) => {
   let data = {};
   const id = request.params.id;
-  data.ownerDiv = '<div><a href="/naujasveislynas">Registruoti veislyną</a> ' +
-      '<a href="/redaguotiveislyna">Redaguoti veislyną</a> '
-      '<a href="#">Skelbti</a></div>';
+  data.ownerDiv = '<div class="main"><a href="/naujasveislynas">Registruoti veislyną</a> ' +
+      '<a href="/redaguotiveislyna">Redaguoti veislyną</a> ' +
+      '<a href="/note">Skelbti</a></div>';
   
   connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
       if (veislynas.length === 0) {
@@ -375,12 +373,11 @@ const showPage = (request, reply) => {
           connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
               connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
                 connection.query('select * from naujienos where veislyno_id = ? order by data', id, (err, naujienos) => {
-                  console.log(generateImageDivs(naujienos));
                   data.veislynas = veislynas[0];
                   data.adresai = adresai;
                   data.telefonai = telefonai;
                   data.pastai = pastai;
-                  data.naujienos = naujienos;
+                  data.naujienos = generateImageDivs(naujienos);
                   data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
                   reply.view('./veislynai/veislynas.html', {htmlData, data});
                 });
@@ -388,8 +385,30 @@ const showPage = (request, reply) => {
           });
       });
   });
-  
+};
 
+const noteView = (request, reply) => {
+  reply.view('./veislynai/naujiena.html', {htmlData});
+};
+
+const note = (request, reply) => {
+  const today = new Date();
+  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
+  const id = 11;
+  const naujiena = {
+    veislyno_id: id,
+    antraste: request.payload.antraste,
+    tekstas: request.payload.tekstas,
+    data: todayString,
+  };
+  if (request.payload.ar_svarbus) {
+    naujiena.ar_svarbus = true;
+  } else {
+    naujiena.ar_svarbus = false;
+  }
+  connection.query('insert into naujienos set ?', naujiena, (error, result) => {
+    reply.redirect('./veislynas/11');
+  }); 
 };
 
 module.exports = {
@@ -401,4 +420,6 @@ module.exports = {
   deleteContactInfo,
   addContactInfo,
   showPage,
+  noteView,
+  note,
 }
