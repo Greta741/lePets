@@ -1,6 +1,7 @@
 const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
+const veislynai = require('./services/veislynuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -37,7 +38,7 @@ server.route({
 
 let htmlData = {};
 htmlData.head = '<head><title>Le pets</title>' +
-    '<link rel="stylesheet" href="./public/CSS/styles.css">' +
+    '<link rel="stylesheet" href="../public/CSS/styles.css">' +
     '<meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
@@ -47,7 +48,7 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="#">Veislynai</a></li>' +
+      '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
@@ -58,7 +59,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
         '<ul class="dropdown-menu">' +
           '<li><a href="#">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
-          '<li><a href="#">Gybūnų ataskaita</a></li>' +
+          '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
         '</ul></li>' +
     '<li class="dropdown">' +
@@ -71,8 +72,8 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
           '<li><a href="#">Prenumerata</a></li>' +
           '<li><a href="#">Atsijungti</a></li>' +
         '</ul></li>' +
-    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Register</a></li>' +
-    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>' +
+    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
+    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
 server.route({
@@ -82,6 +83,71 @@ server.route({
         reply.view('index.html', {htmlData});
     },
 });
+
+
+/* Veislynų valdiklio routes  */
+server.route({
+    method: 'GET',
+    path: '/naujasveislynas',
+    handler: veislynai.registerView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/naujasveislynas',
+    handler: veislynai.register,
+});
+
+server.route({
+    method: 'GET',
+    path: '/redaguotiveislyna',
+    handler: veislynai.editView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/redaguotiveislyna',
+    handler: veislynai.edit,
+});
+
+server.route({
+    method: 'POST',
+    path: '/editContactInfo',
+    handler: veislynai.editContactInfo,
+});
+
+server.route({
+    method: 'POST',
+    path: '/deleteContactInfo',
+    handler: veislynai.deleteContactInfo,
+});
+
+server.route({
+    method: 'POST',
+    path: '/addContactInfo',
+    handler: veislynai.addContactInfo,
+});
+
+server.route({
+    method: 'GET',
+    path: '/veislynas/{id}',
+    handler: veislynai.showPage,
+});
+
+server.route({
+    method: 'GET',
+    path: '/note',
+    handler: veislynai.noteView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/note',
+    handler: veislynai.note,
+});
+
+
+/* Veislynų valdiklio routes pabaiga */
 
 server.start((err) => {
 

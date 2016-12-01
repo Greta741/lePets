@@ -1,0 +1,206 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+
+<div id="main-content">
+    {{{data.errors}}}
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+            <div>
+                {{{data.id}}}
+            </div>
+            <div>
+                <label class="field" for="pavadinimas">Pavadinimas</label>
+                {{{data.pavadinimas}}}
+            </div>
+            <div>
+                <label class="field" for="aprasymas">Aprašymas</label>
+                {{{data.aprasymas}}}
+            </div>
+            <div>
+                <label class="field" for="veiklos_pradzia">Veiklos pradžia</label>
+                {{{data.veiklos_pradzia}}}
+            </div>
+            <div>
+                <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                {{{data.nuotraukos_url}}}
+            </div>
+            <input type="submit" class="submit btn btn-success" name="submit" value="Išsaugoti">
+        </form>
+            <div id="address-div" class="inner-form">
+                <label class="field" for="adresai">Adresai</label>
+                {{#each data.adresai}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addressModal">Pridėti adresą</button>
+
+            <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addressModalLabel">Pridėti adresą</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="address-error" class="error"></div>
+                    <div>
+                        <label class="field" for="salis">Šalis</label>
+                        <input type="text" id="salis" name="salis" class="form-control input-sm" required="true" value="">
+                    </div>
+                    <div>
+                        <label class="field" for="miestas">Miestas</label>
+                        <input type="text" id="miestas" name="miestas" class="form-control input-sm" required="true" value="">
+                    </div>
+                    <div>
+                        <label class="field" for="adresas">Adresas</label>
+                        <input type="text" id="adresas" name="adresas" class="form-control input-sm" required="true" value="">
+                    </div>
+
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Atšaukti</button>
+                    <button type="button" onClick="addNew('address-div', 'address')" class="btn btn-success">Išsaugoti</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="inner-form">
+                <label class="field" for="telefonai">Telefonai</label>
+                {{#each data.telefonai}}
+                    {{{this}}}
+                {{/each}}
+            </div>
+
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#phoneModal">Pridėti telefoną</button>
+
+            <div class="modal fade" id="phoneModal" tabindex="-1" role="dialog" aria-labelledby="phoneModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="phoneModalLabel">Pridėti telefoną</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="phone-error" class="error"></div>
+                    <div>
+                        <label class="field" for="telefono_nr">Telefono nr</label>
+                        <input type="text" id="telefono_nr" name="telefono_nr" class="form-control input-sm" required="true" value="">
+                    </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Atšaukti</button>
+                    <button type="button" onClick="addNew('phone-div', 'phone')" class="btn btn-success">Išsaugoti</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="inner-form">
+                <label class="field" for="pastai">Paštai</label>
+                {{#each data.pastai}}
+                    {{{this}}}
+                {{/each}}
+            </div>  
+
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#emailModal">Pridėti paštą</button>
+
+            <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="emailModalLabel">Pridėti paštą</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="email-error" class="error"></div>
+                    <div>
+                        <label class="field" for="pasto_adresas">Elektroninio pašto adresas</label>
+                        <input type="email" id="pasto_adresas" name="pasto_adresas" class="form-control input-sm" required="true" value="">
+                    </div>
+
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Atšaukti</button>
+                    <button type="button" onClick="addNew('email-div', 'email')" class="btn btn-success">Išsaugoti</button>
+                </div>
+                </div>
+            </div>
+            </div>
+            
+    </div>
+</div>
+
+<script>
+    function edit(buttonId, id, type, state) {
+        $.post('./editContactInfo', {id, type, state}, function (result) {
+            if (result === 'done') {
+                var newState;
+                var element = document.getElementById(buttonId);
+                if (state === '1') {
+                    newState = 0;
+                    element.innerText = 'Padaryti rodomą';
+                } else {
+                    newState = 1;
+                    element.innerText = 'Padaryti nerodomą';
+                }
+                element.removeAttribute('onclick');
+                element.setAttribute('onclick', `edit('${buttonId}', '${id}', '${type}', '${newState}')`);
+            }
+        });
+    }
+
+    function remove(divId, errorId, id, vId, type) {
+        $.post('./deleteContactInfo', {id, vId, type}, function (result) {
+            console.log(result);
+            if (result === 'done') {
+                document.getElementById(divId).innerHTML = '';
+            }
+            else {
+                document.getElementById(errorId).innerHTML = 'Negalima ištrinti, turi būti nurodytas bent vienas.';
+            }
+        });
+    }
+
+    function addNew(divId, type) {
+        var data = {};
+         switch (type) {
+            case 'address': 
+                data.salis = document.getElementById('salis').value;
+                data.miestas = document.getElementById('miestas').value;
+                data.adresas = document.getElementById('adresas').value;
+                if (data.salis === '' || data.miestas === '' || data.adresas === '') {
+                    document.getElementById('address-error').innerHTML = 'Įveskite visus laukus.';
+                    return;
+                }
+                break;
+            case 'phone':
+                data.telefono_nr = document.getElementById('telefono_nr').value;
+                if (data.telefono_nr === '') {
+                    document.getElementById('phone-error').innerHTML = 'Įveskite telefono numerį.';
+                    return;
+                }
+                break;
+            case 'email':
+                data.pasto_adresas = document.getElementById('pasto_adresas').value;
+                if (data.pasto_adresas === '' || data.pasto_adresas.indexOf('@') === -1) {
+                    document.getElementById('email-error').innerHTML = 'Blogai įvestas pašto adresas.';
+                    return;
+                }
+                break;
+        }
+        $.post('./addContactInfo', {type, data}, function (result) {
+            console.log(result);
+            if (result === 'done') {
+                location.reload();
+            }
+            else {
+                document.getElementById('phone-error').innerHTML = 'Blogai įvestas telefono numeris.';
+            }
+        });
+    }
+</script>
+
+</body>
