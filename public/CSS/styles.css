@@ -13,3 +13,49 @@
 .btn {
     margin: 5px;
 }
+
+.main {
+    margin: auto;
+    margin-bottom: 10px;
+    width: 80%;
+    border: solid 1px lightgray;
+    padding: 10px;
+}
+
+.contacts {
+    display: inline-block;
+    width: 30%;
+    margin: auto;
+}
+
+.contact-div {
+    border: solid 1px lightgray;
+    margin-bottom: -1px;
+    padding: 3px;
+}
+
+.v-image {
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+div {
+     word-break: break-all;
+}
+
+.note {
+    background-color: #f2f2f2;
+    margin: 5px;
+}
+
+.note-image {
+    width: 30%;
+    display: inline-block;
+    margin: auto;
+}
+.note-content-image {
+    width: 65%;
+    display: inline-block;
+    margin: auto;
+}

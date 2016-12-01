@@ -38,7 +38,7 @@ server.route({
 
 let htmlData = {};
 htmlData.head = '<head><title>Le pets</title>' +
-    '<link rel="stylesheet" href="./public/CSS/styles.css">' +
+    '<link rel="stylesheet" href="../public/CSS/styles.css">' +
     '<meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
@@ -48,7 +48,7 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="#">Veislynai</a></li>' +
+      '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
@@ -59,7 +59,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
         '<ul class="dropdown-menu">' +
           '<li><a href="#">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
-          '<li><a href="#">Gybūnų ataskaita</a></li>' +
+          '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
         '</ul></li>' +
     '<li class="dropdown">' +
@@ -126,6 +126,12 @@ server.route({
     method: 'POST',
     path: '/addContactInfo',
     handler: veislynai.addContactInfo,
+});
+
+server.route({
+    method: 'GET',
+    path: '/veislynas/{id}',
+    handler: veislynai.showPage,
 });
 
 

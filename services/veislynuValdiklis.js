@@ -13,7 +13,7 @@ connection.connect();
 
 let htmlData = {};
 htmlData.head = '<head><title>Le pets</title>' +
-    '<link rel="stylesheet" href="./public/CSS/styles.css">' +
+    '<link rel="stylesheet" href="../public/CSS/styles.css">' +
     '<meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width, initial-scale=1">' +
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
@@ -23,7 +23,7 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="#">Veislynai</a></li>' +
+      '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
@@ -34,7 +34,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
         '<ul class="dropdown-menu">' +
           '<li><a href="#">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
-          '<li><a href="#">Gybūnų ataskaita</a></li>' +
+          '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
         '</ul></li>' +
     '<li class="dropdown">' +
@@ -349,6 +349,49 @@ const addContactInfo = (request, reply) => {
   }
 };
 
+const generateImageDivs = (data) => {
+  data.forEach((item) => {
+    if (item.nuotraukos_url) {
+      item.nuotraukos_url = `<img class="note-image" src="${item.nuotraukos_url}" alt="img"></img>`;
+    }
+  });
+  return data;
+};
+
+const showPage = (request, reply) => {
+  let data = {};
+  const id = request.params.id;
+  data.ownerDiv = '<div><a href="/naujasveislynas">Registruoti veislyną</a> ' +
+      '<a href="/redaguotiveislyna">Redaguoti veislyną</a> '
+      '<a href="#">Skelbti</a></div>';
+  
+  connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
+      if (veislynas.length === 0) {
+        data.message = 'Nepavyko rasti veislyno.';
+        reply.view('./veislynai/veislynas.html', {htmlData, data});
+        return;
+      }
+      connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
+          connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
+              connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
+                connection.query('select * from naujienos where veislyno_id = ? order by data', id, (err, naujienos) => {
+                  console.log(generateImageDivs(naujienos));
+                  data.veislynas = veislynas[0];
+                  data.adresai = adresai;
+                  data.telefonai = telefonai;
+                  data.pastai = pastai;
+                  data.naujienos = naujienos;
+                  data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                  reply.view('./veislynai/veislynas.html', {htmlData, data});
+                });
+              });
+          });
+      });
+  });
+  
+
+};
+
 module.exports = {
   registerView,
   register,
@@ -357,4 +400,5 @@ module.exports = {
   editContactInfo,
   deleteContactInfo,
   addContactInfo,
+  showPage,
 }
