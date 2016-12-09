@@ -23,7 +23,7 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="/veislynas/11">Veislynai</a></li>' +
+      '<li><a href="/veislynas">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
@@ -32,7 +32,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<li class="dropdown">' +
         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
         '<ul class="dropdown-menu">' +
-          '<li><a href="#">Veislynų ataskaita</a></li>' +
+          '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
           '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
@@ -52,18 +52,26 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '</ul></div></nav>';
 
 
+const generateTypeSelect = (data) => {
+  let temp = '';
+  data.forEach((tipas) => {
+    temp += `<input type="radio" name="tipas" value="${tipas.id}" required="true"> ${tipas.gyvuno_tipas}<br>`;
+  });
+  return temp;
+};
 
-const generateDivs = (data) => {
+const generateDivs = (data, types) => {
   let temp = {};
   temp.pavadinimas = `<input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="${data.pavadinimas}">`;
   temp.aprasymas = `<textarea id="aprasymas" name="aprasymas" rows="15" class="form-control input-sm" required="true">${data.aprasymas}</textarea>`;
   temp.veiklos_pradzia = `<textarea id="veiklos_pradzia" name="veiklos_pradzia" rows="10" class="form-control input-sm" required="true">${data.veiklos_pradzia}</textarea>`;
-  temp.nuotraukos_url = `<input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" required="true" value="${data.nuotraukos_url}">`;
+  temp.nuotraukos_url = `<input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="${data.nuotraukos_url}">`;
   temp.salis = `<input type="text" id="salis" name="salis" class="form-control input-sm" required="true" value="${data.salis}">`;
   temp.miestas = `<input type="text" id="miestas" name="miestas" class="form-control input-sm" required="true" value="${data.miestas}">`;
   temp.adresas = `<input type="text" id="adresas" name="adresas" class="form-control input-sm" required="true" value="${data.adresas}">`;
   temp.telefono_nr = `<input type="text" id="telefono_nr" name="telefono_nr" class="form-control input-sm" required="true" value="${data.telefono_nr}">`;
   temp.pasto_adresas = `<input type="email" id="pasto_adresas" name="pasto_adresas" class="form-control input-sm" required="true" value="${data.pasto_adresas}">`;
+  temp.tipas = generateTypeSelect(types);
   return temp;
 };
 
@@ -74,19 +82,16 @@ const getMaxId = (callback) => {
 };
 
 const insertNew = (data, maxId, callback) => {
-  const today = new Date();
-  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
   const veislynas = {
     id: ++maxId,
     pavadinimas: data.pavadinimas,
     aprasymas: data.aprasymas,
     veiklos_pradzia: data.veiklos_pradzia,
     nuotraukos_url: data.nuotraukos_url,
-    registracijos_data: todayString,
-    paskutinio_aktyvumo_data: todayString,
     ar_patvirtintas: false,
     ar_istrintas: false,
     gyvunu_skaicius: 0,
+    tipo_id: data.tipas,
   };
 
   connection.query('insert into veislynai set ?', veislynas, (err, result) => {
@@ -98,7 +103,6 @@ const insertNew = (data, maxId, callback) => {
     salis: data.salis,
     miestas: data.miestas,
     adresas: data.adresas,
-    data: todayString,
     rodomas: true,
   };
 
@@ -107,7 +111,6 @@ const insertNew = (data, maxId, callback) => {
   const telefonas = {
     veislyno_id: maxId,
     telefono_nr: data.telefono_nr,
-    data: todayString,
     rodomas: true,
   };
 
@@ -116,7 +119,6 @@ const insertNew = (data, maxId, callback) => {
   const pastas = {
     veislyno_id: maxId,
     pasto_adresas: data.pasto_adresas,
-    data: todayString,
     rodomas: true,
   };
 
@@ -124,10 +126,21 @@ const insertNew = (data, maxId, callback) => {
 };
 
 const registerView = (request, reply) => {
-  reply.view('./veislynai/veislynoRegistracija.html', {htmlData});
+  // patikrinti ar prisijungęs
+  // iš db pasiimti tipus
+  const data = {
+    tipas: [
+      {id: 1,
+      gyvuno_tipas: 'Katė'},
+      {id: 2,
+      gyvuno_tipas: 'Šuo'},
+    ]
+  };
+  reply.view('./veislynai/veislynoRegistracija.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
 };
 
 const register = (request, reply) => {
+  // patikrinti ar prisijungęs
   let error;
   if (!/^\+?(0|[1-9]\d*)$/.test(request.payload.telefono_nr)) {
     error = '<div class="error">Blogas telefono numeris</div>';
@@ -135,8 +148,16 @@ const register = (request, reply) => {
     error = '<div class="error">Blogas telefono numeris</div>';
   }
   if (error) {
-    const data = generateDivs(request.payload);
-    data.errors = error;
+    // iš db pasiimti tipus jei negalima išsaugot
+    const types = [
+      {id: 1,
+      gyvuno_tipas: 'Katė'},
+      {id: 2,
+      gyvuno_tipas: 'Šuo'},
+    ];
+    const data = generateDivs(request.payload, types);
+    data.errors = error; 
+
     reply.view('./veislynai/veislynoRegistracija.html', {htmlData, data});
   } else {
     getMaxId((maxId) => {
@@ -148,13 +169,19 @@ const register = (request, reply) => {
   }
 };
 
+const updateTime = (id) => {
+  const date = new Date();
+  connection.query('update veislynai set paskutinio_aktyvumo_data = ? where id = ?',
+    [date, id]);
+};
+
 const generateEditDivs = (data, adresai, telefonai, pastai) => {
   let temp = {};
   temp.id = `<input type="text" id="id" name="id" class="form-control input-sm" value="${data.id}" style="display: none">`;
   temp.pavadinimas = `<input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="${data.pavadinimas}">`;
   temp.aprasymas = `<textarea id="aprasymas" name="aprasymas" rows="15" class="form-control input-sm" required="true">${data.aprasymas}</textarea>`;
   temp.veiklos_pradzia = `<textarea id="veiklos_pradzia" name="veiklos_pradzia" rows="10" class="form-control input-sm" required="true">${data.veiklos_pradzia}</textarea>`;
-  temp.nuotraukos_url = `<input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" required="true" value="${data.nuotraukos_url}">`;
+  temp.nuotraukos_url = `<input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="${data.nuotraukos_url}">`;
   let addressDiv = [];
   let phoneDiv = [];
   let emailDiv = [];
@@ -208,6 +235,7 @@ const generateEditDivs = (data, adresai, telefonai, pastai) => {
 };
 
 const editView = (request, reply) => {
+  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
   const id = 11;
   connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
       connection.query('select * from adresai where veislyno_id = ?', id, (err, adresai) => {
@@ -222,12 +250,14 @@ const editView = (request, reply) => {
 };
 
 const edit = (request, reply) => {
+  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
   connection.query('update veislynai set pavadinimas = ?, aprasymas = ?, veiklos_pradzia = ?, nuotraukos_url = ? where id = ?',
         [request.payload.pavadinimas, request.payload.aprasymas, request.payload.veiklos_pradzia,
         request.payload.nuotraukos_url, request.payload.id], (err, result) => {
           const data = {message: '<div class="message">Išsaugota</message>'}
           reply.view('./veislynai/veislynas.html', {htmlData, data});
         });
+  updateTime(id);
 };
 
 const editContactInfo = (request, reply) => {
@@ -257,6 +287,7 @@ const editContactInfo = (request, reply) => {
           });
           break;
   }
+  updateTime(id);
 };
 
 const deleteContactInfo = (request, reply) => {
@@ -295,11 +326,10 @@ const deleteContactInfo = (request, reply) => {
           });
           break;
   }
+  updateTime(id);
 };
 
 const addContactInfo = (request, reply) => {
-  const today = new Date();
-  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
   const id = 11;
    switch (request.payload.type) {
     case 'address': 
@@ -308,7 +338,6 @@ const addContactInfo = (request, reply) => {
             salis: request.payload['data[salis]'],
             miestas: request.payload['data[miestas]'],
             adresas: request.payload['data[adresas]'],
-            data: todayString,
             rodomas: true,
           };
           connection.query('insert into adresai set ?', adresas, (error, result) => {
@@ -326,7 +355,6 @@ const addContactInfo = (request, reply) => {
           const telefonas = {
             veislyno_id: id,
             telefono_nr: request.payload['data[telefono_nr]'],
-            data: todayString,
             rodomas: true,
           };
           connection.query('insert into telefonai set ?', telefonas, (error, result) => {
@@ -337,7 +365,6 @@ const addContactInfo = (request, reply) => {
           const pastas = {
             veislyno_id: id,
             pasto_adresas: request.payload['data[pasto_adresas]'],
-            data: todayString,
             rodomas: true,
           };
           connection.query('insert into pastai set ?', pastas, (error, result) => {
@@ -345,35 +372,81 @@ const addContactInfo = (request, reply) => {
           });
           break;
   }
+  updateTime(id);
 };
 
-const generateImageDivs = (data) => {
+const formatDate = (data) => {
+  const date = new Date(data);
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+};
+
+const generateImageDivs = (data, canDelete) => {
   data.forEach((item) => {
     if (item.nuotraukos_url) {
       item.nuotraukos_url = `<img class="note-image" src="${item.nuotraukos_url}" alt="img"></img>`;
+    }
+    item.data = formatDate(item.data);
+    if (canDelete) {
+      item.deleteLink = `<a href="./deleteNote/${item.id}" class="delete-note">Ištrinti</a>`;
     }
   });
   return data;
 };
 
-const showPage = (request, reply) => {
-  let data = {};
+const showOwnerPage = (request, reply) => {
+  const data = {};
+  const id = 11;
+  // jei sausainiukas neturi veislyno id
+  // data.ownerDiv = '<div class="main"><a href="/naujasveislynas">Registruoti veislyną</a> ';
+  // reply.view('./veislynai/veislynas.html', {htmlData, data});
+
+  // jei sausiuniukas turi veislyno id
+  data.ownerDiv = '<div class="main"><a href="/redaguotiveislyna">Redaguoti veislyną</a> ' +
+        '<a href="/note">Skelbti</a> ' +
+        `<a href="./remove/${id}">Ištrinti</a></div>`;
+    connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
+        if (veislynas.length === 0) {
+          data.message = 'Nepavyko rasti veislyno.';
+          reply.view('./veislynai/veislynas.html', {htmlData, data});
+          return;
+        }
+        connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
+            connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
+                connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
+                  connection.query('select * from naujienos where veislyno_id = ? order by data DESC', id, (err, naujienos) => {
+                    data.veislynas = veislynas[0];
+                    data.veislynas.registracijos_data = formatDate(data.veislynas.registracijos_data);
+                    data.veislynas.paskutinio_aktyvumo_data = formatDate(data.veislynas.paskutinio_aktyvumo_data);
+                    data.adresai = adresai;
+                    data.telefonai = telefonai;
+                    data.pastai = pastai;
+                    data.naujienos = generateImageDivs(naujienos, true);
+                    data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                    reply.view('./veislynai/veislynas.html', {htmlData, data});
+                  });
+                });
+            });
+        });
+    });
+    updateTime(id);
+};
+
+const showPageById = (request, reply) => {
   const id = request.params.id;
-  data.ownerDiv = '<div class="main"><a href="/naujasveislynas">Registruoti veislyną</a> ' +
-      '<a href="/redaguotiveislyna">Redaguoti veislyną</a> ' +
-      '<a href="/note">Skelbti</a></div>';
-  
-  connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
+  let data = {};
+  connection.query('select * from veislynai where id = ? and ar_istrintas <> true and ar_patvirtintas = true', id, (err, veislynas) => {
       if (veislynas.length === 0) {
-        data.message = 'Nepavyko rasti veislyno.';
+        data.message = '<div class="message">Nepavyko rasti veislyno.</div>';
         reply.view('./veislynai/veislynas.html', {htmlData, data});
         return;
       }
       connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
           connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
               connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
-                connection.query('select * from naujienos where veislyno_id = ? order by data', id, (err, naujienos) => {
+                connection.query('select * from naujienos where veislyno_id = ? order by data DESC', id, (err, naujienos) => {
                   data.veislynas = veislynas[0];
+                  data.veislynas.registracijos_data = formatDate(data.veislynas.registracijos_data);
+                  data.veislynas.paskutinio_aktyvumo_data = formatDate(data.veislynas.paskutinio_aktyvumo_data);
                   data.adresai = adresai;
                   data.telefonai = telefonai;
                   data.pastai = pastai;
@@ -385,21 +458,30 @@ const showPage = (request, reply) => {
           });
       });
   });
+}
+
+const showPage = (request, reply) => {
+  // jei id, rodyti to id veislyną
+  if (request.params.id) {
+    showPageById(request, reply);
+  } else { // jei be id, rodyti kūrimą/savo
+    // patikrinti ar prisijungęs
+    showOwnerPage(request, reply);
+  }
 };
 
 const noteView = (request, reply) => {
+  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
   reply.view('./veislynai/naujiena.html', {htmlData});
 };
 
 const note = (request, reply) => {
-  const today = new Date();
-  const todayString = `${today.getFullYear()}-${today.getMonth()}-${today.getDay()}`;
+  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
   const id = 11;
   const naujiena = {
     veislyno_id: id,
     antraste: request.payload.antraste,
     tekstas: request.payload.tekstas,
-    data: todayString,
   };
   if (request.payload.ar_svarbus) {
     naujiena.ar_svarbus = true;
@@ -407,8 +489,80 @@ const note = (request, reply) => {
     naujiena.ar_svarbus = false;
   }
   connection.query('insert into naujienos set ?', naujiena, (error, result) => {
-    reply.redirect('./veislynas/11');
+    reply.redirect('./veislynas');
   }); 
+  updateTime(id);
+};
+
+const deleteNote = (request, reply) => {
+  // patikrinti ar prisijungusio vartotojo veislyno id sutampa su žinutės veislyno id
+  const id = 11;
+   connection.query('select veislynai.id from veislynai, naujienos where veislynai.id = naujienos.veislyno_id and naujienos.id = ?', request.params.id, (err, result) => {
+     if (id == result[0].id) {
+        connection.query('delete from naujienos where id = ?', request.params.id, (err, result) => {
+          reply.redirect('../veislynas');
+        });
+     } else {
+       reply.view('./message.html', {htmlData, data: {message: '<div class="message">Negalima.</div>'}})
+     }
+   });
+   updateTime(id);
+};
+
+const remove = (request, reply) => {
+  // patikrinti ar prisijungusio vartotojo veislyno id sutampa su nurodytu id
+  const id = 11;
+  connection.query('update veislynai set ar_istrintas = ? where id = ?', [true, id], (err, result) => {
+    reply.view('./message.html', {htmlData, data: {message: '<div class="message">Ištrinta</div>'}});
+  });
+
+};
+
+const reportView = (request, reply) => {
+  // Patikrinti ar administratorius ir paimti iš db tipus
+  const data = {
+    tipas: [
+      {id: 1,
+      gyvuno_tipas: 'Katė'},
+      {id: 2,
+      gyvuno_tipas: 'Šuo'},
+    ]
+  };
+  reply.view('./veislynai/ataskaita.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
+};
+
+const report = (request, reply) => {
+  // Patikrinti ar administratorius ir paimti iš db duomenis
+  const isivaizduojamiDuomenys = [
+    {
+      pavadinimas: 'Grumpy cat veislynas',
+      savininkas: 'Pats grumpy cat',
+      tipas: 'Katės',
+      registracijos_data: '2016-10-01',
+      paskutinio_aktyvumo_data: '2016-12-09',
+      gyvunu_skaicius: 10,
+      parduodamu_skaicius: 5,
+    },
+    {
+      pavadinimas: 'Grumpy cat veislynas 2',
+      savininkas: 'Pats grumpy cat',
+      tipas: 'Katės',
+      registracijos_data: '2016-10-01',
+      paskutinio_aktyvumo_data: '2016-12-09',
+      gyvunu_skaicius: 10,
+      parduodamu_skaicius: 5,
+    },
+    {
+      pavadinimas: 'Grumpy cat veislynas 3',
+      savininkas: 'Pats grumpy cat',
+      tipas: 'Katės',
+      registracijos_data: '2016-10-01',
+      paskutinio_aktyvumo_data: '2016-12-09',
+      gyvunu_skaicius: 10,
+      parduodamu_skaicius: 5,
+    },
+  ];
+  reply.view('./veislynai/ataskaita.html', {htmlData, data: {veislynai: isivaizduojamiDuomenys}});
 };
 
 module.exports = {
@@ -422,4 +576,8 @@ module.exports = {
   showPage,
   noteView,
   note,
+  deleteNote,
+  remove,
+  reportView,
+  report,
 }
