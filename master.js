@@ -48,7 +48,7 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="/veislynas/11">Veislynai</a></li>' +
+      '<li><a href="/veislynas">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
@@ -57,7 +57,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<li class="dropdown">' +
         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
         '<ul class="dropdown-menu">' +
-          '<li><a href="#">Veislynų ataskaita</a></li>' +
+          '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
           '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
@@ -83,7 +83,6 @@ server.route({
         reply.view('index.html', {htmlData});
     },
 });
-
 
 /* Veislynų valdiklio routes  */
 server.route({
@@ -130,7 +129,7 @@ server.route({
 
 server.route({
     method: 'GET',
-    path: '/veislynas/{id}',
+    path: '/veislynas/{id?}',
     handler: veislynai.showPage,
 });
 
@@ -144,6 +143,30 @@ server.route({
     method: 'POST',
     path: '/note',
     handler: veislynai.note,
+});
+
+server.route({
+    method: 'GET',
+    path: '/deleteNote/{id}',
+    handler: veislynai.deleteNote,
+});
+
+server.route({
+    method: 'GET',
+    path: '/remove/{id}',
+    handler: veislynai.remove,
+});
+
+server.route({
+    method: 'GET',
+    path: '/ataskaitos/veislynai',
+    handler: veislynai.reportView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/ataskaitos/veislynai',
+    handler: veislynai.report,
 });
 
 
