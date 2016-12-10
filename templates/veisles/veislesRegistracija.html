@@ -1,0 +1,44 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+<script>
+    const veisForm = () => {
+        document.getElementById("veis-form").outerHTML='';
+    }
+</script>
+<div id="main-content">
+    {{{data.errors}}}
+    
+    <div class="simple-form" id="formContainer">
+        <button class="btn btn-default" onclick="veisForm()">Registruoti veislę</button>
+        <button class="btn btn-default" >Registruoti poveislę</button>
+	    <form action="" method="post" id="veis-form">
+            <div>
+                <label class="field" for="gyv-tip-radio">Gyvūno tipas</label>
+                <div class="radio" id="gyv-tip-radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+                        šuo
+                    </label>
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                        katė
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="field" for="pavadinimas">Veislės pavadinimas</label>
+                {{#if data.pavadinimas}}
+                    {{{data.pavadinimas}}}
+                {{else}}
+                    <input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="">
+                {{/if}}
+            </div>
+            <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
+
+    </form>
+    </div>
+</div>
+
+</body>

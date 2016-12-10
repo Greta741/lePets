@@ -2,6 +2,7 @@ const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
 const veislynai = require('./services/veislynuValdiklis.js');
+const veisles = require('./services/veisliuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -50,7 +51,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
-      '<li><a href="#">Veislės</a></li>' +
+      '<li><a href="/naujaveisle">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
@@ -84,6 +85,14 @@ server.route({
     },
 });
 
+/* Veislių valdiklio routes  */
+server.route({
+    method: 'GET',
+    path: '/naujaveisle',
+    handler: veisles.registerView,
+});
+
+/* Veislių valdiklio routes pabaiga  */
 
 /* Veislynų valdiklio routes  */
 server.route({
