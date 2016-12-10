@@ -15,6 +15,10 @@
                 {{/if}}
             </div>
             <div>
+                <label class="field" for="tipas">Tipas</label><br>
+                {{{data.tipas}}}
+            </div>
+            <div>
                 <label class="field" for="aprasymas">Aprašymas</label>
                 {{#if data.aprasymas}}
                     {{{data.aprasymas}}}
@@ -35,7 +39,7 @@
                 {{#if data.nuotraukos_url}}
                     {{{data.nuotraukos_url}}}
                 {{else}}
-                    <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" required="true" value="">
+                    <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
                 {{/if}}
             </div>
             <div class="inner-form">

@@ -59,3 +59,12 @@ div {
     display: inline-block;
     margin: auto;
 }
+
+.message {
+    margin: auto;
+    width: 30%;
+}
+
+.delete-note {
+    float: right;
+}
