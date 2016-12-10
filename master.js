@@ -51,7 +51,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
-      '<li><a href="/naujaveisle">Veislės</a></li>' +
+      '<li><a href="/gyvtipopas">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
@@ -86,6 +86,11 @@ server.route({
 });
 
 /* Veislių valdiklio routes  */
+server.route({
+    method: 'GET',
+    path: '/gyvtipopas',
+    handler: veisles.chooseTypeView,
+});
 server.route({
     method: 'GET',
     path: '/naujaveisle',

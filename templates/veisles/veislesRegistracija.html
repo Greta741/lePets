@@ -1,44 +1,61 @@
 {{{htmlData.head}}}
 <body>
-{{{htmlData.navbar}}}
-<script>
-    const veisForm = () => {
-        document.getElementById("veis-form").outerHTML='';
-    }
-</script>
-<div id="main-content">
-    {{{data.errors}}}
-    
-    <div class="simple-form" id="formContainer">
-        <button class="btn btn-default" onclick="veisForm()">Registruoti veislę</button>
-        <button class="btn btn-default" >Registruoti poveislę</button>
-	    <form action="" method="post" id="veis-form">
-            <div>
-                <label class="field" for="gyv-tip-radio">Gyvūno tipas</label>
-                <div class="radio" id="gyv-tip-radio">
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
-                        šuo
-                    </label>
-                    <label>
-                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                        katė
-                    </label>
+    {{{htmlData.navbar}}}
+    <div id="main-content">
+        {{{data.errors}}}
+        <div class="simple-form" id="formContainer">
+            <form action="" method="post" id="veis-form">
+                <div>
+                    <label class="field" for="gyv-tip-radio">Gyvūno tipas</label>
+                    <div class="radio" id="gyv-tip-radio">
+                        <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+                            šuo
+                        </label>
+                        <label>
+                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                            katė
+                        </label>
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label class="field" for="pavadinimas">Veislės pavadinimas</label>
-                {{#if data.pavadinimas}}
-                    {{{data.pavadinimas}}}
-                {{else}}
-                    <input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="">
-                {{/if}}
-            </div>
-            <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
+                <div>
+                    <label class="field" for="pavadinimas">Veislės pavadinimas</label>
+                    {{#if data.pavadinimas}}
+                        {{{data.pavadinimas}}}
+                    {{else}}
+                        <input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="">
+                    {{/if}}
+                </div>
+                <div>
+                    <label class="field" for="gyv-dyd-select">Gyvūno dydis</label>
+                    <select class="form-control" id="gyv-dyd-select">
+                        <option value="xs">XS</option>
+                        <option value="s">S</option>
+                        <option value="m">M</option>
+                        <option value="l">L</option>
+                        <option value="xl">XL</option>
+                        <option value="2xl">2XL</option>
+                        <option value="3xl">3XL</option>
+                        <option value="4xl">4XL</option>
+                    </select>
+                </div>
 
-    </form>
+                <div>
+                    <label class="field" for="aprasymas">Veislės aprašymas</label>
+                    <textarea class="form-control" id="aprasymas" rows="4"></textarea>
+                </div>
+
+                <div>
+                    <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                    {{#if data.nuotraukos_url}}
+                        {{{data.nuotraukos_url}}}
+                    {{else}}
+                        <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
+                    {{/if}}
+                </div>
+                <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
+            </form>
+        </div>
     </div>
-</div>
-
 </body>

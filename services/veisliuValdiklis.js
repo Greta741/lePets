@@ -22,7 +22,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
-      '<li><a href="/naujaveisle">Veislės</a></li>' +
+      '<li><a href="/gyvtipopas">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
@@ -48,10 +48,15 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
+const chooseTypeView = (request, reply) => {
+  reply.view('./veisles/veisTipoPasirinkimas.html', {htmlData});
+};
+
 const registerView = (request, reply) => {
   reply.view('./veisles/veislesRegistracija.html', {htmlData});
 };
 
 module.exports = {
+  chooseTypeView,
   registerView,
 }
