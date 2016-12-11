@@ -4,7 +4,6 @@
 
 <script>
     const register = () => {
-        console.log("yay");
         var data = {};
         data.username = document.getElementById('username').value;
         data.email = document.getElementById('email').value;
@@ -25,7 +24,6 @@
             document.getElementById('register-error').innerHTML = "Blogai suvesti duomenys";
         }
     }
-
 </script>
 
 <div id="registerModal" class="modal fade" role="dialog">
@@ -67,17 +65,15 @@
                 <h4 class="modal-title">Prisijungimas</h4>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="username-login">Vartotojo vardas:</label>
-                        <input type="text" class="form-control" id="username-login" required="">
-                    </div>
-                    <div class="form-group">
-                        <label for="pwd-login">Slaptažodis:</label>
-                        <input type="password" class="form-control" id="pwd-login" required="">
-                    </div>
-                    <button style="float: left" type="submit" class="btn btn-success">Prisijungti</button>
-                </form>
+                <div class="form-group">
+                    <label for="username-login">Vartotojo vardas:</label>
+                    <input type="text" class="form-control" id="username-login" required="">
+                </div>
+                <div class="form-group">
+                    <label for="pwd-login">Slaptažodis:</label>
+                    <input type="password" class="form-control" id="pwd-login" required="">
+                </div>
+                <button type="submit" class="btn btn-success">Prisijungti</button>
             </div>
         </div>
     </div>

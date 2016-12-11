@@ -167,6 +167,7 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 
 CREATE TABLE `vartotojai` (
   `id` int(11) NOT NULL,
+  `prisijung_id` int(11) DEFAULT NULL,
   `vartotojo_vardas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
   `el_pastas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
   `telefono_nr` varchar(20) COLLATE utf8_lithuanian_ci DEFAULT NULL,
@@ -183,6 +184,17 @@ CREATE TABLE `vartotojai` (
 -- Sukurta duomenų kopija lentelei `vartotojai`
 --
 
+CREATE TABLE `prisijungimo_duomenys` (
+  `id` int(11) NOT NULL,
+  `slaptazodis` varchar(200) COLLATE utf8_lithuanian_ci NOT NULL,
+  `paskutinio_aktyvumo_laikas` datetime DEFAULT NULL,
+  `prieigos_raktas` varchar(200) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `busena` varchar(20) COLLATE utf8_lithuanian_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `vartotojai`
+--
 
 
 -- --------------------------------------------------------
@@ -232,6 +244,12 @@ ALTER TABLE `vartotojai`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `prisijungimo_duomenys`
+--
+ALTER TABLE `prisijungimo_duomenys`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -262,6 +280,11 @@ ALTER TABLE `telefonai`
 ALTER TABLE `vartotojai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
+--
+-- AUTO_INCREMENT for table `prisijungimo_duomenys`
+--
+ALTER TABLE `prisijungimo_duomenys`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 
 --
@@ -291,6 +314,12 @@ ALTER TABLE `pastai`
 --
 ALTER TABLE `telefonai`
   ADD CONSTRAINT `telefonai_ibfk_1` FOREIGN KEY (`veislyno_id`) REFERENCES `veislynai` (`id`);
+
+--
+-- Apribojimai lentelei `vartotojai`
+--
+ALTER TABLE `vartotojai`
+  ADD CONSTRAINT `vartotojai_ibfk_1` FOREIGN KEY (`prisijung_id`) REFERENCES `prisijungimo_duomenys` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
