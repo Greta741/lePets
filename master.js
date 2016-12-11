@@ -2,6 +2,7 @@ const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
 const veislynai = require('./services/veislynuValdiklis.js');
+const gyvunai = require('./services/gyvunuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -49,7 +50,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas">Veislynai</a></li>' +
-      '<li><a href="#">Gyvūnai</a></li>' +
+      '<li><a href="/gyvunai">Gyvūnai</a></li>' +
       '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
@@ -171,6 +172,16 @@ server.route({
 
 
 /* Veislynų valdiklio routes pabaiga */
+
+/* Gyvūnų valdiklio routes  */
+
+server.route({
+    method: 'GET',
+    path: '/gyvunai/{id?}',
+    handler: gyvunai.showPage,
+});
+
+/* Gyvūnų valdiklio routes pabaiga */
 
 server.start((err) => {
 

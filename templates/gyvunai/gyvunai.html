@@ -1,0 +1,16 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+{{#if data.message}}
+        {{{data.message}}}
+{{/if}}
+<div id="main-content" class="main">
+    <h1>Visi sistemoje užregistruoti gyvūnai</h1>
+    {{#each data.gyvunas}}
+        <div class="pets main">
+            <h2>{{this.vardas}}</h2>
+            <img class="v-image" src="{{{this.nuotrauka}}}" width=600px alt="img">
+            <div><strong>Gimimo data: </strong>{{this.gimimo_data}}</div>
+        </div>
+    {{/each}}
+<div>
