@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016 m. Grd 11 d. 17:57
+-- Generation Time: 2016 m. Grd 11 d. 20:49
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.4
 
@@ -145,7 +145,8 @@ CREATE TABLE `veisle` (
 --
 
 INSERT INTO `veisle` (`id`, `redagavimo_data`, `pavadinimas`, `gyvuno_tipas`, `dydis`, `aprasymas`, `registravimo_data`, `gyvunu_kiekis`, `poveisliu_kiekis`) VALUES
-(1, '2016-12-11', 'bdfbd', 'šuo', 'xs', 'dbdbd', '2016-12-11', 2, 2);
+(1, '2016-12-11', 'bdfbd', 'šuo', 'xs', 'dbdbd', '2016-12-11', 2, 2),
+(2, '2016-12-11', 'Some goofy-ass dog', 'šuo', 'l', 'They eat, shit and don''t really do much else', '2016-12-11', 2, 2);
 
 -- --------------------------------------------------------
 
@@ -257,7 +258,7 @@ ALTER TABLE `telefonai`
 -- AUTO_INCREMENT for table `veisle`
 --
 ALTER TABLE `veisle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Apribojimai eksportuotom lentelėm
 --

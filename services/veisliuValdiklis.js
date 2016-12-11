@@ -22,7 +22,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas/11">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
-      '<li><a href="/gyvtipopas">Veislės</a></li>' +
+      '<li><a href="/veisle/1">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
@@ -70,12 +70,36 @@ const insertNew = (data) => {
   };
 
   connection.query('insert into veisle set ?', veisle, (err, result) => {
-    
+
   });
 };
+
+const formatDate = (data) => {
+  const date = new Date(data);
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+};
+
+const showPage = (request, reply) => {
+  const id = request.params.id;
+  let data = {};
+  connection.query('select * from veisle where id = ?', id, (err, veisle) => {
+    if (veisle.length === 0) {
+      data.message = '<div class="message">Nepavyko rasti veislės.</div>';
+      reply.view('./veisles/veisle.html', {htmlData, data});
+      return;
+    }
+    
+    data.veisle = veisle[0];
+    data.veisle.registravimo_data = formatDate(data.veisle.registravimo_data);
+    data.veisle.redagavimo_data = formatDate(data.veisle.redagavimo_data);
+    // data.image = `<img class="v-image" src="${veisle[0].nuotraukos_url}" alt="img"></img>`
+    reply.view('./veisles/veisle.html', {htmlData, data});
+  });
+}
 
 module.exports = {
   chooseTypeView,
   registerView,
   insertNew,
+  showPage,
 }

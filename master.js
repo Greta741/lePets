@@ -51,7 +51,7 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<ul class="nav navbar-nav">' +
       '<li><a href="/veislynas">Veislynai</a></li>' +
       '<li><a href="#">Gyvūnai</a></li>' +
-      '<li><a href="/gyvtipopas">Veislės</a></li>' +
+      '<li><a href="/veisle/1">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
@@ -102,6 +102,12 @@ server.route({
     method: 'POST',
     path: '/naujaveisle',
     handler: veisles.insertNew,
+});
+
+server.route({
+    method: 'GET',
+    path: '/veisle/{id?}',
+    handler: veisles.showPage,
 });
 
 /* Veislių valdiklio routes pabaiga  */
