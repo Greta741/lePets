@@ -6,14 +6,16 @@
         <div class="simple-form" id="formContainer">
             <form action="" method="post" id="veis-form">
                 <div>
-                    <label class="field" for="gyv-tip-radio">Gyvūno tipas</label>
-                    <div class="radio" id="gyv-tip-radio">
+                    <label class="field" for="gyv_tip_radio">Gyvūno tipas</label>
+                    <div class="radio" id="gyv_tip_radio" required="true" name="gyv_tip_radio">
                         <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1">
+                            <input type="radio" id="gyv_tip_radio" value="šuo" name="gyv_tip_radio">
                             šuo
                         </label>
+                    </div>
+                    <div class="radio" id="gyv_tip_radio2" required="true">
                         <label>
-                            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                            <input type="radio" id="gyv_tip_radio2" value="katė" name="gyv_tip_radio">
                             katė
                         </label>
                     </div>
@@ -28,8 +30,8 @@
                     {{/if}}
                 </div>
                 <div>
-                    <label class="field" for="gyv-dyd-select">Gyvūno dydis</label>
-                    <select class="form-control" id="gyv-dyd-select">
+                    <label class="field" for="gyv_dyd_select">Gyvūno dydis</label>
+                    <select class="form-control" id="gyv-gyv_dyd_select-select" value="" name="gyv_dyd_select">
                         <option value="xs">XS</option>
                         <option value="s">S</option>
                         <option value="m">M</option>
@@ -43,7 +45,7 @@
 
                 <div>
                     <label class="field" for="aprasymas">Veislės aprašymas</label>
-                    <textarea class="form-control" id="aprasymas" rows="4"></textarea>
+                    <textarea type="text" class="form-control" id="aprasymas" rows="4" name="aprasymas" value=""></textarea>
                 </div>
 
                 <div>

@@ -56,7 +56,26 @@ const registerView = (request, reply) => {
   reply.view('./veisles/veislesRegistracija.html', {htmlData});
 };
 
+const insertNew = (data) => {
+  data = data.payload;
+  const veisle = {
+    redagavimo_data: new Date(),
+    pavadinimas: data.pavadinimas,
+    gyvuno_tipas: data.gyv_tip_radio,
+    dydis: data.gyv_dyd_select,
+    aprasymas: data.aprasymas,
+    registravimo_data: new Date(),
+    gyvunu_kiekis: 2,
+    poveisliu_kiekis: 2,
+  };
+
+  connection.query('insert into veisle set ?', veisle, (err, result) => {
+    
+  });
+};
+
 module.exports = {
   chooseTypeView,
   registerView,
+  insertNew,
 }

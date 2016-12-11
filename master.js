@@ -91,10 +91,17 @@ server.route({
     path: '/gyvtipopas',
     handler: veisles.chooseTypeView,
 });
+
 server.route({
     method: 'GET',
     path: '/naujaveisle',
     handler: veisles.registerView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/naujaveisle',
+    handler: veisles.insertNew,
 });
 
 /* Veislių valdiklio routes pabaiga  */
