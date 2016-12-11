@@ -2,6 +2,7 @@ const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
 const veislynai = require('./services/veislynuValdiklis.js');
+const vartotojai = require('./services/vartotojuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -72,8 +73,8 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
           '<li><a href="#">Prenumerata</a></li>' +
           '<li><a href="#">Atsijungti</a></li>' +
         '</ul></li>' +
-    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
-    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
+    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#registerModal"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
+    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
 server.route({
@@ -167,6 +168,12 @@ server.route({
     method: 'POST',
     path: '/ataskaitos/veislynai',
     handler: veislynai.report,
+});
+
+server.route({
+    method: 'POST',
+    path: '/register',
+    handler: vartotojai.registerUser,
 });
 
 

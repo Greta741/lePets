@@ -160,6 +160,33 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 (10, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
 (11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg');
 
+
+--
+-- Sukurta duomenų struktūra lentelei `vartotojai`
+--
+
+CREATE TABLE `vartotojai` (
+  `id` int(11) NOT NULL,
+  `vartotojo_vardas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
+  `el_pastas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
+  `telefono_nr` varchar(20) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `gimimo_data` date DEFAULT NULL,
+  `vardas` varchar(50) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `pavarde` varchar(50) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `registracijos_laikas` datetime NOT NULL,
+  `lytis` varchar(50) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `salis` varchar(30) COLLATE utf8_lithuanian_ci DEFAULT NULL,
+  `miestas` varchar(50) COLLATE utf8_lithuanian_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `vartotojai`
+--
+
+
+
+-- --------------------------------------------------------
+
 --
 -- Indexes for dumped tables
 --
@@ -199,6 +226,12 @@ ALTER TABLE `veislynai`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `vartotojai`
+--
+ALTER TABLE `vartotojai`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -222,6 +255,15 @@ ALTER TABLE `pastai`
 --
 ALTER TABLE `telefonai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `vartotojai`
+--
+ALTER TABLE `vartotojai`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+
+
 --
 -- Apribojimai eksportuotom lentelėm
 --
