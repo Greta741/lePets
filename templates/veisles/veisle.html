@@ -1,0 +1,82 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+{{#if data.message}}
+    {{{data.message}}}
+{{/if}}
+{{#if data.ownerDiv}}
+    {{{data.ownerDiv}}}
+{{/if}}
+{{#if data.veislynas}}
+<div id="main-content" class="main">
+    <h1>{{data.veislynas.pavadinimas}}</h1>
+    {{#if data.image}}
+        {{{data.image}}}
+    {{/if}}
+    <div><strong>Savininkas: </strong></div>
+    <div><strong>Tipas: </strong></div>
+    <div><strong>Aprašymas: </strong>{{data.veislynas.aprasymas}}</div>
+    <div><strong>Veiklos pradžia: </strong>{{data.veislynas.veiklos_pradzia}}</div>
+    <div><strong>Registracijos data: </strong>{{data.veislynas.registracijos_data}}</div>
+    <div><strong>Paskutinio aktyvumo data: </strong>{{data.veislynas.paskutinio_aktyvumo_data}}</div>
+    <div><strong>Gyvūnų skaičius: </strong>{{data.veislynas.gyvunu_skaicius}}</div>
+    <div><strong></strong></div>
+    <h2>Kontaktai</h2>
+    <div class="contacts">
+        <h3>Adresas</h3>
+        {{#each data.adresai}}
+            <div class="contact-div">
+                <div><strong>Šalis: </strong>{{this.salis}}</div>
+                <div><strong>Miestas: </strong>{{this.miestas}}</div>
+                <div><strong>Adresas: </strong>{{this.adresas}}</div>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="contacts">
+        <h3>Telefonas</h3>
+        {{#each data.telefonai}}
+            <div class="contact-div">
+                <div><strong>Telefono numeris: </strong>{{this.telefono_nr}}</div>
+            </div>
+        {{/each}}
+    </div>
+
+    <div class="contacts">
+        <h3>Elektroninio pašto adresas</h3>
+        {{#each data.pastai}}
+            <div class="contact-div">
+                <div><strong>Elektroninio pašto adresas: </strong>{{this.pasto_adresas}}</div>
+            </div>
+        {{/each}}  
+    </div>
+ </div>
+
+    <div class="notes main">
+        <h2>Naujienos</h2>
+        {{#each data.naujienos}}
+            <div class="note">
+                {{#if this.nuotraukos_url}}
+                    {{{this.nuotraukos_url}}}
+                <div class="note-content-image">
+                {{else}}
+                    <div class="note-content">
+                {{/if}}
+                    {{#if this.ar_svarbus}}
+                        <div class="heading w3-red"><h3>{{this.antraste}} {{{this.deleteLink}}}</h3></div>
+                    {{else}}
+                        <div class="heading w3-teal"><h3>{{this.antraste}} {{{this.deleteLink}}}</h3></div>
+                    {{/if}}
+                    <div>{{this.data}}</div>
+                    <div>{{this.tekstas}}</div>
+                </div>
+            </div>
+        {{/each}}
+
+    </div>
+    <div class="pets main">
+        <h2>Gyvūnai</h2>
+    </div>
+
+{{/if}}
+</body>
