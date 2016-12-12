@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016 m. Grd 11 d. 20:22
--- Server version: 10.1.13-MariaDB
--- PHP Version: 5.6.21
+-- Generation Time: 2016 m. Grd 01 d. 17:29
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -45,36 +45,6 @@ INSERT INTO `adresai` (`id`, `veislyno_id`, `salis`, `miestas`, `adresas`, `data
 (2, 9, 'sdgd', 'dfgdfg', 'dsgdfg', '2016-10-03', 1),
 (14, 11, 'adcg', 'dhvh', 'gfjhg', '2016-12-01', 1),
 (15, 11, 'safdgfhgjg', 'sfdhgjhkjk', 'gjfhkjk', '2016-11-04', 1);
-
--- --------------------------------------------------------
-
---
--- Sukurta duomenų struktūra lentelei `gyvunas`
---
-
-CREATE TABLE `gyvunas` (
-  `id` int(10) NOT NULL,
-  `apdovanojimas_id` int(10) NOT NULL,
-  `pardavimas_id` int(10) NOT NULL,
-  `tipas_id` int(10) NOT NULL,
-  `veislynas_id` int(10) NOT NULL,
-  `vartotojas_id` int(10) NOT NULL,
-  `veislės_id` int(10) NOT NULL,
-  `vardas` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `gimimo_data` date NOT NULL,
-  `nuotrauka` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
-  `tevas` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `motina` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `spalva` varchar(50) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Sukurta duomenų kopija lentelei `gyvunas`
---
-
-INSERT INTO `gyvunas` (`id`, `apdovanojimas_id`, `pardavimas_id`, `tipas_id`, `veislynas_id`, `vartotojas_id`, `veislės_id`, `vardas`, `gimimo_data`, `nuotrauka`, `tevas`, `motina`, `spalva`) VALUES
-(1, 1, 1, 1, 1, 1, 1, 'greagrag', '2016-12-14', 'http://laikas.tv3.lt/assets/data/media/images/kate(1).jpg', 'rthrth', 'rthrhr', 'rthrthr'),
-(2, 2, 2, 2, 2, 2, 2, 'agdfsgf', '2016-12-06', 'http://g4.dcdn.lt/images/pix/kate-paniurele-67169470.jpg', 'dfgdg', 'dfgdfg', 'dfgdgdg');
 
 -- --------------------------------------------------------
 
@@ -155,28 +125,6 @@ INSERT INTO `telefonai` (`id`, `veislyno_id`, `telefono_nr`, `data`, `rodomas`) 
 -- --------------------------------------------------------
 
 --
--- Sukurta duomenų struktūra lentelei `tipas`
---
-
-CREATE TABLE `tipas` (
-  `id` int(11) NOT NULL,
-  `gyvuno_tipas` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `lytis` varchar(10) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Sukurta duomenų kopija lentelei `tipas`
---
-
-INSERT INTO `tipas` (`id`, `gyvuno_tipas`, `lytis`) VALUES
-(1, 'šuo', 'patinas'),
-(2, 'šuo', 'patelė'),
-(3, 'katė', 'patelė'),
-(4, 'katinas', 'patinas');
-
--- --------------------------------------------------------
-
---
 -- Sukurta duomenų struktūra lentelei `veislynai`
 --
 
@@ -210,7 +158,7 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 (8, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
 (9, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
 (10, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
-(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-12-11', 0, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg');
+(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg');
 
 --
 -- Indexes for dumped tables
@@ -222,12 +170,6 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 ALTER TABLE `adresai`
   ADD PRIMARY KEY (`id`),
   ADD KEY `veislyno_id` (`veislyno_id`);
-
---
--- Indexes for table `gyvunas`
---
-ALTER TABLE `gyvunas`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `naujienos`
@@ -251,12 +193,6 @@ ALTER TABLE `telefonai`
   ADD KEY `veislyno_id` (`veislyno_id`);
 
 --
--- Indexes for table `tipas`
---
-ALTER TABLE `tipas`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `veislynai`
 --
 ALTER TABLE `veislynai`
@@ -272,15 +208,10 @@ ALTER TABLE `veislynai`
 ALTER TABLE `adresai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
--- AUTO_INCREMENT for table `gyvunas`
---
-ALTER TABLE `gyvunas`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
 -- AUTO_INCREMENT for table `naujienos`
 --
 ALTER TABLE `naujienos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `pastai`
 --
@@ -291,11 +222,6 @@ ALTER TABLE `pastai`
 --
 ALTER TABLE `telefonai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `tipas`
---
-ALTER TABLE `tipas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- Apribojimai eksportuotom lentelėm
 --

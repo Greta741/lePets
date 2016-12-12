@@ -1,0 +1,22 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+{{#if data.veisle}}
+<div id="main-content" class="main">
+    <div class="simple-form" id="formContainer">
+        <a href="/naujaveisle" class="btn btn-default">Registruoti veislę</a>
+        <a class="btn btn-default">Registruoti poveislę</a>
+    </div>
+    <h1>{{data.veisle.pavadinimas}}</h1>
+    {{#if data.image}}
+        {{{data.image}}}
+    {{/if}}
+    <div><strong>Tipas: </strong>{{data.veisle.gyvuno_tipas}}</div>
+    <div><strong>Aprašymas: </strong>{{data.veisle.aprasymas}}</div>
+    <div><strong>Gyvūno dydis: </strong>{{data.veisle.dydis}}</div>
+    <div><strong>Registracijos data: </strong>{{data.veisle.registravimo_data}}</div>
+    <div><strong>Paskutinį kartą redaguota: </strong>{{data.veisle.redagavimo_data}}</div>
+    <div><strong>Poveislių skaičius: </strong>{{data.veisle.poveisliu_kiekis}}</div>
+    <div><strong>Gyvūnų skaičius: </strong>{{data.veisle.gyvunu_kiekis}}</div>
+{{/if}}
+</body>
