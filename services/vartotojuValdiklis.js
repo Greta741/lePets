@@ -64,7 +64,7 @@ const loginUser = (request, reply) => {
                             }
                             reply().state('session', {
                                 username: loginData.username,
-                                access_token: result1[0].vart_id,
+                                user_id: result1[0].vart_id,
                                 access_token: result1[0].prieigos_raktas,
                                 gyvunoRegistravimas: teises[10],
                                 uzregistruotoGyvunoRedagavimas: teises[11],
