@@ -1,9 +1,8 @@
-{{{htmlData.head}}}
+{{{data.head}}}
 <body>
-{{{htmlData.navbar}}}
+{{{data.navbar}}}
 
 <script>
-    console.log(document.cookie);
     const register = () => {
         var data = {};
         data.username = document.getElementById('username').value;
@@ -13,19 +12,40 @@
 
         var areThereErrors;
 
-        console.log(document.cookie);
         if (data.password !== data.confPassword || data.username == '' || data.email == '' || data.password == '') {
             areThereErrors = true;
         }
 
         if (!areThereErrors) {
-            $.post('./register', {data}, function (result) {
+            $.post('./register', {data}, (result) => {
 
                 location.reload();
             });
         } else {
             document.getElementById('register-error').innerHTML = "Blogai suvesti duomenys";
         }
+    }
+
+    const login = () => {
+        var data = {};
+        data.username = document.getElementById('username-login').value;
+        data.password = document.getElementById('pwd-login').value;
+        var areThereErrors;
+
+        if (data.username == '' ||  data.password == '') {
+            areThereErrors = true;
+            console.log("errors");
+        }
+
+        if (!areThereErrors) {
+            $.post('./login', {data}, (result) => {
+
+                location.reload();
+            });
+        } else {
+            document.getElementById('login-error').innerHTML = "Blogai suvesti duomenys";
+        }
+
     }
 </script>
 
@@ -68,6 +88,7 @@
                 <h4 class="modal-title">Prisijungimas</h4>
             </div>
             <div class="modal-body">
+                <div id="login-error" class="error"></div>
                 <div class="form-group">
                     <label for="username-login">Vartotojo vardas:</label>
                     <input type="text" class="form-control" id="username-login" required="">
@@ -76,7 +97,7 @@
                     <label for="pwd-login">Slaptažodis:</label>
                     <input type="password" class="form-control" id="pwd-login" required="">
                 </div>
-                <button type="submit" class="btn btn-success">Prisijungti</button>
+                <button type="submit" onClick="login()" class="btn btn-success">Prisijungti</button>
             </div>
         </div>
     </div>

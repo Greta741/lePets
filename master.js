@@ -36,61 +36,15 @@ server.route({
     },
 });
 
-
-/* Laikinai čia, turės būt perkeltas ten, kur tikrinamas autentifikavimas, kad žinoti
-    ką rodyti navbar'e. */
-
-let htmlData = {};
-htmlData.head = '<head><title>Le pets</title>' +
-    '<link rel="stylesheet" href="../public/CSS/styles.css">' +
-    '<meta charset="utf-8">' +
-    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-    '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
-    '<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">' +
-    '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>' +
-    '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script></head>';
-htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
-    '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
-    '<ul class="nav navbar-nav">' +
-      '<li><a href="/veislynas">Veislynai</a></li>' +
-      '<li><a href="/gyvunai">Gyvūnai</a></li>' +
-      '<li><a href="/veisle/1">Veislės</a></li>' +
-      '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
-    '</ul>' +
-    '<ul class="nav navbar-nav navbar-right">' +
-    '<li class="dropdown">' +
-        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
-        '<ul class="dropdown-menu">' +
-          '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
-          '<li><a href="#">Veislių ataskaita</a></li>' +
-          '<li><a href="#">Gyvūnų ataskaita</a></li>' +
-          '<li><a href="#">Vartotojų ataskaita</a></li>' +
-        '</ul></li>' +
-    '<li class="dropdown">' +
-        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu<span class="caret"></span></a>' +
-        '<ul class="dropdown-menu">' +
-          '<li><a href="#">Redaguoti profilį</a></li>' +
-          '<li><a href="#">Keisti roles</a></li>' +
-          '<li><a href="#">Patvirtinti veislynus</a></li>' +
-          '<li><a href="#">Žinutės</a></li>' +
-          '<li><a href="#">Prenumerata</a></li>' +
-          '<li><a href="#">Atsijungti</a></li>' +
-        '</ul></li>' +
-    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#registerModal"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
-    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
-    '</ul></div></nav>';
-
 server.route({
     method: 'GET',
     path: '/',
     handler: (request, reply) => {
-        reply.view('index.html', {htmlData}).state('datacook', 'value');
+        var data = vartotojai.generateNavBar(request.state.session);
+        reply.view('index.html', {data});
     },
 });
 
-server.state('data', {
-    isSecure: false,
-})
 /* Veislių valdiklio routes  */
 server.route({
     method: 'GET',
@@ -203,14 +157,36 @@ server.route({
     handler: veislynai.report,
 });
 
+/* Veislynų valdiklio routes pabaiga */
+
+
+/* Vartotojų valdiklio routes pradžia */
 server.route({
     method: 'POST',
     path: '/register',
     handler: vartotojai.registerUser,
 });
 
+server.route({
+    method: 'POST',
+    path: '/login',
+    handler: vartotojai.loginUser,
+});
 
-/* Veislynų valdiklio routes pabaiga */
+server.route({
+    method: 'GET',
+    path: '/logout',
+    handler: vartotojai.logoutUser,
+});
+
+server.state('session', {
+    ttl: 24 * 60 * 60 * 1000,
+    isSecure: false,
+    path: '/',
+    encoding: 'base64json'
+});
+
+/* Vartotojų valdiklio routes pabaiga */
 
 /* Gyvūnų valdiklio routes  */
 
