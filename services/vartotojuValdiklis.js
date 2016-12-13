@@ -179,8 +179,44 @@ const generateNavBar = (session) => {
 };
 
 const profileView = (request, reply) => {
-    var data = generateNavBar(request.state.session);
-    reply.view('./vartotojai/profile.html', {data});
+    connection.query(`select * from vartotojai where vartotojo_vardas='${request.state.session.username}'`, {}, (err, res) => {
+        var birthdate = res[0].gimimo_data;
+        var dateString = '';
+        if (birthdate != null) {
+            var date = new Date(birthdate);
+            date.setDate(date.getDate()+1);
+            dateString = date.toISOString().substring(0, 10);
+        }
+        var userData = {
+            vartotojo_vardas: res[0].vartotojo_vardas,
+            el_pastas: res[0].el_pastas,
+            telefono_nr: res[0].telefono_nr,
+            gimimo_data: dateString,
+            vardas: res[0].vardas,
+            pavarde: res[0].pavarde,
+            lytis: res[0].lytis,
+            salis: res[0].salis,
+            miestas: res[0].miestas,
+        }
+        var data = generateNavBar(request.state.session);
+        reply.view('./vartotojai/profile.html', {data, userData});
+    });
+};
+
+const editProfile = (request, reply) => {
+    const newData = {
+        el_pastas: request.payload['newData[email]'],
+        telefono_nr: request.payload['newData[tel]'],
+        gimimo_data: request.payload['newData[birthdate]'],
+        vardas: request.payload['newData[vardas]'],
+        pavarde: request.payload['newData[pav]'],
+        salis: request.payload['newData[count]'],
+        miestas: request.payload['newData[city]'],
+        lytis: request.payload['newData[gender]'],
+    }
+    connection.query(`update vartotojai set ? where vartotojo_vardas='${request.state.session.username}'`, newData, (err, res) => {
+        reply();
+    });
 };
 
 const hashString = (myString, callback) => {
@@ -203,4 +239,5 @@ module.exports = {
     generateNavBar: generateNavBar,
     logoutUser: logoutUser,
     profileView: profileView,
+    editProfile: editProfile,
 };

@@ -185,6 +185,12 @@ server.route({
     handler: vartotojai.profileView,
 });
 
+server.route({
+    method: 'POST',
+    path: '/editProfile',
+    handler: vartotojai.editProfile,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
