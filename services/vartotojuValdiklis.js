@@ -28,8 +28,11 @@ const registerUser = (request, reply) => {
                 busena: 'aktyvus'
             }
             connection.query('insert into prisijungimo_duomenys set ?', loginInfo, (err, result) => {
+
                 newUser.prisijung_id = result.insertId;
-                connection.query('insert into vartotojai set ?', newUser, (err, result) => {})
+                connection.query('insert into vartotojai set ?', newUser, (err, result) => {
+                    console.log(err);
+                })
             });
         })
     })
