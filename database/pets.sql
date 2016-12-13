@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016 m. Grd 11 d. 20:49
--- Server version: 10.1.10-MariaDB
--- PHP Version: 7.0.4
+-- Generation Time: 2016 m. Grd 01 d. 17:29
+-- Server version: 10.1.16-MariaDB
+-- PHP Version: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -125,32 +125,6 @@ INSERT INTO `telefonai` (`id`, `veislyno_id`, `telefono_nr`, `data`, `rodomas`) 
 -- --------------------------------------------------------
 
 --
--- Sukurta duomenų struktūra lentelei `veisle`
---
-
-CREATE TABLE `veisle` (
-  `id` int(11) NOT NULL,
-  `redagavimo_data` date NOT NULL,
-  `pavadinimas` varchar(100) NOT NULL,
-  `gyvuno_tipas` varchar(50) NOT NULL,
-  `dydis` varchar(100) NOT NULL,
-  `aprasymas` varchar(500) NOT NULL,
-  `registravimo_data` date NOT NULL,
-  `gyvunu_kiekis` int(11) NOT NULL,
-  `poveisliu_kiekis` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Sukurta duomenų kopija lentelei `veisle`
---
-
-INSERT INTO `veisle` (`id`, `redagavimo_data`, `pavadinimas`, `gyvuno_tipas`, `dydis`, `aprasymas`, `registravimo_data`, `gyvunu_kiekis`, `poveisliu_kiekis`) VALUES
-(1, '2016-12-11', 'bdfbd', 'šuo', 'xs', 'dbdbd', '2016-12-11', 2, 2),
-(2, '2016-12-11', 'Some goofy-ass dog', 'šuo', 'l', 'They eat, shit and don''t really do much else', '2016-12-11', 2, 2);
-
--- --------------------------------------------------------
-
---
 -- Sukurta duomenų struktūra lentelei `veislynai`
 --
 
@@ -184,7 +158,7 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 (8, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
 (9, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
 (10, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'https://sgdgfd.com'),
-(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-12-11', 0, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg');
+(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03', '2016-10-03', 0, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg');
 
 --
 -- Indexes for dumped tables
@@ -219,12 +193,6 @@ ALTER TABLE `telefonai`
   ADD KEY `veislyno_id` (`veislyno_id`);
 
 --
--- Indexes for table `veisle`
---
-ALTER TABLE `veisle`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `veislynai`
 --
 ALTER TABLE `veislynai`
@@ -243,7 +211,7 @@ ALTER TABLE `adresai`
 -- AUTO_INCREMENT for table `naujienos`
 --
 ALTER TABLE `naujienos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `pastai`
 --
@@ -254,11 +222,6 @@ ALTER TABLE `pastai`
 --
 ALTER TABLE `telefonai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `veisle`
---
-ALTER TABLE `veisle`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Apribojimai eksportuotom lentelėm
 --

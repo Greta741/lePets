@@ -8,6 +8,9 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+/* Laikinai čia, turės būt perkeltas ten, kur tikrinamas autentifikavimas, kad žinoti
+    ką rodyti navbar'e. */
+
 let htmlData = {};
 htmlData.head = '<head><title>Le pets</title>' +
     '<link rel="stylesheet" href="../public/CSS/styles.css">' +
@@ -20,16 +23,16 @@ htmlData.head = '<head><title>Le pets</title>' +
 htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
     '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
     '<ul class="nav navbar-nav">' +
-      '<li><a href="/veislynas/11">Veislynai</a></li>' +
+      '<li><a href="/veislynas">Veislynai</a></li>' +
       '<li><a href="/gyvunai">Gyvūnai</a></li>' +
-      '<li><a href="/veisle/1">Veislės</a></li>' +
+      '<li><a href="#">Veislės</a></li>' +
       '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
     '</ul>' +
     '<ul class="nav navbar-nav navbar-right">' +
     '<li class="dropdown">' +
         '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
         '<ul class="dropdown-menu">' +
-          '<li><a href="#">Veislynų ataskaita</a></li>' +
+          '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
           '<li><a href="#">Veislių ataskaita</a></li>' +
           '<li><a href="#">Gyvūnų ataskaita</a></li>' +
           '<li><a href="#">Vartotojų ataskaita</a></li>' +
@@ -48,30 +51,31 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
     '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
-const chooseTypeView = (request, reply) => {
-  reply.view('./veisles/veisTipoPasirinkimas.html', {htmlData});
+const showPage = (request, reply) => {
+  // jei id, rodyti to id gyvūną
+  if (request.params.id) {
+    //showAnimalById(request, reply);
+  } else { // jei be id, rodyti visus gyvūnus
+    showAllAnimals(request, reply);
+  }
 };
 
-const registerView = (request, reply) => {
-  reply.view('./veisles/veislesRegistracija.html', {htmlData});
-};
-
-const insertNew = (data) => {
-  data = data.payload;
-  const veisle = {
-    redagavimo_data: new Date(),
-    pavadinimas: data.pavadinimas,
-    gyvuno_tipas: data.gyv_tip_radio,
-    dydis: data.gyv_dyd_select,
-    aprasymas: data.aprasymas,
-    registravimo_data: new Date(),
-    gyvunu_kiekis: 2,
-    poveisliu_kiekis: 2,
-  };
-
-  connection.query('insert into veisle set ?', veisle, (err, result) => {
-
-  });
+const showAllAnimals = (request, reply) => {
+  const data = {};
+  connection.query('select * from gyvunas', (err, gyvunas) => {
+      if (gyvunas.length === 0) {
+        data.message = 'Gyvūnų sistemoje nėra.'; 
+        reply.view('./gyvunai/gyvunai.html', {htmlData, data});
+        return;       
+      }
+      else {
+        data.gyvunas = gyvunas;
+        data.gyvunas.forEach((item) => {
+          item.gimimo_data = formatDate(item.gimimo_data);
+        });
+        reply.view('./gyvunai/gyvunai.html', {htmlData, data});
+      }      
+    });
 };
 
 const formatDate = (data) => {
@@ -79,27 +83,26 @@ const formatDate = (data) => {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 };
 
-const showPage = (request, reply) => {
-  const id = request.params.id;
-  let data = {};
-  connection.query('select * from veisle where id = ?', id, (err, veisle) => {
-    if (veisle.length === 0) {
-      data.message = '<div class="message">Nepavyko rasti veislės.</div>';
-      reply.view('./veisles/veisle.html', {htmlData, data});
-      return;
-    }
-    
-    data.veisle = veisle[0];
-    data.veisle.registravimo_data = formatDate(data.veisle.registravimo_data);
-    data.veisle.redagavimo_data = formatDate(data.veisle.redagavimo_data);
-    // data.image = `<img class="v-image" src="${veisle[0].nuotraukos_url}" alt="img"></img>`
-    reply.view('./veisles/veisle.html', {htmlData, data});
+const generateTypeSelect = (data) => {
+  let temp = '';
+  data.forEach((tipas) => {
+    temp += `<input type="radio" name="tipas" value="${tipas.id}" required="true"> ${tipas.gyvuno_tipas} ${tipas.lytis}<br>`;
   });
-}
+  return temp;
+};
+
+const registerView = (request, reply) => {
+  const data = {};
+  connection.query('select * from tipas', (err, tipas) => {
+    data.tipas = tipas;
+    reply.view('./gyvunai/gyvunoRegistracija.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
+  });
+};
 
 module.exports = {
-  chooseTypeView,
-  registerView,
-  insertNew,
+  generateTypeSelect,
+  formatDate,
+  showAllAnimals,
   showPage,
+  registerView,
 }
