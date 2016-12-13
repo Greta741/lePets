@@ -48,8 +48,8 @@ server.route({
 /* Veislių valdiklio routes  */
 server.route({
     method: 'GET',
-    path: '/gyvtipopas',
-    handler: veisles.chooseTypeView,
+    path: '/visosveisles',
+    handler: veisles.allBreeds,
 });
 
 server.route({

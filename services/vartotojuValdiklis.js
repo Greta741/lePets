@@ -125,7 +125,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/gyvunai">Gyvūnai</a></li>';
         }
         if (session.veislesPuslapioPerziura == 'yes') {
-            htmlData.navbar += '<li><a href="/veisle/1">Veislės</a></li>';
+            htmlData.navbar += '<li><a href="/visosveisles">Veislės</a></li>';
         }
 
         if (session.paieskaPagalRaktazodi == 'yes') {

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2016 m. Grd 13 d. 13:01
+-- Generation Time: 2016 m. Grd 13 d. 19:28
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -140,7 +140,8 @@ CREATE TABLE `naujienos` (
 
 INSERT INTO `naujienos` (`id`, `veislyno_id`, `data`, `antraste`, `tekstas`, `nuotraukos_url`, `ar_svarbus`) VALUES
 (3, 11, '2016-12-01 00:00:00', 'sagfdg', 'sdgdfjhg', 'http://webneel.com/daily/sites/default/files/images/daily/02-2014/25-evil-cat-drawing.preview.jpg', 1),
-(13, 11, '2016-12-09 16:35:33', 'aszgdxhcvbnm', 'sdhfcvjbn.m,.', NULL, 0);
+(13, 11, '2016-12-09 16:35:33', 'aszgdxhcvbnm', 'sdhfcvjbn.m,.', NULL, 0),
+(14, 11, '2016-12-13 14:05:13', 'sdyf\r\n', 'ADHJKL;\r\n''', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -263,16 +264,12 @@ CREATE TABLE `prisijungimo_duomenys` (
   `busena` varchar(20) COLLATE utf8_lithuanian_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
 
--- --------------------------------------------------------
-
 --
--- Sukurta duomenų struktūra lentelei `role-teise`
+-- Sukurta duomenų kopija lentelei `prisijungimo_duomenys`
 --
 
-CREATE TABLE `role-teise` (
-  `roles_id` int(11) NOT NULL,
-  `teises_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+INSERT INTO `prisijungimo_duomenys` (`id`, `slaptazodis`, `paskutinio_aktyvumo_laikas`, `prieigos_raktas`, `busena`) VALUES
+(1, '$2a$10$8j3PMYC6wW7vdYV100iI4e77JcX9nyQfmceGWot5a8Z0Uxt/XA.g6', '2016-12-13 14:09:22', '$2a$10$s4PJdPC.bUOlBTAdjpoeUe8eUzXQE84/zB.x0JdqVWg.2XBM/Chim', 'aktyvus');
 
 -- --------------------------------------------------------
 
@@ -288,6 +285,87 @@ CREATE TABLE `roles` (
   `aprasymas` varchar(200) COLLATE utf8_lithuanian_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
 
+--
+-- Sukurta duomenų kopija lentelei `roles`
+--
+
+INSERT INTO `roles` (`id`, `pavadinimas`, `lygis`, `priskyrimo_laikas`, `aprasymas`) VALUES
+(10, 'Registruotas vartotojas', 1, '2016-12-13 14:23:09', 'Paprastas registruotas vartotojas.'),
+(11, 'Moderatorius', 3, '2016-12-13 14:23:27', NULL),
+(12, 'Administratorius', 10, '2016-12-13 14:23:54', 'Sistemos administratorius'),
+(13, 'Veislyno savininkas', 2, '2016-12-13 14:24:17', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Sukurta duomenų struktūra lentelei `role_teise`
+--
+
+CREATE TABLE `role_teise` (
+  `roles_id` int(11) NOT NULL,
+  `teises_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `role_teise`
+--
+
+INSERT INTO `role_teise` (`roles_id`, `teises_id`) VALUES
+(10, 10),
+(10, 11),
+(10, 12),
+(10, 13),
+(10, 14),
+(10, 15),
+(10, 16),
+(10, 17),
+(10, 18),
+(10, 19),
+(10, 20),
+(11, 10),
+(11, 11),
+(11, 12),
+(11, 13),
+(11, 14),
+(11, 15),
+(11, 16),
+(11, 17),
+(11, 18),
+(11, 19),
+(11, 20),
+(11, 21),
+(11, 22),
+(11, 23),
+(12, 10),
+(12, 11),
+(12, 12),
+(12, 13),
+(12, 14),
+(12, 15),
+(12, 16),
+(12, 17),
+(12, 18),
+(12, 19),
+(12, 20),
+(12, 21),
+(12, 22),
+(12, 23),
+(12, 24),
+(12, 25),
+(13, 10),
+(13, 11),
+(13, 12),
+(13, 13),
+(13, 14),
+(13, 15),
+(13, 16),
+(13, 17),
+(13, 18),
+(13, 19),
+(13, 20),
+(13, 26),
+(13, 27);
+
 -- --------------------------------------------------------
 
 --
@@ -299,6 +377,30 @@ CREATE TABLE `roliu_teises` (
   `pavadinimas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
   `aprasymas` varchar(500) COLLATE utf8_lithuanian_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `roliu_teises`
+--
+
+INSERT INTO `roliu_teises` (`id`, `pavadinimas`, `aprasymas`) VALUES
+(10, 'gyvunoRegistravimas', 'Užregistruoti gyvūną sistemoje'),
+(11, 'uzregistruotoGyvunoRedagavimas', 'Užregistruoto gyvūno redagavimas'),
+(12, 'veislynoRegistravimas', 'Veislyno registravimas'),
+(13, 'asmeninioProfilioPerziuraRedagavimas', 'Asmeninio profilio peržiūra/redagavimas'),
+(14, 'asmeniniuZinuciuSiuntimas', 'Asmeninių žinučių siuntimas'),
+(15, 'gyvunoPerziura', 'Gyvūno peržiūra'),
+(16, 'paieskaPagalRaktazodi', 'Paieška pagal raktažodį'),
+(17, 'issamiPaieskaPagalKriterijus', 'Išsami paieška pagal kriterijus'),
+(18, 'veislesPuslapioPerziura', 'Veislės puslapio peržiūra'),
+(19, 'prenumeratosRegistravimas', 'Prenumeratos registravimas'),
+(20, 'prenumeratosPerziura', 'Prenumeratos peržiūra'),
+(21, 'veislynoPatvirtinimas', 'Veislyno patvirtinimas'),
+(22, 'veislesRegistravimas', 'Veislės registravimas'),
+(23, 'registruotosVeislesRedagavimas', 'Registruotos veislės redagavimas'),
+(24, 'vartotojuRoliuKeitimas', 'Vartotojų rolių keitimas'),
+(25, 'perziuretiAtaskaitas', 'Peržiūrėti ataskaitas'),
+(26, 'asmeninioPuslapioRedagavimas', 'Asmeninio veislyno puslapio redagavimas'),
+(27, 'naujienuSkelbimas', 'Naujienų skelbimas');
 
 -- --------------------------------------------------------
 
@@ -433,7 +535,7 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 (8, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03 00:00:00', '2016-10-03 00:00:00', 0, 0, 0, 'https://sgdgfd.com'),
 (9, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03 00:00:00', '2016-10-03 00:00:00', 0, 0, 0, 'https://sgdgfd.com'),
 (10, NULL, NULL, 'afsgdfchgvjhj', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03 00:00:00', '2016-10-03 00:00:00', 0, 0, 0, 'https://sgdgfd.com'),
-(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03 00:00:00', '2016-12-09 17:10:06', 1, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg'),
+(11, NULL, NULL, 'dgfhgjhjk', 'dfjhgkjhk', 'fcjvbknm,.', '2016-10-03 00:00:00', '2016-12-13 14:08:37', 1, 0, 0, 'http://tamsoje.lt/wp-content/uploads/2013/07/Katinas_04.jpg'),
 (12, 1, NULL, 'adfhfdh', 'dsgdfhgfh', 'sdgfhgf', '2016-12-09 16:26:12', '2016-12-09 16:26:12', 0, 0, 0, '');
 
 --
@@ -538,17 +640,17 @@ ALTER TABLE `prisijungimo_duomenys`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `role-teise`
---
-ALTER TABLE `role-teise`
-  ADD PRIMARY KEY (`roles_id`,`teises_id`),
-  ADD KEY `teises_id` (`teises_id`);
-
---
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `role_teise`
+--
+ALTER TABLE `role_teise`
+  ADD PRIMARY KEY (`roles_id`,`teises_id`),
+  ADD KEY `teises_id` (`teises_id`);
 
 --
 -- Indexes for table `roliu_teises`
@@ -609,7 +711,7 @@ ALTER TABLE `apdovanojimas`
 -- AUTO_INCREMENT for table `asmenines_zinutes`
 --
 ALTER TABLE `asmenines_zinutes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `atsiemimo_vieta`
 --
@@ -624,7 +726,7 @@ ALTER TABLE `gyvunas`
 -- AUTO_INCREMENT for table `naujienos`
 --
 ALTER TABLE `naujienos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `nuotrauka`
 --
@@ -659,17 +761,17 @@ ALTER TABLE `prenumeratos_parinktys`
 -- AUTO_INCREMENT for table `prisijungimo_duomenys`
 --
 ALTER TABLE `prisijungimo_duomenys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `roliu_teises`
 --
 ALTER TABLE `roliu_teises`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT for table `telefonai`
 --
@@ -764,11 +866,11 @@ ALTER TABLE `prenumeratos_parinktys`
   ADD CONSTRAINT `prenumeratos_parinktys_ibfk_3` FOREIGN KEY (`tipas`) REFERENCES `tipas` (`id`);
 
 --
--- Apribojimai lentelei `role-teise`
+-- Apribojimai lentelei `role_teise`
 --
-ALTER TABLE `role-teise`
-  ADD CONSTRAINT `role-teise_ibfk_1` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`),
-  ADD CONSTRAINT `role-teise_ibfk_2` FOREIGN KEY (`teises_id`) REFERENCES `roliu_teises` (`id`);
+ALTER TABLE `role_teise`
+  ADD CONSTRAINT `role_teise_ibfk_1` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`),
+  ADD CONSTRAINT `role_teise_ibfk_2` FOREIGN KEY (`teises_id`) REFERENCES `roliu_teises` (`id`);
 
 --
 -- Apribojimai lentelei `telefonai`
