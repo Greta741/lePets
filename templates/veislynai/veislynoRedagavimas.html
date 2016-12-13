@@ -166,6 +166,7 @@
 
     function addNew(divId, type) {
         var data = {};
+        data.id = document.getElementById('id').value;
          switch (type) {
             case 'address': 
                 data.salis = document.getElementById('salis').value;

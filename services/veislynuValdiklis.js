@@ -1,7 +1,6 @@
 const mysql = require('mysql');
 const vartotojai = require('./vartotojuValdiklis.js');
 
-
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -83,22 +82,43 @@ const insertNew = (data, maxId, callback) => {
   connection.query('insert into pastai set ?', pastas);
 };
 
+const getId = (userId, callback) => {
+  connection.query('select veislynai.id from vartotojai, veislynai where vartotojai.id = ? and veislynai.vartotojo_id = vartotojai.id and veislynai.ar_patvirtintas = 1', userId, (err, id) => {
+    if (id.length === 1) {
+      callback(id[0].id);
+    } else {
+      callback(false);
+    }
+  });
+}
+
 const registerView = (request, reply) => {
-  // patikrinti ar prisijungęs
-  // iš db pasiimti tipus
-  const data = {
-    tipas: [
-      {id: 1,
-      gyvuno_tipas: 'Katė'},
-      {id: 2,
-      gyvuno_tipas: 'Šuo'},
-    ]
-  };
-  reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(data.tipas)}});
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislynoRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  getId(request.state.session.user_id, (result) => {
+    if (!result) {
+      connection.query('select * from tipas group by gyvuno_tipas', (err, result) => {
+        reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {tipas : generateTypeSelect(result)}});
+      });
+    } else {
+      reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, jūs jau turite veislyną.'}});
+    }
+  });
 };
 
 const register = (request, reply) => {
-  // patikrinti ar prisijungęs
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislynoRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   let error;
   if (!/^\+?(0|[1-9]\d*)$/.test(request.payload.telefono_nr)) {
     error = '<div class="error">Blogas telefono numeris</div>';
@@ -106,16 +126,11 @@ const register = (request, reply) => {
     error = '<div class="error">Blogas telefono numeris</div>';
   }
   if (error) {
-    // iš db pasiimti tipus jei negalima išsaugot
-    const types = [
-      {id: 1,
-      gyvuno_tipas: 'Katė'},
-      {id: 2,
-      gyvuno_tipas: 'Šuo'},
-    ];
-    const data = generateDivs(request.payload, types);
-    data.errors = error; 
-
+    connection.query('select * from tipas group by gyvuno_tipas', (err, result) => {
+      const data = generateDivs(request.payload, types);
+      data.errors = error; 
+      reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
     reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
   } else {
     getMaxId((maxId) => {
@@ -193,22 +208,39 @@ const generateEditDivs = (data, adresai, telefonai, pastai) => {
 };
 
 const editView = (request, reply) => {
-  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
-  const id = 11;
-  connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'no') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  getId(request.state.session.user_id, (id) => {
+    if (id) {
+    connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
       connection.query('select * from adresai where veislyno_id = ?', id, (err, adresai) => {
-          connection.query('select * from telefonai where veislyno_id = ?', id, (err, telefonai) => {
-              connection.query('select * from pastai where veislyno_id = ?', id, (err, pastai) => {
-                const data = generateEditDivs(veislynas[0], adresai, telefonai, pastai);
-                reply.view('./veislynai/veislynoRedagavimas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
-              });
+        connection.query('select * from telefonai where veislyno_id = ?', id, (err, telefonai) => {
+          connection.query('select * from pastai where veislyno_id = ?', id, (err, pastai) => {
+            const data = generateEditDivs(veislynas[0], adresai, telefonai, pastai);
+            reply.view('./veislynai/veislynoRedagavimas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
           });
+        });
       });
+    }); 
+    } else {
+      reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, jūs neturite veislyno.'}});
+    }
   });
 };
 
 const edit = (request, reply) => {
-  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'no') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   connection.query('update veislynai set pavadinimas = ?, aprasymas = ?, veiklos_pradzia = ?, nuotraukos_url = ? where id = ?',
         [request.payload.pavadinimas, request.payload.aprasymas, request.payload.veiklos_pradzia,
         request.payload.nuotraukos_url, request.payload.id], (err, result) => {
@@ -219,6 +251,14 @@ const edit = (request, reply) => {
 };
 
 const editContactInfo = (request, reply) => {
+  if (!request.state.session) {
+    reply(false);
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'no') {
+    reply(false);
+    return;
+  }
+
   let newState;
   if (request.payload.state === '1') {
     newState = false;
@@ -249,6 +289,13 @@ const editContactInfo = (request, reply) => {
 };
 
 const deleteContactInfo = (request, reply) => {
+  if (!request.state.session) {
+    reply(false);
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'no') {
+    reply(false);
+    return;
+  }
   switch (request.payload.type) {
     case 'address': 
           connection.query('select count(id) from adresai where veislyno_id = ?', request.payload.vId, (err, result) => {
@@ -288,7 +335,14 @@ const deleteContactInfo = (request, reply) => {
 };
 
 const addContactInfo = (request, reply) => {
-  const id = 11;
+  if (!request.state.session) {
+    reply(false);
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'no') {
+    reply(false);
+    return;
+  }
+  const id = request.payload.id;
    switch (request.payload.type) {
     case 'address': 
           const adresas = {
@@ -352,41 +406,49 @@ const generateImageDivs = (data, canDelete) => {
 };
 
 const showOwnerPage = (request, reply) => {
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const data = {};
-  const id = 11;
-  // jei sausainiukas neturi veislyno id
-  // data.ownerDiv = '<div class="main"><a href="/naujasveislynas">Registruoti veislyną</a> ';
-  // reply.view('./veislynai/veislynas.html', {htmlData, data});
-
-  // jei sausiuniukas turi veislyno id
-  data.ownerDiv = '<div class="main"><a href="/redaguotiveislyna">Redaguoti veislyną</a> ' +
-        '<a href="/note">Skelbti</a> ' +
-        `<a href="./remove/${id}">Ištrinti</a></div>`;
-    connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
-        if (veislynas.length === 0) {
-          data.message = 'Nepavyko rasti veislyno.';
-          reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
-          return;
-        }
-        connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
-            connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
-                connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
-                  connection.query('select * from naujienos where veislyno_id = ? order by data DESC', id, (err, naujienos) => {
-                    data.veislynas = veislynas[0];
-                    data.veislynas.registracijos_data = formatDate(data.veislynas.registracijos_data);
-                    data.veislynas.paskutinio_aktyvumo_data = formatDate(data.veislynas.paskutinio_aktyvumo_data);
-                    data.adresai = adresai;
-                    data.telefonai = telefonai;
-                    data.pastai = pastai;
-                    data.naujienos = generateImageDivs(naujienos, true);
-                    data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
-                    reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+  getId(request.state.session.user_id, (id) => {
+    if (id) {
+      data.ownerDiv = '<div class="main"><a href="/redaguotiveislyna">Redaguoti veislyną</a> ' +
+          '<a href="/note">Skelbti</a> ' +
+          `<a href="./remove/${id}">Ištrinti</a></div>`;
+      connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
+          if (veislynas.length === 0) {
+            data.message = 'Nepavyko rasti veislyno.';
+            reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+            return;
+          }
+          connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
+              connection.query('select * from telefonai where veislyno_id = ? and rodomas = true', id, (err, telefonai) => {
+                  connection.query('select * from pastai where veislyno_id = ? and rodomas = true', id, (err, pastai) => {
+                    connection.query('select * from naujienos where veislyno_id = ? order by data DESC', id, (err, naujienos) => {
+                      data.veislynas = veislynas[0];
+                      data.veislynas.registracijos_data = formatDate(data.veislynas.registracijos_data);
+                      data.veislynas.paskutinio_aktyvumo_data = formatDate(data.veislynas.paskutinio_aktyvumo_data);
+                      data.adresai = adresai;
+                      data.telefonai = telefonai;
+                      data.pastai = pastai;
+                      data.naujienos = generateImageDivs(naujienos, true);
+                      data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                      reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                    });
                   });
-                });
-            });
-        });
-    });
-    updateTime(id);
+              });
+          });
+      });
+      updateTime(id);
+    } else {
+      data.ownerDiv = '<div class="main"><a href="/naujasveislynas">Registruoti veislyną</a> ';
+      reply.view('./veislynai/veislynas.html', {htmlData, data});
+    }
+  });
 };
 
 const showPageById = (request, reply) => {
@@ -419,78 +481,114 @@ const showPageById = (request, reply) => {
 }
 
 const showPage = (request, reply) => {
-  // jei id, rodyti to id veislyną
   if (request.params.id) {
     showPageById(request, reply);
-  } else { // jei be id, rodyti kūrimą/savo
-    // patikrinti ar prisijungęs
+  } else {
     showOwnerPage(request, reply);
   }
 };
 
 const noteView = (request, reply) => {
-  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
-  reply.view('./veislynai/naujiena.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.naujienosSkelbimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  getId(request.state.session.user_id, (id) => {
+    if (id) {
+      reply.view('./veislynai/naujiena.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
+    } else {
+      reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, jūs neturite veislyno.'}});
+    }
+  });
 };
 
 const note = (request, reply) => {
-  // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
-  const id = 11;
-  const naujiena = {
-    veislyno_id: id,
-    antraste: request.payload.antraste,
-    tekstas: request.payload.tekstas,
-  };
-  if (request.payload.ar_svarbus) {
-    naujiena.ar_svarbus = true;
-  } else {
-    naujiena.ar_svarbus = false;
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.naujienosSkelbimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
   }
-  connection.query('insert into naujienos set ?', naujiena, (error, result) => {
-    reply.redirect('./veislynas');
-  }); 
-  updateTime(id);
+  getId(request.state.session.user_id, (id) => {
+    const naujiena = {
+      veislyno_id: id,
+      antraste: request.payload.antraste,
+      tekstas: request.payload.tekstas,
+    };
+    if (request.payload.ar_svarbus) {
+      naujiena.ar_svarbus = true;
+    } else {
+      naujiena.ar_svarbus = false;
+    }
+    connection.query('insert into naujienos set ?', naujiena, (error, result) => {
+      reply.redirect('./veislynas');
+    }); 
+    updateTime(id);
+  });
 };
 
 const deleteNote = (request, reply) => {
-  // patikrinti ar prisijungusio vartotojo veislyno id sutampa su žinutės veislyno id
-  const id = 11;
-   connection.query('select veislynai.id from veislynai, naujienos where veislynai.id = naujienos.veislyno_id and naujienos.id = ?', request.params.id, (err, result) => {
-     if (id == result[0].id) {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.naujienosSkelbimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  getId(request.state.session.user_id, (id) => {
+    connection.query('select veislynai.id from veislynai, naujienos where veislynai.id = naujienos.veislyno_id and naujienos.id = ?', request.params.id, (err, result) => {
+      if (id == result[0].id) {
         connection.query('delete from naujienos where id = ?', request.params.id, (err, result) => {
           reply.redirect('../veislynas');
         });
-     } else {
-       reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Negalima.</div>'}})
-     }
-   });
-   updateTime(id);
+      } else {
+        reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Negalima.</div>'}})
+      }
+    });
+    updateTime(id);
+  });
 };
 
 const remove = (request, reply) => {
-  // patikrinti ar prisijungusio vartotojo veislyno id sutampa su nurodytu id
-  const id = 11;
-  connection.query('update veislynai set ar_istrintas = ? where id = ?', [true, id], (err, result) => {
-    reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Ištrinta</div>'}});
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.asmeninioPuslapioRedagavimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  getId(request.state.session.user_id, (id) => {
+    connection.query('update veislynai set ar_istrintas = ? where id = ?', [true, id], (err, result) => {
+      reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Ištrinta</div>'}});
+    });
   });
-
 };
 
 const reportView = (request, reply) => {
-  // Patikrinti ar administratorius ir paimti iš db tipus
-  const data = {
-    tipas: [
-      {id: 1,
-      gyvuno_tipas: 'Katė'},
-      {id: 2,
-      gyvuno_tipas: 'Šuo'},
-    ]
-  };
-  reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(data.tipas)}});
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  connection.query('select * from tipas group by gyvuno_tipas', (err, result) => {
+    reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(result)}});
+  });
 };
 
 const report = (request, reply) => {
-  // Patikrinti ar administratorius ir paimti iš db duomenis
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const isivaizduojamiDuomenys = [
     {
       pavadinimas: 'Grumpy cat veislynas',
