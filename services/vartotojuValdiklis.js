@@ -1,6 +1,8 @@
 const mysql = require('mysql');
 const bcrypt = require('bcryptjs');
 
+const saltRounds = 10;
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -34,7 +36,7 @@ const registerUser = (request, reply) => {
     })
 
     reply().state('data', 'thisisacookiestring');
-}
+};
 
 const loginUser = (request, reply) => {
     const loginData = {
@@ -49,7 +51,7 @@ const loginUser = (request, reply) => {
                 checkMatch(loginData.password, result1[0].slaptazodis, (res) => {
                     if (res) {
                         connection.query('select roles.id, roles.pavadinimas, roliu_teises.id, roliu_teises.pavadinimas, ' +
-                            'vartotojai.vartotojo_vardas from roles, vartotojai, roliu_teises, ' +
+                            'vartotojai.vartotojo_vardas, vartotojai.id from roles, vartotojai, roliu_teises, ' +
                             `role_teise WHERE vartotojai.vartotojo_vardas = '${loginData.username}' ` +
                             'AND vartotojai.roles_id = roles.id AND roles.id = role_teise.roles_id ' +
                             'AND role_teise.teises_id = roliu_teises.id', {}, (err, result2) => {
@@ -62,6 +64,7 @@ const loginUser = (request, reply) => {
                             }
                             reply().state('session', {
                                 username: loginData.username,
+                                user_id: result1[0].id,
                                 access_token: result1[0].prieigos_raktas,
                                 gyvunoRegistravimas: teises[10],
                                 uzregistruotoGyvunoRedagavimas: teises[11],
@@ -92,11 +95,11 @@ const loginUser = (request, reply) => {
             }
 
     });
-}
+};
 
 const logoutUser = (request, reply) => {
     reply().redirect('/').unstate('session');
-}
+};
 
 const generateNavBar = (session) => {
     htmlData = {};
@@ -148,7 +151,7 @@ const generateNavBar = (session) => {
             '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu<span class="caret"></span></a>' +
             '<ul class="dropdown-menu">';
         if (session.asmeninioProfilioPerziuraRedagavimas == 'yes') {
-            htmlData.navbar += '<li><a href="#">Redaguoti profilį</a></li>';
+            htmlData.navbar += '<li><a href="/profile">Redaguoti profilį</a></li>';
         }
         if (session.vartotojuRoliuKeitimas == 'yes') {
             htmlData.navbar += '<li><a href="#">Keisti roles</a></li>';
@@ -169,13 +172,16 @@ const generateNavBar = (session) => {
     if (session == undefined) {
         htmlData.navbar +=
             '<li><a style="cursor: pointer" data-toggle="modal" data-target="#registerModal"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
-            '<li><a style="cursor: pointer" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
-            '</ul></div></nav>';
+            '<li><a style="cursor: pointer" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>';
     }
+    htmlData.navbar += '</ul></div></nav>';
     return htmlData;
 };
 
-const saltRounds = 10;
+const profileView = (request, reply) => {
+    var data = generateNavBar(request.state.session);
+    reply.view('./vartotojai/profile.html', {data});
+};
 
 const hashString = (myString, callback) => {
     bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -196,4 +202,5 @@ module.exports = {
     loginUser: loginUser,
     generateNavBar: generateNavBar,
     logoutUser: logoutUser,
-}
+    profileView: profileView,
+};

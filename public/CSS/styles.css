@@ -68,3 +68,14 @@ div {
 .delete-note {
     float: right;
 }
+
+.profile-div {
+    display: inline-block;
+    width: 50%;
+    margin: 50px 50px 50px 50px;
+    text-align: left;
+}
+
+.form-group {
+
+}
