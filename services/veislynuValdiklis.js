@@ -1,4 +1,6 @@
 const mysql = require('mysql');
+const vartotojai = require('./vartotojuValdiklis.js');
+
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -7,50 +9,6 @@ const connection = mysql.createConnection({
   database: 'pets'
 });
 connection.connect();
-
-/* Laikinai čia, turės būt perkeltas ten, kur tikrinamas autentifikavimas, kad žinoti
-    ką rodyti navbar'e. */
-
-let htmlData = {};
-htmlData.head = '<head><title>Le pets</title>' +
-    '<link rel="stylesheet" href="../public/CSS/styles.css">' +
-    '<meta charset="utf-8">' +
-    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-    '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' +
-    '<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">' +
-    '<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>' +
-    '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script></head>';
-htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-fluid">' +
-    '<div class="navbar-header"><a class="navbar-brand" href="/">Le pets</a></div>' +
-    '<ul class="nav navbar-nav">' +
-      '<li><a href="/veislynas">Veislynai</a></li>' +
-      '<li><a href="/gyvunai">Gyvūnai</a></li>' +
-      '<li><a href="/veisle/1">Veislės</a></li>' +
-      '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>'+ 
-    '</ul>' +
-    '<ul class="nav navbar-nav navbar-right">' +
-    '<li class="dropdown">' +
-        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
-        '<ul class="dropdown-menu">' +
-          '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
-          '<li><a href="#">Veislių ataskaita</a></li>' +
-          '<li><a href="#">Gyvūnų ataskaita</a></li>' +
-          '<li><a href="#">Vartotojų ataskaita</a></li>' +
-        '</ul></li>' +
-    '<li class="dropdown">' +
-        '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu<span class="caret"></span></a>' +
-        '<ul class="dropdown-menu">' +
-          '<li><a href="#">Redaguoti profilį</a></li>' +
-          '<li><a href="#">Keisti roles</a></li>' +
-          '<li><a href="#">Patvirtinti veislynus</a></li>' +
-          '<li><a href="#">Žinutės</a></li>' +
-          '<li><a href="#">Prenumerata</a></li>' +
-          '<li><a href="#">Atsijungti</a></li>' +
-        '</ul></li>' +
-    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
-    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
-    '</ul></div></nav>';
-
 
 const generateTypeSelect = (data) => {
   let temp = '';
@@ -136,7 +94,7 @@ const registerView = (request, reply) => {
       gyvuno_tipas: 'Šuo'},
     ]
   };
-  reply.view('./veislynai/veislynoRegistracija.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
+  reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(data.tipas)}});
 };
 
 const register = (request, reply) => {
@@ -158,12 +116,12 @@ const register = (request, reply) => {
     const data = generateDivs(request.payload, types);
     data.errors = error; 
 
-    reply.view('./veislynai/veislynoRegistracija.html', {htmlData, data});
+    reply.view('./veislynai/veislynoRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
   } else {
     getMaxId((maxId) => {
       insertNew(request.payload, maxId, () => {
         const data = {message: '<div class="message">Veislynas užregistruotas, laukite patvirtinimo.</div>'}
-        reply.view('./veislynai/veislynas.html', {htmlData, data});
+        reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
       });
     });
   }
@@ -242,7 +200,7 @@ const editView = (request, reply) => {
           connection.query('select * from telefonai where veislyno_id = ?', id, (err, telefonai) => {
               connection.query('select * from pastai where veislyno_id = ?', id, (err, pastai) => {
                 const data = generateEditDivs(veislynas[0], adresai, telefonai, pastai);
-                reply.view('./veislynai/veislynoRedagavimas.html', {htmlData, data});
+                reply.view('./veislynai/veislynoRedagavimas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
               });
           });
       });
@@ -255,7 +213,7 @@ const edit = (request, reply) => {
         [request.payload.pavadinimas, request.payload.aprasymas, request.payload.veiklos_pradzia,
         request.payload.nuotraukos_url, request.payload.id], (err, result) => {
           const data = {message: '<div class="message">Išsaugota</message>'}
-          reply.view('./veislynai/veislynas.html', {htmlData, data});
+          reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
         });
   updateTime(id);
 };
@@ -407,7 +365,7 @@ const showOwnerPage = (request, reply) => {
     connection.query('select * from veislynai where id = ?', id, (err, veislynas) => {
         if (veislynas.length === 0) {
           data.message = 'Nepavyko rasti veislyno.';
-          reply.view('./veislynai/veislynas.html', {htmlData, data});
+          reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
           return;
         }
         connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
@@ -422,7 +380,7 @@ const showOwnerPage = (request, reply) => {
                     data.pastai = pastai;
                     data.naujienos = generateImageDivs(naujienos, true);
                     data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
-                    reply.view('./veislynai/veislynas.html', {htmlData, data});
+                    reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
                   });
                 });
             });
@@ -437,7 +395,7 @@ const showPageById = (request, reply) => {
   connection.query('select * from veislynai where id = ? and ar_istrintas <> true and ar_patvirtintas = true', id, (err, veislynas) => {
       if (veislynas.length === 0) {
         data.message = '<div class="message">Nepavyko rasti veislyno.</div>';
-        reply.view('./veislynai/veislynas.html', {htmlData, data});
+        reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
         return;
       }
       connection.query('select * from adresai where veislyno_id = ? and rodomas = true', id, (err, adresai) => {
@@ -452,7 +410,7 @@ const showPageById = (request, reply) => {
                   data.pastai = pastai;
                   data.naujienos = generateImageDivs(naujienos);
                   data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
-                  reply.view('./veislynai/veislynas.html', {htmlData, data});
+                  reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
                 });
               });
           });
@@ -472,7 +430,7 @@ const showPage = (request, reply) => {
 
 const noteView = (request, reply) => {
   // patikrinti ar prisijungęs ir sausainiukas turi veislyno id
-  reply.view('./veislynai/naujiena.html', {htmlData});
+  reply.view('./veislynai/naujiena.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
 };
 
 const note = (request, reply) => {
@@ -503,7 +461,7 @@ const deleteNote = (request, reply) => {
           reply.redirect('../veislynas');
         });
      } else {
-       reply.view('./message.html', {htmlData, data: {message: '<div class="message">Negalima.</div>'}})
+       reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Negalima.</div>'}})
      }
    });
    updateTime(id);
@@ -513,7 +471,7 @@ const remove = (request, reply) => {
   // patikrinti ar prisijungusio vartotojo veislyno id sutampa su nurodytu id
   const id = 11;
   connection.query('update veislynai set ar_istrintas = ? where id = ?', [true, id], (err, result) => {
-    reply.view('./message.html', {htmlData, data: {message: '<div class="message">Ištrinta</div>'}});
+    reply.view('./message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: '<div class="message">Ištrinta</div>'}});
   });
 
 };
@@ -528,7 +486,7 @@ const reportView = (request, reply) => {
       gyvuno_tipas: 'Šuo'},
     ]
   };
-  reply.view('./veislynai/ataskaita.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
+  reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(data.tipas)}});
 };
 
 const report = (request, reply) => {
@@ -562,7 +520,7 @@ const report = (request, reply) => {
       parduodamu_skaicius: 5,
     },
   ];
-  reply.view('./veislynai/ataskaita.html', {htmlData, data: {veislynai: isivaizduojamiDuomenys}});
+  reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {veislynai: isivaizduojamiDuomenys}});
 };
 
 module.exports = {
