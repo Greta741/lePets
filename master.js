@@ -1,7 +1,9 @@
 const Hapi = require('hapi');
 const Vision = require('vision');
 const Inert = require('inert');
+
 const veislynai = require('./services/veislynuValdiklis.js');
+const vartotojai = require('./services/vartotojuValdiklis.js');
 const gyvunai = require('./services/gyvunuValdiklis.js');
 const veisles = require('./services/veisliuValdiklis.js');
 
@@ -74,18 +76,21 @@ htmlData.navbar = '<nav class="navbar navbar-default"><div class="container-flui
           '<li><a href="#">Prenumerata</a></li>' +
           '<li><a href="#">Atsijungti</a></li>' +
         '</ul></li>' +
-    '<li><a href="./register"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
-    '<li><a href="./login"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
+    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#registerModal"><span class="glyphicon glyphicon-user"></span> Registruotis</a></li>' +
+    '<li><a style="cursor: pointer" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-log-in"></span> Prisijungti</a></li>' +
     '</ul></div></nav>';
 
 server.route({
     method: 'GET',
     path: '/',
     handler: (request, reply) => {
-        reply.view('index.html', {htmlData});
+        reply.view('index.html', {htmlData}).state('datacook', 'value');
     },
 });
 
+server.state('data', {
+    isSecure: false,
+})
 /* Veislių valdiklio routes  */
 server.route({
     method: 'GET',
@@ -196,6 +201,12 @@ server.route({
     method: 'POST',
     path: '/ataskaitos/veislynai',
     handler: veislynai.report,
+});
+
+server.route({
+    method: 'POST',
+    path: '/register',
+    handler: vartotojai.registerUser,
 });
 
 
