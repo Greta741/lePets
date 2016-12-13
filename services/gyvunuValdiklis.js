@@ -65,9 +65,8 @@ const registerView = (request, reply) => {
   });
 };
 
-const insertNew = (data, reply, request) => {
+const insertNew = (data, reply) => {
   data = data.payload;
-  console.log(request.state.session.user_id);
   const atsiemimo_vieta = {
       miestas: data.miestas,
       gatve: data.gatve,
@@ -84,7 +83,7 @@ const insertNew = (data, reply, request) => {
   };
   const gyvunas = {
       tipas_id: data.tipas,
-      vartotojas_id: request.state.session.user_id,
+      vartotojas_id: 1,
       vardas: data.vardas,
       nuotrauka: data.nuotrauka,
       tevas: data.tevas,
@@ -96,10 +95,8 @@ const insertNew = (data, reply, request) => {
   // Jeigu ivesta kilme ir apdovanojimas
   if (data.kilme == 1 && data.apdov == 1) {    
     connection.query('insert into atsiemimo_vieta set ?', atsiemimo_vieta, (err, result1) => {
-      console.log(err);
       pardavimas.atsiemimo_vieta_id = result1.insertId;    
       connection.query('insert into pardavimas set ?', pardavimas, (err, result2) => {
-        console.log(err);
         const apdovanojimas = {
           data: data.apdovanojimas_data,
           uzimta_vieta: data.uzimta_vieta,
@@ -110,12 +107,10 @@ const insertNew = (data, reply, request) => {
           konkurso_salis: data.konkurso_salis,
         };
         connection.query('insert into apdovanojimas set ?', apdovanojimas, (err, result3) => {
-          console.log(err);
           gyvunas.apdovanojimas_id = result3.insertId;
           gyvunas.veislės_id = data.veisle;
           gyvunas.pardavimas_id = result2.insertId;
           connection.query('insert into gyvunas set ?', gyvunas, (err, result) => {
-            console.log(err);
           });
         });
       });
@@ -124,14 +119,11 @@ const insertNew = (data, reply, request) => {
   // jeigu ivesta tik kilme
   else if (data.kilme == 1 && data.apdov == 0) {
     connection.query('insert into atsiemimo_vieta set ?', atsiemimo_vieta, (err, result1) => {
-      console.log(err);   
       pardavimas.atsiemimo_vieta_id = result1.insertId;     
       connection.query('insert into pardavimas set ?', pardavimas, (err, result2) => {
-        console.log(err);
         gyvunas.veislės_id = data.veisle;
         gyvunas.pardavimas_id = result2.insertId;
           connection.query('insert into gyvunas set ?', gyvunas, (err, result) => {
-          console.log(err);
         });
       });
     });
@@ -139,10 +131,8 @@ const insertNew = (data, reply, request) => {
   // jeigu ivesta tik apdovanojimas
   else if ((data.kilme == 0 && data.apdov == 1)) {
     connection.query('insert into atsiemimo_vieta set ?', atsiemimo_vieta, (err, result1) => {
-      console.log(err);    
       pardavimas.atsiemimo_vieta_id = result1.insertId;    
       connection.query('insert into pardavimas set ?', pardavimas, (err, result2) => {
-        console.log(err);
         const apdovanojimas = {
           data: data.apdovanojimas_data,
           uzimta_vieta: data.uzimta_vieta,
@@ -153,25 +143,21 @@ const insertNew = (data, reply, request) => {
           konkurso_salis: data.konkurso_salis,
         };
         connection.query('insert into apdovanojimas set ?', apdovanojimas, (err, result3) => {
-          console.log(err);
           gyvunas.apdovanojimas_id = result3.insertId;
           gyvunas.pardavimas_id = result2.insertId;
           connection.query('insert into gyvunas set ?', gyvunas, (err, result) => {
-            console.log(err);
           });
         });
       });
     });
   }
+  // jei nenurodyta nei veisle, nei apdovanojimas
   else {
     connection.query('insert into atsiemimo_vieta set ?', atsiemimo_vieta, (err, result1) => {
-      console.log(err); 
       pardavimas.atsiemimo_vieta_id = result1.insertId;       
       connection.query('insert into pardavimas set ?', pardavimas, (err, result2) => {
-        console.log(err);
         gyvunas.pardavimas_id = result2.insertId;
           connection.query('insert into gyvunas set ?', gyvunas, (err, result) => {
-          console.log(err);
         });
       });
     });
