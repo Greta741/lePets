@@ -51,7 +51,7 @@ const loginUser = (request, reply) => {
                 checkMatch(loginData.password, result1[0].slaptazodis, (res) => {
                     if (res) {
                         connection.query('select roles.id, roles.pavadinimas, roliu_teises.id, roliu_teises.pavadinimas, ' +
-                            'vartotojai.vartotojo_vardas, vartotojai.id from roles, vartotojai, roliu_teises, ' +
+                            'vartotojai.vartotojo_vardas, vartotojai.id as vart_id from roles, vartotojai, roliu_teises, ' +
                             `role_teise WHERE vartotojai.vartotojo_vardas = '${loginData.username}' ` +
                             'AND vartotojai.roles_id = roles.id AND roles.id = role_teise.roles_id ' +
                             'AND role_teise.teises_id = roliu_teises.id', {}, (err, result2) => {
@@ -64,7 +64,7 @@ const loginUser = (request, reply) => {
                             }
                             reply().state('session', {
                                 username: loginData.username,
-                                user_id: result1[0].id,
+                                access_token: result1[0].vart_id,
                                 access_token: result1[0].prieigos_raktas,
                                 gyvunoRegistravimas: teises[10],
                                 uzregistruotoGyvunoRedagavimas: teises[11],
