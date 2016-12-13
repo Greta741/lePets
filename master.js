@@ -81,9 +81,13 @@ server.route({
     method: 'GET',
     path: '/',
     handler: (request, reply) => {
-        reply.view('index.html', {htmlData});
+        reply.view('index.html', {htmlData}).state('datacook', 'value');
     },
 });
+
+server.state('data', {
+    isSecure: false,
+})
 
 /* Veislynų valdiklio routes  */
 server.route({

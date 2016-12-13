@@ -11,6 +11,7 @@ connection.connect();
 
 const registerUser = (request, reply) => {
 
+    console.log(request.state['data']);
     const date = new Date();
     const newUser = {
         vartotojo_vardas: request.payload['data[username]'],
@@ -33,7 +34,7 @@ const registerUser = (request, reply) => {
         })
     })
 
-    reply();
+    reply().state('data', 'thisisacookiestring');
 }
 
 const saltRounds = 10;

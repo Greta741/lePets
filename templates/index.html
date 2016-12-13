@@ -3,6 +3,7 @@
 {{{htmlData.navbar}}}
 
 <script>
+    console.log(document.cookie);
     const register = () => {
         var data = {};
         data.username = document.getElementById('username').value;
@@ -12,12 +13,14 @@
 
         var areThereErrors;
 
+        console.log(document.cookie);
         if (data.password !== data.confPassword || data.username == '' || data.email == '' || data.password == '') {
             areThereErrors = true;
         }
 
         if (!areThereErrors) {
             $.post('./register', {data}, function (result) {
+
                 location.reload();
             });
         } else {

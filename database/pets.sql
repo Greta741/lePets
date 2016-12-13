@@ -167,6 +167,7 @@ INSERT INTO `veislynai` (`id`, `tipo_id`, `vartotojo_id`, `pavadinimas`, `aprasy
 
 CREATE TABLE `vartotojai` (
   `id` int(11) NOT NULL,
+  `roles_id` int(11) NOT NULL,
   `prisijung_id` int(11) DEFAULT NULL,
   `vartotojo_vardas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
   `el_pastas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
@@ -193,7 +194,53 @@ CREATE TABLE `prisijungimo_duomenys` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
 
 --
--- Sukurta duomenų kopija lentelei `vartotojai`
+-- Sukurta duomenų kopija lentelei `asmenines_zinutes`
+--
+
+CREATE TABLE `asmenines_zinutes` (
+  `id` int(11) NOT NULL,
+  `adresatas` int(11) NOT NULL,
+  `siuntejas` int(11) NOT NULL,
+  `tekstas` varchar(500) COLLATE utf8_lithuanian_ci NOT NULL,
+  `tema` varchar(200) COLLATE utf8_lithuanian_ci NOT NULL,
+  `issiuntimo_laikas` datetime DEFAULT NULL,
+  `perziurejimo_laikas` datetime DEFAULT NULL,
+  `busena` varchar(20) COLLATE utf8_lithuanian_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `asmenines_zinutes`
+--
+
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL,
+  `adresatas` int(11) NOT NULL,
+  `pavadinimas` varchar(50) COLLATE utf8_lithuanian_ci NOT NULL,
+  `lygis` int(11) NOT NULL,
+  `priskyrimo_laikas` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `roles`
+--
+
+CREATE TABLE `roliu_teises` (
+  `id` int(11) NOT NULL,
+  `pavadinimas` varchar(100) COLLATE utf8_lithuanian_ci NOT NULL,
+  `aprasymas` varchar(500) COLLATE utf8_lithuanian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `roliu-teise`
+--
+
+CREATE TABLE `role-teise` (
+  `roles_id` int(11) NOT NULL,
+  `teises_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_lithuanian_ci;
+
+--
+-- Sukurta duomenų kopija lentelei `roliu-teise`
 --
 
 
@@ -250,6 +297,30 @@ ALTER TABLE `prisijungimo_duomenys`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `asmenines_zinutes`
+--
+ALTER TABLE `asmenines_zinutes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `roliu_teises`
+--
+ALTER TABLE `roliu_teises`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `role-teise`
+--
+ALTER TABLE `role-teise`
+  ADD PRIMARY KEY (`roles_id`, `teises_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -284,6 +355,24 @@ ALTER TABLE `vartotojai`
 -- AUTO_INCREMENT for table `prisijungimo_duomenys`
 --
 ALTER TABLE `prisijungimo_duomenys`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `asmenines_zinutes`
+--
+ALTER TABLE `asmenines_zinutes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `roliu_teises`
+--
+ALTER TABLE `roliu_teises`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 
