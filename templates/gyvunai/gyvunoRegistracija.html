@@ -1,4 +1,40 @@
 {{{htmlData.head}}}
+<script>
+    function displayBreads(test) {
+        if (test == 1) {
+            document.getElementById("veisle").style.display = "block";
+            document.getElementById("b").required = true;
+        }
+        if (test == 0) {
+            document.getElementById("veisle").style.display = "none";
+            document.getElementById("b").required = false;
+        }
+    }
+</script>
+<script>
+    function displayApdovanojimas(test) {
+        if (test == 1) {
+            document.getElementById("apdovanojimas").style.display = "block";
+            document.getElementById("apdovanojimas_data").required = true;
+            document.getElementById("uzimta_vieta").required = true;
+            document.getElementById("prizas").required = true;
+            document.getElementById("dalyviu_skaicius").required = true;
+            document.getElementById("seimininkas").required = true;
+            document.getElementById("konkurso_miestas").required = true;
+            document.getElementById("konkurso_salis").required = true;
+        }
+        if (test == 0) {
+            document.getElementById("apdovanojimas").style.display = "none";
+            document.getElementById("apdovanojimas_data").required = false;
+            document.getElementById("uzimta_vieta").required = false;
+            document.getElementById("prizas").required = false;
+            document.getElementById("dalyviu_skaicius").required = false;
+            document.getElementById("seimininkas").required = false;
+            document.getElementById("konkurso_miestas").required = false;
+            document.getElementById("konkurso_salis").required = false;
+        }
+    }
+</script>
 <body>
     {{{htmlData.navbar}}}
     <div id="main-content" class="main">
@@ -94,16 +130,7 @@
                         {{#if data.telefonas}}
                             {{{data.telefonas}}}
                         {{else}}
-                            <input type="tel" maxlength="12" id="telefonas" name="telefonas" class="form-control input-sm" required="true" value="">
-                        {{/if}}
-                    </div>
-
-                    <div>
-                        <label class="field" for="pardavimas_data">Data</label>
-                        {{#if data.pardavimas_data}}
-                            {{{data.pardavimas_data}}}
-                        {{else}}
-                            <input type="date" id="pardavimas_data" name="pardavimas_data" class="form-control input-sm" required="true" value="">
+                            <input type="number" min="860000000" max="869999999" step="1" id="telefonas" name="telefonas" class="form-control input-sm" required="true" value="">
                         {{/if}}
                     </div>
 
@@ -165,7 +192,95 @@
                         {{/if}}
                     </div>
                 </div>
+
+                <div class="inner-form">
+                    <label class="field" for="kilm">Ar kilmingas?</label><br>
+                    <input type="radio" name="kilme" value="1" required="true" onclick="displayBreads(1)">Taip<br>
+                    <input type="radio" name="kilme" value="0" required="true" onclick="displayBreads(0)">Ne<br>
+                </div>
+
+                <div class="inner-form" id="veisle" style="display: none">
+                    <label class="field" for="veisle">Veislė</label><br>
+                    {{#each data.veisle}}
+                        <input type="radio" id="b" name="veisle" value="{{{this.id}}}" required="true"> {{this.pavadinimas}}<br>
+                    {{/each}}
+                </div>
+
+                <div class="inner-form">
+                    <label class="field" for="apd">Ar turi apdovanojimą?</label><br>
+                    <input type="radio" name="apdov" value="1" required="true" onclick="displayApdovanojimas(1)">Taip<br>
+                    <input type="radio" name="apdov" value="0" required="true" onclick="displayApdovanojimas(0)">Ne<br>
+                </div>
+
+                <div class="inner-form" id="apdovanojimas" style="display: none">
+                    <label class="field" for="apdova">Apdovanojimo informacija</label><br>
+
+                    <div>
+                        <label class="field" for="apdovanojimas_data">Apdovanojimo gavimo data</label>
+                        {{#if data.apdovanojimas_data}}
+                            {{{data.apdovanojimas_data}}}
+                        {{else}}
+                            <input type="date" id="apdovanojimas_data" name="apdovanojimas_data" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="uzimta_vieta">Užimta vieta</label>
+                        {{#if data.uzimta_vieta}}
+                            {{{data.uzimta_vieta}}}
+                        {{else}}
+                            <input type="number" min="0" max="999" step="1" id="uzimta_vieta" name="uzimta_vieta" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="prizas">Prizas</label>
+                        {{#if data.prizas}}
+                            {{{data.prizas}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="prizas" name="prizas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="dalyviu_skaicius">Dalyvių skaičius</label>
+                        {{#if data.dalyviu_skaicius}}
+                            {{{data.dalyviu_skaicius}}}
+                        {{else}}
+                            <input type="number" min="0" max="9999" step="1" id="dalyviu_skaicius" name="dalyviu_skaicius" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="seimininkas">Šeimininkas</label>
+                        {{#if data.seimininkas}}
+                            {{{data.seimininkas}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="seimininkas" name="seimininkas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="konkurso_miestas">Konkurso miestas</label>
+                        {{#if data.konkurso_miestas}}
+                            {{{data.konkurso_miestas}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="konkurso_miestas" name="konkurso_miestas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="konkurso_salis">Konkurso šalis</label>
+                        {{#if data.konkurso_salis}}
+                            {{{data.konkurso_salis}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="konkurso_salis" name="konkurso_salis" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+                </div>
+                <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
             </form>
         </div>
     </div>
 </body>
+
