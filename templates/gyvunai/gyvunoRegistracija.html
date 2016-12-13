@@ -1,0 +1,171 @@
+{{{htmlData.head}}}
+<body>
+    {{{htmlData.navbar}}}
+    <div id="main-content" class="main">
+        {{{data.errors}}}
+        <div class="simple-form" id="formContainer">
+            <form action="" method="post">
+                <div class="inner-form">
+                    <label class="field" for="Gyvunas">Gyvūnas</label>
+
+                    <div>
+                        <label class="field" for="vardas">Vardas</label>
+                        {{#if data.vardas}}
+                            {{{data.vardas}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="vardas" name="vardas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="tipas">Tipas</label><br>
+                        {{{data.tipas}}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="amzius">Amžius (metais)</label>
+                        {{#if data.amzius}}
+                            {{{data.amzius}}}
+                        {{else}}
+                            <input type="number" step="1" min="0" max="99" id="amzius" name="amzius" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                    <label class="field" for="nuotrauka">Nuotrauka</label>
+                        {{#if data.nuotrauka}}
+                            {{{data.nuotrauka}}}
+                        {{else}}
+                            <input type="URL" maxlength="500" id="nuotrauka" name="nuotrauka" class="form-control input-sm" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="tevas">Tėvas</label>
+                        {{#if data.tevas}}
+                            {{{data.tevas}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="tevas" name="tevas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="motina">Motina</label>
+                        {{#if data.motina}}
+                            {{{data.motina}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="motina" name="motina" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="spalva">Spalva</label>
+                        {{#if data.spalva}}
+                            {{{data.spalva}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="spalva" name="spalva" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="inner-form">
+                    <label class="field" for="pardavimas">Pardavimo informacija</label>
+
+                    <div>
+                        <label class="field" for="kaina">Kaina</label>
+                        {{#if data.kaina}}
+                            {{{data.kaina}}}
+                        {{else}}
+                            <input type="number" step="any" min="0" id="kaina" name="kaina" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="pardavejo_vardas">Pardavėjo vardas</label>
+                        {{#if data.pardavejo_vardas}}
+                            {{{data.pardavejo_vardas}}}
+                        {{else}}
+                            <input type="text" maxlength="50" id="pardavejo_vardas" name="pardavejo_vardas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="telefonas">Telefonas</label>
+                        {{#if data.telefonas}}
+                            {{{data.telefonas}}}
+                        {{else}}
+                            <input type="tel" maxlength="12" id="telefonas" name="telefonas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="pardavimas_data">Data</label>
+                        {{#if data.pardavimas_data}}
+                            {{{data.pardavimas_data}}}
+                        {{else}}
+                            <input type="date" id="pardavimas_data" name="pardavimas_data" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="aprasymas">Aprašymas</label>
+                        {{#if data.aprasymas}}
+                            {{{data.aprasymas}}}
+                        {{else}}
+                            <textarea id="aprasymas" name="aprasymas" rows="15" maxlength="500" class="form-control input-sm" required="true" value=""></textarea>
+                        {{/if}}
+                    </div>
+                </div>
+
+                <div class="inner-form">
+                    <label class="field" for="info">Informacija, apie atsiėmimo vietą</label>
+                    
+                    <div>
+                        <label class="field" for="miestas">Miestas</label>
+                        {{#if data.miestas}}
+                            {{{data.miestas}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="miestas" name="miestas" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="gatve">Gatvė</label>
+                        {{#if data.gatve}}
+                            {{{data.gatve}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="gatve" name="gatve" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="namo_numeris">Namo numeris</label>
+                        {{#if data.namo_numeris}}
+                            {{{data.namo_numeris}}}
+                        {{else}}
+                            <input type="number" step="1" min="0" max="9999" id="namo_numeris" name="namo_numeris" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="buto_numeris">Buto numeris</label>
+                        {{#if data.buto_numeris}}
+                            {{{data.buto_numeris}}}
+                        {{else}}
+                            <input type="number" step="1" min="0" max="9999" id="buto_numeris" name="buto_numeris" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label class="field" for="salis">Šalis</label>
+                        {{#if data.salis}}
+                            {{{data.salis}}}
+                        {{else}}
+                            <input type="text" maxlength="100" id="salis" name="salis" class="form-control input-sm" required="true" value="">
+                        {{/if}}
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
