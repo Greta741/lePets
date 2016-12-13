@@ -129,7 +129,7 @@ const generateNavBar = (session) => {
         }
 
         if (session.paieskaPagalRaktazodi == 'yes') {
-            htmlData.navbar += '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Paieška</a></li>';
+            htmlData.navbar += '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Gyvūnų paieška</a></li>';
         }
         htmlData.navbar += '</ul>';
         htmlData.navbar += '<ul class="nav navbar-nav navbar-right">';
@@ -148,7 +148,7 @@ const generateNavBar = (session) => {
     if (session != undefined) {
         htmlData.navbar +=
             '<li class="dropdown">' +
-            '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Menu<span class="caret"></span></a>' +
+            '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Meniu<span class="caret"></span></a>' +
             '<ul class="dropdown-menu">';
         if (session.asmeninioProfilioPerziuraRedagavimas == 'yes') {
             htmlData.navbar += '<li><a href="/profile">Redaguoti profilį</a></li>';
