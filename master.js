@@ -179,6 +179,12 @@ server.route({
     handler: vartotojai.logoutUser,
 });
 
+server.route({
+    method: 'GET',
+    path: '/profile',
+    handler: vartotojai.profileView,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
