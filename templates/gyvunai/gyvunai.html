@@ -1,11 +1,15 @@
 {{{htmlData.head}}}
 <body>
 {{{htmlData.navbar}}}
-{{#if data.message}}
-        {{{data.message}}}
-{{/if}}
 <div id="main-content" class="main">
     <h1>Visi sistemoje užregistruoti gyvūnai</h1>
+    <h3>{{#if data.message}}
+        {{{data.message}}}
+    {{/if}}
+    </h3>
+    <div class="pets main">
+        <a href="/naujasgyvunas" class="btn btn-default">Registruoti gyvūną</a>
+    </div>
     {{#each data.gyvunas}}
         <div class="pets main">
             <h2>{{this.vardas}}</h2>

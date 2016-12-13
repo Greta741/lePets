@@ -83,8 +83,26 @@ const formatDate = (data) => {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 };
 
+const generateTypeSelect = (data) => {
+  let temp = '';
+  data.forEach((tipas) => {
+    temp += `<input type="radio" name="tipas" value="${tipas.id}" required="true"> ${tipas.gyvuno_tipas} ${tipas.lytis}<br>`;
+  });
+  return temp;
+};
+
+const registerView = (request, reply) => {
+  const data = {};
+  connection.query('select * from tipas', (err, tipas) => {
+    data.tipas = tipas;
+    reply.view('./gyvunai/gyvunoRegistracija.html', {htmlData, data : {tipas : generateTypeSelect(data.tipas)}});
+  });
+};
+
 module.exports = {
+  generateTypeSelect,
   formatDate,
   showAllAnimals,
   showPage,
+  registerView,
 }
