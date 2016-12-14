@@ -9,6 +9,7 @@
                 <th>Id</th>
                 <th>Pavadinimas</th>
                 <th>Registracijos data</th>
+                <th>Savininkas</th>
             </tr>
             </thead>
             <tbody>
@@ -17,9 +18,10 @@
                 <td>{{{this.id}}}</td>
                 <td>{{{this.pavadinimas}}}</td>
                 <td>{{{this.registracijos_data}}}</td>
+                <td>{{{this.vartotojo_vardas}}}</td>
                 <td id="{{{this.id}}}">
-                    <button class="btn-success" value="accept" onclick="decide(this.parentNode.id, this.value)">Priimti</button>
-                    <button class="btn-danger" value="reject" onclick="decide(this.parentNode.id, this.value)">Atmesti</button>
+                    <button class="btn-success" value="accept" onclick="decide(this.parentNode.id, this.value, this.parentNode.previousElementSibling.innerHTML)">Priimti</button>
+                    <button class="btn-danger" value="reject" onclick="decide(this.parentNode.id, this.value, this.parentNode.previousElementSibling.innerHTML)">Atmesti</button>
                 </td>
             </tr>
             {{/each}}
@@ -30,8 +32,8 @@
 </body>
 
 <script>
-    const decide = (id, decision) => {
-        $.post('./keistiVeislynoStatusa', {id: id, decision: decision}, (result) => {
+    const decide = (id, decision, username) => {
+        $.post('./keistiVeislynoStatusa', {id: id, decision: decision, username: username}, (result) => {
             location.reload();
         });
     };

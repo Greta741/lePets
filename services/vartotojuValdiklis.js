@@ -277,7 +277,8 @@ const veislynuRegView = (request, reply) => {
         var veislynuData = {
             data: []
         }
-        connection.query('select pavadinimas, id, registracijos_data from veislynai where veislynai.ar_patvirtintas = 0 ' +
+        connection.query('select pavadinimas, veislynai.id, registracijos_data, vartotojai.id as vart_id, vartotojo_vardas ' +
+            'from veislynai, vartotojai where veislynai.ar_patvirtintas = 0 and vartotojai.id=veislynai.vartotojo_id ' +
             'order by registracijos_data', {}, (err, res) => {
             for (var i = 0; i < res.length; i++) {
                 var fullDate = res[i].registracijos_data;
@@ -288,7 +289,9 @@ const veislynuRegView = (request, reply) => {
                 veislynuData.data[i] = {
                     pavadinimas: res[i].pavadinimas,
                     id: res[i].id,
-                    registracijos_data: dateString
+                    registracijos_data: dateString,
+                    vart_id: res[i].vart_id,
+                    vartotojo_vardas: res[i].vartotojo_vardas
                 };
             }
             var data = generateNavBar(request.state.session);
@@ -308,8 +311,11 @@ const keistiVeislynoStatusa = (request, reply) => {
             decisionId = 2;
         }
         connection.query(`update veislynai set veislynai.ar_patvirtintas=${decisionId} where 
-        veislynai.id=${request.payload.id}`, {}, (err, res) => {
-            reply();
+            veislynai.id=${request.payload.id}`, {}, (err, res) => {
+            connection.query(`update vartotojai set vartotojai.roles_id=13 where 
+                vartotojai.vartotojo_vardas='${request.payload.username}'`, {}, (err, res) => {
+                reply();
+            });
         });
     } else {
         reply();
