@@ -27,7 +27,7 @@
                         {{{data.pavadinimas}}}
                     {{else}}
                         <input type="text" id="pavadinimas" name="pavadinimas" 
-                        class="form-control input-sm" required="true" value="">
+                        class="form-control input-sm" required="true" value="{{data.veisle.pavadinimas}}">
                     {{/if}}
                 </div>
                 <div>
@@ -46,7 +46,8 @@
 
                 <div>
                     <label class="field" for="aprasymas">Veislės aprašymas</label>
-                    <textarea type="text" class="form-control" id="aprasymas" rows="4" name="aprasymas" value=""></textarea>
+                    <textarea type="text" class="form-control" id="aprasymas" 
+                    rows="4" name="aprasymas" value="">{{data.veisle.aprasymas}}</textarea>
                 </div>
 
                 <div>
@@ -54,7 +55,8 @@
                     {{#if data.nuotraukos_url}}
                         {{{data.nuotraukos_url}}}
                     {{else}}
-                        <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
+                        <input type="URL" id="nuotraukos_url" name="nuotraukos_url"
+                         class="form-control input-sm" value="{{data.nuotraukos_url}}">
                     {{/if}}
                 </div>
                 <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">

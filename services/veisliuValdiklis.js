@@ -31,6 +31,30 @@ const registerView = (request, reply) => {
   reply.view('./veisles/veislesRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
 };
 
+const editView = (request, reply) => {
+  const id = request.params.id;
+
+  let data = {};
+  connection.query('select * from veisle where id = ?', id, (err, veisle) => {
+    connection.query('select * from nuotrauka where veisle = ?', id, (err, nuotrauka) => {
+      if (veisle.length === 0) {
+        data.message = '<div class="message">Nepavyko rasti veislės.</div>';
+        reply.view('./veisles/veisle.html', {htmlData, data});
+        return;
+      }
+      
+      data.veisle = veisle[0];
+      data.veisle.registravimo_data = formatDate(data.veisle.registravimo_data);
+      data.veisle.redagavimo_data = formatDate(data.veisle.redagavimo_data);
+      if(nuotrauka[0]) {
+        data.image = `<img class="v-image" src="${nuotrauka[0].url}" alt="img"></img>`
+      }
+      data.nuotraukos_url = nuotrauka[0].url;
+      reply.view('./veisles/veislesRedagavimas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
+  });
+};
+
 const insertNew = (request, reply) => {
   payload = request.payload;
   const veisle = {
@@ -47,7 +71,6 @@ const insertNew = (request, reply) => {
   let data = {};
   data.veisle = veisle;
   
-
   connection.query('insert into veisle set ?', veisle, (err, result) => {
     const nuotrauka = {
       veisle: result.insertId,
@@ -90,6 +113,7 @@ const showPage = (request, reply) => {
 module.exports = {
   allBreeds,
   registerView,
+  editView,
   insertNew,
   showPage,
 }
