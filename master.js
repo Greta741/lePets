@@ -280,6 +280,18 @@ server.route({
     handler: gyvunai.edit,
 });
 
+server.route({
+    method: 'GET',
+    path: '/ataskaitos/gyvunai',
+    handler: gyvunai.chooseReport,
+});
+
+server.route({
+    method: 'POST',
+    path: '/ataskaitos/gyvunai',
+    handler: gyvunai.returnReport,
+});
+
 /* Gyvūnų valdiklio routes pabaiga */
 
 server.start((err) => {

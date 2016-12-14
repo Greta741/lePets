@@ -1,0 +1,55 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+
+
+{{#if data.tipas}}
+<div id="main-content">
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+            <div>
+                <label class="field" for="tipas">Tipas</label><br>
+                {{{data.tipas}}}
+            </div>
+            <input type="submit" class="submit btn btn-success" name="submit" value="Rodyti">
+    </form>
+    </div>
+</div>
+{{/if}}
+
+{{#if data.gyvunai}}
+<div id="main-content">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Vardas</th>
+            <th>Tėvas</th>
+            <th>Motina</th>
+            <th>Spalva</th>
+            <th>Amžius</th>
+            <th>Vartotojas vardas</th>
+            <th>Gyvūno tipas</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each data.gyvunai}}
+                <tr>
+                    <td>{{this.vardas}}</td>
+                    <td>{{this.tevas}}</td>
+                    <td>{{this.motina}}</td>
+                    <td>{{this.spalva}}</td>
+                    <td>{{this.amzius}}</td>
+                    <td>{{this.vartotojas}}</td>
+                    <td>{{this.tipas}}</td>
+                </tr>
+            {{/each}}      
+        </tbody>
+    </table>
+  </div>
+{{/if}}
+
+{{#if data.error}}
+    <div class="error">Nieko nepavyko rasti.</div>
+{{/if}}
+
+</body>
