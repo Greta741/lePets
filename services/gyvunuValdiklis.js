@@ -39,31 +39,52 @@ const showAnimalById = (request, reply) => {
   connection.query('select * from gyvunas where id = ?', id, (err, gyvunas) => {
     data.gyvunas = gyvunas[0];
     data.gyvunas.registravimo_data = formatDate(data.gyvunas.registravimo_data);
-      connection.query('select * from pardavimas where id = ?', data.gyvunas.pardavimas_id, (err, pardavimas) => {
+    connection.query('select * from tipas where id = ?', data.gyvunas.tipas_id, (err, tipas) => {
+      data.tipas = tipas[0]; 
+      connection.query('select * from pardavimas where id = ?', gyvunas[0].pardavimas_id, (err, pardavimas) => { 
         data.pardavimas = pardavimas[0];
-        data.pardavimas.data = formatDate(data.pardavimas.data);
-        connection.query('select * from tipas where id = ?', data.gyvunas.tipas_id, (err, tipas) => {
-          data.tipas = tipas[0];
-          connection.query('select * from atsiemimo_vieta where id = ?', data.pardavimas.atsiemimo_vieta_id, (err, vieta) => {
+        data.pardavimas.data = formatDate(data.pardavimas.data);       
+        connection.query('select * from atsiemimo_vieta where id = ?', data.pardavimas.atsiemimo_vieta_id, (err, vieta) => {
           data.vieta = vieta[0];
-          });
+
+          if (data.gyvunas.apdovanojimas_id) {
+            connection.query('select * from apdovanojimas where id = ?', data.gyvunas.apdovanojimas_id, (err, apdovanojimas) => {
+              data.apdovanojimas = apdovanojimas[0];
+              data.apdovanojimas.data = formatDate(data.apdovanojimas.data);
+            if (data.gyvunas.veislės_id) {            
+              connection.query('select * from veisle where id = ?', data.gyvunas.veislės_id, (err, veisle) => {
+                data.veisle = veisle[0];
+                reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+              });
+            }
+            else {
+              reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+            }
+            });     
+          }
+
+          else if (data.gyvunas.veislės_id) {
+            connection.query('select * from veisle where id = ?', data.gyvunas.veislės_id, (err, veisle) => {
+                data.veisle = veisle[0];
+                if (data.gyvunas.apdovanojimas_id) {
+                  connection.query('select * from apdovanojimas where id = ?', data.gyvunas.apdovanojimas_id, (err, apdovanojimas) => {
+                    data.apdovanojimas = apdovanojimas[0];
+                    data.apdovanojimas.data = formatDate(data.apdovanojimas.data);
+                    reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                  });
+                }
+                else {
+                  reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                }
+            });
+          }
+
+          else {
+            reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+          }          
         });
       });
-
-    if (data.gyvunas.apdovanojimas_id) {
-      connection.query('select * from apdovanojimas where id = ?', data.gyvunas.apdovanojimas_id, (err, apdovanojimas) => {
-        data.apdovanojimas = apdovanojimas[0];
-        data.apdovanojimas.data = formatDate(data.apdovanojimas.data);
-      });     
-    }
-
-    if (data.gyvunas.veislės_id) {
-      connection.query('select * from veisle where id = ?', data.gyvunas.veislės_id, (err, veisle) => {
-        data.veisle = veisle[0];  
-      });    
-    }
-
-    reply.view('./gyvunai/gyvunas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });    
   });
 };
 
