@@ -6,13 +6,14 @@
 {{#if data.paieska}}
 <div id="main-content">
     <div class="simple-form" id="formContainer">
-	<form action="" method="post">
-            <div>
+        <div>
+	        <form action="" method="post">
                 <label class="field" for="paieska">Įveskite gyvūno(-ų) vardą arba jo pradžią</label><br>
                 {{{data.paieska}}}
-            </div>
-            <input type="submit" class="submit btn btn-success" name="submit" value="Ieškoti">
-    </form>
+                <input type="submit" class="submit btn btn-success" name="submit" value="Ieškoti">
+            </form>
+            <a href="/issamipaieska" class="btn btn-default">Išsami paieška</a>
+        </div>
     </div>
 </div>
 {{/if}}
@@ -21,12 +22,6 @@
     <div id="main-content" class="main">
         <h1>Paieškos "{{{data.ivesta}}}" rezultatai</h1>
         {{{data.gyvunas}}}
-        {{#each data.gyvunas}}
-            <div class="inner-form">
-                <a href="/gyvunai/{{{this.id}}}" class="btn btn-default"><h2>{{this.vardas}}</h2></a><br>
-                <img class="v-image" src="{{{this.nuotrauka}}}" width=600px alt="img">
-            </div>
-        {{/each}}
     </div>
 {{/if}}
 
