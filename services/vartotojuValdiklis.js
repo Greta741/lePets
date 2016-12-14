@@ -129,7 +129,7 @@ const generateNavBar = (session) => {
         }
 
         if (session.paieskaPagalRaktazodi == 'yes') {
-            htmlData.navbar += '<li><a href="#"><span class="glyphicon glyphicon-search"></span> Gyvūnų paieška</a></li>';
+            htmlData.navbar += '<li><a href="/paieska"><span class="glyphicon glyphicon-search"></span> Gyvūnų paieška</a></li>';
         }
         htmlData.navbar += '</ul>';
         htmlData.navbar += '<ul class="nav navbar-nav navbar-right">';
