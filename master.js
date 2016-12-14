@@ -351,6 +351,18 @@ server.route({
     handler: paieska.searchResult,
 });
 
+server.route({
+    method: 'GET',
+    path: '/issamipaieska',
+    handler: paieska.detailSearchView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/issamipaieska',
+    handler: paieska.detailSearchResult,
+});
+
 /* Paieškos valdiklio routes pabaiga */
 
 server.start((err) => {

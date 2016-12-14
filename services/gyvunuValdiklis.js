@@ -40,6 +40,10 @@ const generateEdits = (data, user_id) => {
 };
 
 const showAllAnimals = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const user_id = request.state.session.user_id;
   const data = {};
   connection.query('select * from gyvunas', (err, gyvunas) => {
@@ -56,6 +60,10 @@ const showAllAnimals = (request, reply) => {
 };
 
 const showAnimalById = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const id = request.params.id;
   const data = {};
   connection.query('select * from gyvunas where id = ?', id, (err, gyvunas) => {
@@ -124,6 +132,10 @@ const generateTypeSelect = (data) => {
 };
 
 const registerView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const data = {};
   connection.query('select * from tipas', (err, tipas) => {
     data.tipas = tipas;
@@ -135,6 +147,10 @@ const registerView = (request, reply) => {
 };
 
 const insertNew = (data, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const user_id = data.state.session.user_id;
   data = data.payload;
   const atsiemimo_vieta = {
@@ -237,6 +253,10 @@ const insertNew = (data, reply) => {
 };
 
 const editView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const id = request.params.id;
   const data = {};
   connection.query('select * from gyvunas where id = ?', id, (err, gyvunas) => {
@@ -253,6 +273,10 @@ const editView = (request, reply) => {
 };
 
 const edit = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const id = request.params.id;
   const duom = request.payload;
   const tmp = {};
