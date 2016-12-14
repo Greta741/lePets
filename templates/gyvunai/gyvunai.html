@@ -2,19 +2,19 @@
 <body>
     {{{htmlData.navbar}}}
     <div id="main-content" class="main">
-    <h1>Visi sistemoje užregistruoti gyvūnai</h1>
-    <h3>{{#if data.message}}
-        {{{data.message}}}
-    {{/if}}
-    </h3>
-    <div class="pets main">
-        <a href="/naujasgyvunas" class="btn btn-default">Registruoti gyvūną</a>
-    </div>
-    {{#each data.gyvunas}}
+        <h1>Visi sistemoje užregistruoti gyvūnai</h1>
+        <h3>{{#if data.message}}
+            {{{data.message}}}
+        {{/if}}
+        </h3>
         <div class="pets main">
-                <a href="/naujasgyvunas/{this.id}" class="btn btn-default"><h2>{{this.vardas}}</h2></a>
-            <img class="v-image" src="{{{this.nuotrauka}}}" width=600px alt="img">
+            <a href="/naujasgyvunas" class="btn btn-default">Registruoti gyvūną</a>
         </div>
-    {{/each}}
-    <div>
+        {{#each data.gyvunas}}
+            <div class="pets main">
+                    <a href="/gyvunai/{{{this.id}}}" class="btn btn-default"><h2>{{this.vardas}}</h2></a><br>
+                    <img class="v-image" src="{{{this.nuotrauka}}}" width=600px alt="img">
+            </div>
+        {{/each}}
+    </div>
 </body>
