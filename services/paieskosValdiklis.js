@@ -29,8 +29,29 @@ const generateEdits = (data, user_id) => {
     if (gyvunas.vartotojas_id === user_id) {
       temp += `<div class="inner-form"> 
       <a href="/gyvunai/${gyvunas.id}" class="btn btn-default"><h2>${gyvunas.vardas}</h2></a><br>
+      <img class="v-image" src="${gyvunas.nuotrauka}" width=600px alt="img"><br>
+      <a href="/redaguotigyvuna/${gyvunas.id}"><button class="submit btn btn-success">Redaguoti</button></a><br>
+      </div>`;
+    }
+    else {
+      temp += `<div class="inner-form"> 
+      <a href="/gyvunai/${gyvunas.id}" class="btn btn-default"><h2>${gyvunas.vardas}</h2></a><br>
+      <img class="v-image" src="${gyvunas.nuotrauka}" width=600px alt="img"><br>
+      <div><strong>Redaguoti negalima</strong></div>
+      </div>`;      
+    }
+  });
+  return temp;
+};
+
+const generateEdits2 = (data, user_id) => {
+  let temp = '';
+  data.forEach((gyvunas) => {
+    if (gyvunas.vartotojas_id === user_id) {
+      temp += `<div class="inner-form"> 
+      <a href="/gyvunai/${gyvunas.id}" class="btn btn-default"><h2>${gyvunas.vardas}</h2></a><br>
       <div><strong>Kaina (eurais): </strong>${gyvunas.kaina}</div>
-      <div><strong>Tipas </strong>${gyvunas.tipas}</div>
+      <div><strong>Tipas: </strong>${gyvunas.tipas}</div>
       <img class="v-image" src="${gyvunas.nuotrauka}" width=600px alt="img"><br>
       <a href="/redaguotigyvuna/${gyvunas.id}"><button class="submit btn btn-success">Redaguoti</button></a><br>
       </div>`;
@@ -39,7 +60,7 @@ const generateEdits = (data, user_id) => {
       temp += `<div class="inner-form"> 
       <a href="/gyvunai/${gyvunas.id}" class="btn btn-default"><h2>${gyvunas.vardas}</h2></a><br>
       <div><strong>Kaina (eurais): </strong>${gyvunas.kaina}</div>
-      <div><strong>Tipas </strong>${gyvunas.tipas}</div>
+      <div><strong>Tipas: </strong>${gyvunas.tipas}</div>
       <img class="v-image" src="${gyvunas.nuotrauka}" width=600px alt="img"><br>
       <div><strong>Redaguoti negalima</strong></div>
       </div>`;      
@@ -106,7 +127,7 @@ const detailSearchResult = (request, reply) => {
         }
         else {
           data.gyvunas = gyvunas;
-          reply.view('./paieska/issamipaieska.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {gyvunas : generateEdits(data.gyvunas, user_id)}});
+          reply.view('./paieska/issamipaieska.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {gyvunas : generateEdits2(data.gyvunas, user_id)}});
         }      
       });
   }
@@ -120,7 +141,7 @@ const detailSearchResult = (request, reply) => {
         }
         else {
           data.gyvunas = gyvunas;
-          reply.view('./paieska/issamipaieska.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {gyvunas : generateEdits(data.gyvunas, user_id)}});
+          reply.view('./paieska/issamipaieska.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {gyvunas : generateEdits2(data.gyvunas, user_id)}});
         }      
       });
   }
@@ -131,6 +152,7 @@ module.exports = {
   searchView,
   searchResult,
   generateEdits,
+  generateEdits2,
   detailSearchView,
   generateTypeSelect2,
   detailSearchResult,
