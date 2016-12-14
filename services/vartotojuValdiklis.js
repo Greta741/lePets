@@ -28,14 +28,21 @@ const registerUser = (request, reply) => {
                 prieigos_raktas: hashedString2,
                 busena: 'aktyvus'
             }
-            connection.query('insert into prisijungimo_duomenys set ?', loginInfo, (err, result) => {
-                newUser.prisijung_id = result.insertId;
-                connection.query('insert into vartotojai set ?', newUser, (err, result) => {})
+            connection.query(`select vartotojai.id from vartotojai where vartotojo_vardas='${newUser.vartotojo_vardas}' or 
+                el_pastas='${newUser.el_pastas}'`, {}, (err, res) => {
+                if (res.length == 0) {
+                    connection.query('insert into prisijungimo_duomenys set ?', loginInfo, (err, result) => {
+                        newUser.prisijung_id = result.insertId;
+                        connection.query('insert into vartotojai set ?', newUser, (err, result) => {})
+                    });
+                    reply();
+                } else {
+                    reply({message: 'egzistuoja'});
+                }
             });
+
         })
     })
-
-    reply().state('data', 'thisisacookiestring');
 };
 
 const loginUser = (request, reply) => {
@@ -87,13 +94,12 @@ const loginUser = (request, reply) => {
                             })
                         });
                     } else {
-                        reply('slaptažodis neteisingas');
+                        reply({message: 'slaptazodis neteisingas'});
                     }
                 });
             } else {
-                reply('vartotojas nerastas');
+                reply({message: 'vartotojas nerastas'});
             }
-
     });
 };
 
@@ -323,7 +329,7 @@ const keistiVeislynoStatusa = (request, reply) => {
 };
 
 const chooseReport = (request, reply) => {
-    if (request.state.session.perziuretiAtaskaitas == 'yes') {
+    if (request.state.session && request.state.session.perziuretiAtaskaitas == 'yes') {
         var data = generateNavBar(request.state.session);
         data.select = 1;
         reply.view('./vartotojai/ataskaita.html', {data});
