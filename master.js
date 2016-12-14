@@ -208,6 +208,12 @@ server.route({
     handler: gyvunai.registerView,
 });
 
+server.route({
+    method: 'POST',
+    path: '/naujasgyvunas',
+    handler: gyvunai.insertNew,
+});
+
 /* Gyvūnų valdiklio routes pabaiga */
 
 server.start((err) => {

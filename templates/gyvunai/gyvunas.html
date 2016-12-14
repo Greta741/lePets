@@ -1,0 +1,59 @@
+{{{htmlData.head}}}
+<body>
+    {{{htmlData.navbar}}}
+    <div id="main-content" class="main">
+        <label class="field" for="info"><h3>Detali informacija apie gyvūną</h3></label>
+        <div class="inner-form">
+            <label class="field" for="info">Pagrindinė informacija</label>
+            <div><strong>Nuotrauka</strong></div>   
+            <div><img class="v-image" src="{{{data.gyvunas.nuotrauka}}}" width=600px alt="img"></div>
+            <div><strong>Registravimo sistemoje data: </strong>{{data.gyvunas.registravimo_data}}</div>
+            <div><strong>Vardas: </strong>{{data.gyvunas.vardas}}</div>
+            <div><strong>Tipas: </strong>{{data.tipas.gyvuno_tipas}}, {{data.tipas.lytis}}</div>
+            <div><strong>Amžius: </strong>{{data.gyvunas.amzius}}</div>            
+            <div><strong>Spalva: </strong>{{data.gyvunas.spalva}}</div>
+            <div><strong>Tėvas: </strong>{{data.gyvunas.tevas}}</div>
+            <div><strong>Motina: </strong>{{data.gyvunas.motina}}</div>
+
+            <div class="inner-form">
+                <label class="field" for="info">Veislė</label>
+                {{#if data.veisle}}
+                    <div><strong>Pavadinimas: </strong>{{{data.veisle.pavadinimas}}}</div>
+                {{else}}
+                    <div>Neveislinis</div>
+                {{/if}}
+            </div>
+
+            <div class="inner-form">
+                <label class="field" for="info">Apdovanojimas</label>
+                {{#if data.apdovanojimas}}
+                    <div><strong>Gavimo data: </strong>{{{data.apdovanojimas.data}}}</div>
+                    <div><strong>Užimta vieta: </strong>{{{data.apdovanojimas.uzimta_vieta}}}</div>
+                    <div><strong>Prizas: </strong>{{{data.apdovanojimas.prizas}}}</div>
+                    <div><strong>Dalyvių skaičius: </strong>{{{data.apdovanojimas.dalyviu_skaicius}}}</div>
+                    <div><strong>Tuometinis šeimininkas: </strong>{{{data.apdovanojimas.seimininkas}}}</div>
+                    <div><strong>Konkurso miestas: </strong>{{{data.apdovanojimas.konkurso_miestas}}}</div>
+                    <div><strong>Konkurso šalis: </strong>{{{data.apdovanojimas.konkurso_šalis}}}</div>
+                {{else}}
+                    <div>Apdovanojimo šis gyvūnas neturi</div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="inner-form">
+            <label class="field" for="info">Pardavimo informacija</label>
+            <div><strong>Kaina (eurais): </strong>{{data.pardavimas.kaina}} </div>
+            <div><strong>Pardavėjo vardas: </strong>{{data.pardavimas.pardavejo_vardas}}</div>
+            <div><strong>Telefono numeris: </strong>{{data.pardavimas.telefono_numeris}}</div>
+            <div><strong>Iki kada parduodamas: </strong>{{data.pardavimas.data}}</div>
+            <div><strong>Aprašymas: </strong>{{data.pardavimas.aprasymas}}</div>
+        </div>
+        <div class="inner-form">
+            <label class="field" for="info">Informacija, apie atsiėmimo vietą</label>
+            <div><strong>Miestas: </strong>{{data.vieta.miestas}} </div>
+            <div><strong>Gatvė: </strong>{{data.vieta.gatve}} </div>
+            <div><strong>Namo numeris: </strong>{{data.vieta.namo_numeris}} </div>
+            <div><strong>Buto numeris: </strong>{{data.vieta.buto_numeris}} </div>
+            <div><strong>Šalis: </strong>{{data.vieta.salis}} </div>
+        </div>
+    </div>
+</body>
