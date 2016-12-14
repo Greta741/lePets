@@ -11,6 +11,7 @@
             <button class="submit btn btn-success" onclick="window.location.reload()">Atnaujinti gyvūnų sąrašą</button>
             <a href="/naujasgyvunas" class="btn btn-default">Registruoti gyvūną</a>
         </div>
+        {{{data.gyvunas}}}
         {{#each data.gyvunas}}
             <div class="inner-form">
                 <a href="/gyvunai/{{{this.id}}}" class="btn btn-default"><h2>{{this.vardas}}</h2></a><br>

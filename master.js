@@ -256,6 +256,18 @@ server.route({
     handler: gyvunai.insertNew,
 });
 
+server.route({
+    method: 'GET',
+    path: '/redaguotigyvuna/{id?}',
+    handler: gyvunai.editView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/redaguotigyvuna/{id?}',
+    handler: gyvunai.edit,
+});
+
 /* Gyvūnų valdiklio routes pabaiga */
 
 server.start((err) => {
