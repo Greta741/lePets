@@ -138,3 +138,14 @@ div {
     color: red;
     text-align: center;
 }
+
+.report-selection {
+    display: inline-block;
+    border-width: 1px;
+    border-style: solid;
+    width: 20%;
+    margin: 50px 50px 50px 50px;
+    margin-top: 20px;
+    padding-left: 5px;
+    text-align: left;
+}

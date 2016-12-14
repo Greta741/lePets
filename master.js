@@ -215,6 +215,18 @@ server.route({
     handler: vartotojai.keistiVeislynoStatusa,
 });
 
+server.route({
+    method: 'GET',
+    path: '/ataskaitos/vartotojai',
+    handler: vartotojai.chooseReport,
+});
+
+server.route({
+    method: 'POST',
+    path: '/ataskaitos/vartotojai',
+    handler: vartotojai.returnReport,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
