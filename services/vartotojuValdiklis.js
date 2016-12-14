@@ -140,7 +140,7 @@ const generateNavBar = (session) => {
                 '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
                 '<li><a href="#">Veislių ataskaita</a></li>' +
                 '<li><a href="#">Gyvūnų ataskaita</a></li>' +
-                '<li><a href="#">Vartotojų ataskaita</a></li>' +
+                '<li><a href="/ataskaitos/vartotojai">Vartotojų ataskaita</a></li>' +
                 '</ul></li>';
         }
     }
@@ -320,6 +320,50 @@ const keistiVeislynoStatusa = (request, reply) => {
     } else {
         reply();
     }
+};
+
+const chooseReport = (request, reply) => {
+    if (request.state.session.perziuretiAtaskaitas == 'yes') {
+        var data = generateNavBar(request.state.session);
+        data.select = 1;
+        reply.view('./vartotojai/ataskaita.html', {data});
+    } else {
+        reply('negalima');
+    }
+};
+
+const returnReport = (request, reply) => {
+    var data = generateNavBar(request.state.session);
+    if (request.payload.choice.toString() == '1') {
+        connection.query('select vartotojai.id as vart_id, vartotojo_vardas, el_pastas, roles.id, roles.pavadinimas ' +
+            'from vartotojai, roles where vartotojai.roles_id = roles.id', {}, (err, res) => {
+            data.roles = [];
+            for (var i = 0; i < res.length; i++) {
+                data.roles[i] = {
+                    id: res[i].vart_id,
+                    username: res[i].vartotojo_vardas,
+                    email: res[i].el_pastas,
+                    role: res[i].pavadinimas
+                }
+            }
+            reply.view('./vartotojai/ataskaita.html', {data});
+        });
+    } else {
+        connection.query('select vartotojai.id, vartotojo_vardas, el_pastas, veislynai.pavadinimas, gyvunu_skaicius ' +
+            'from vartotojai, veislynai where veislynai.vartotojo_id = vartotojai.id', {}, (err, res) => {
+            data.veislynai = [];
+            for (var i = 0; i < res.length; i++) {
+                data.veislynai[i] = {
+                    id: res[i].id,
+                    username: res[i].vartotojo_vardas,
+                    email: res[i].el_pastas,
+                    title: res[i].pavadinimas,
+                    pets: res[i].gyvunu_skaicius
+                }
+            }
+            reply.view('./vartotojai/ataskaita.html', {data});
+        });
+    }
 }
 
 const hashString = (myString, callback) => {
@@ -347,4 +391,6 @@ module.exports = {
     changeRole: changeRole,
     veislynuRegView: veislynuRegView,
     keistiVeislynoStatusa: keistiVeislynoStatusa,
+    chooseReport: chooseReport,
+    returnReport: returnReport,
 };

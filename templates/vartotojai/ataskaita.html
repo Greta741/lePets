@@ -1,0 +1,81 @@
+{{{data.head}}}
+<body>
+{{{data.navbar}}}
+
+{{#if data.select}}
+<div style="text-align: center">
+    <div class="report-selection">
+        <form action="" method="post">
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="choice" value="1" required>Vartotojų rolės</label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="choice" value="2" required>Veislynų savininkai</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-default">Gauti ataskaitą</button>
+        </form>
+    </div>
+</div>
+{{/if}}
+
+{{#if data.roles}}
+<div style="text-align: center">
+    <h1>Vartotojų rolių ataskaita</h1>
+    <div class="roles-div">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Vartotojo vardas</th>
+                <th>El. paštas</th>
+                <th>Rolė</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data.roles}}
+            <tr>
+                <td>{{{this.id}}}</td>
+                <td>{{{this.username}}}</td>
+                <td>{{{this.email}}}</td>
+                <td>{{{this.role}}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{/if}}
+
+{{#if data.veislynai}}
+<div style="text-align: center">
+    <h1>Veislynų savininkų ataskaita</h1>
+    <div class="roles-div">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>Vartotojo vardas</th>
+                <th>El. paštas</th>
+                <th>Veislyno pavadinimas</th>
+                <th>Gyvūnų skaičius</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each data.veislynai}}
+            <tr>
+                <td>{{{this.id}}}</td>
+                <td>{{{this.username}}}</td>
+                <td>{{{this.email}}}</td>
+                <td>{{{this.title}}}</td>
+                <td>{{{this.pets}}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{/if}}
+
+</body>
