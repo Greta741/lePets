@@ -1,0 +1,40 @@
+{{{data.head}}}
+<body>
+{{{data.navbar}}}
+<div style="text-align: center">
+    <div class="roles-div">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Pavadinimas</th>
+                <th>Registracijos data</th>
+                <th>Savininkas</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#each veislynuData.data}}
+            <tr>
+                <td>{{{this.id}}}</td>
+                <td>{{{this.pavadinimas}}}</td>
+                <td>{{{this.registracijos_data}}}</td>
+                <td>{{{this.vartotojo_vardas}}}</td>
+                <td id="{{{this.id}}}">
+                    <button class="btn-success" value="accept" onclick="decide(this.parentNode.id, this.value, this.parentNode.previousElementSibling.innerHTML)">Priimti</button>
+                    <button class="btn-danger" value="reject" onclick="decide(this.parentNode.id, this.value, this.parentNode.previousElementSibling.innerHTML)">Atmesti</button>
+                </td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+<script>
+    const decide = (id, decision, username) => {
+        $.post('./keistiVeislynoStatusa', {id: id, decision: decision, username: username}, (result) => {
+            location.reload();
+        });
+    };
+</script>

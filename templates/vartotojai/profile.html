@@ -2,25 +2,75 @@
 <body>
 {{{data.navbar}}}
 <div style="text-align: center">
+    <h1>Profilio redagavimas</h1>
     <div class="profile-div">
         <div id="register-error" class="error"></div>
         <div class="form-group">
             <label for="username">Vartotojo vardas:</label>
-            <input type="text" class="form-control" id="username" readonly>
+            <input type="text" class="form-control" id="username" value="{{{userData.vartotojo_vardas}}}" readonly>
         </div>
         <div class="form-group">
             <label for="email">El. paštas:</label>
-            <input type="email" class="form-control" id="email" required="">
+            <input type="email" class="form-control" id="email" value="{{{userData.el_pastas}}}" required="">
         </div>
         <div class="form-group">
             <label for="tel">Telefono nr.:</label>
-            <input type="text" class="form-control" id="tel" required="">
+            <input type="text" class="form-control" id="tel" value="{{{userData.telefono_nr}}}">
         </div>
         <div class="form-group">
             <label for="birthdate">Gimimo data:</label>
-            <input type="date" class="form-control" id="birthdate" required="">
+            <input type="date" class="form-control" id="birthdate" value="{{{userData.gimimo_data}}}">
         </div>
-        <button type="submit" onClick="register()" class="btn btn-success">Redaguoti</button>
+        <div class="form-group">
+            <label for="vardas">Vardas:</label>
+            <input type="text" class="form-control" id="vardas" value="{{{userData.vardas}}}">
+        </div>
+        <div class="form-group">
+            <label for="pav">Pavardė:</label>
+            <input type="text" class="form-control" id="pav" value="{{{userData.pavarde}}}">
+        </div>
+        <div class="form-group">
+            <label for="count">Šalis:</label>
+            <input type="text" class="form-control" id="count" value="{{{userData.salis}}}">
+        </div>
+        <div class="form-group">
+            <label for="city">Miestas:</label>
+            <input type="text" class="form-control" id="city" value="{{{userData.miestas}}}">
+        </div>
+        <div class="form-group">
+            <label for="gender">Lytis:</label>
+            <select class="form-control" id="gender">
+                <option id="vyr" value="Vyras">Vyras</option>
+                <option id="mot" value="Moteris">Moteris</option>
+            </select>
+        </div>
+        <button type="submit" onClick="editProfile()" class="btn btn-success">Redaguoti</button>
     </div>
+
 </div>
 </body>
+
+<script>
+    var gender = '{{{userData.lytis}}}';
+    if (gender == 'Vyras') {
+        document.getElementById('vyr').setAttribute('selected', '1');
+    } else {
+        document.getElementById('mot').setAttribute('selected', '1');
+    }
+
+    const editProfile = () => {
+        var newData = {
+            email: document.getElementById('email').value,
+            tel: document.getElementById('tel').value,
+            birthdate: document.getElementById('birthdate').value,
+            vardas: document.getElementById('vardas').value,
+            pav: document.getElementById('pav').value,
+            count: document.getElementById('count').value,
+            city: document.getElementById('city').value,
+            gender: document.getElementById('gender').value,
+        }
+        $.post('./editProfile', {newData}, (result) => {
+            location.reload();
+        });
+    }
+</script>

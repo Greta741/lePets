@@ -73,6 +73,15 @@ div {
     display: inline-block;
     width: 50%;
     margin: 50px 50px 50px 50px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.roles-div {
+    display: inline-block;
+    width: 80%;
+    margin: 50px 50px 50px 50px;
+    margin-top: 20px;
     text-align: left;
 }
 

@@ -185,6 +185,36 @@ server.route({
     handler: vartotojai.profileView,
 });
 
+server.route({
+    method: 'POST',
+    path: '/editProfile',
+    handler: vartotojai.editProfile,
+});
+
+server.route({
+    method: 'GET',
+    path: '/rolesview',
+    handler: vartotojai.rolesView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/changeRole',
+    handler: vartotojai.changeRole,
+});
+
+server.route({
+    method: 'GET',
+    path: '/veislynuregistracijos',
+    handler: vartotojai.veislynuRegView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/keistiVeislynoStatusa',
+    handler: vartotojai.keistiVeislynoStatusa,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
