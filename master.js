@@ -5,6 +5,7 @@ const Inert = require('inert');
 const veislynai = require('./services/veislynuValdiklis.js');
 const vartotojai = require('./services/vartotojuValdiklis.js');
 const gyvunai = require('./services/gyvunuValdiklis.js');
+const paieska = require('./services/paieskosValdiklis.js');
 const veisles = require('./services/veisliuValdiklis.js');
 
 const server = new Hapi.Server();
@@ -293,6 +294,22 @@ server.route({
 });
 
 /* Gyvūnų valdiklio routes pabaiga */
+
+/* Paieškos valdiklio routes pradžia */
+
+server.route({
+    method: 'GET',
+    path: '/paieska',
+    handler: paieska.searchView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/paieska',
+    handler: paieska.searchResult,
+});
+
+/* Paieškos valdiklio routes pabaiga */
 
 server.start((err) => {
 
