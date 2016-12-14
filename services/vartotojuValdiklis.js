@@ -139,7 +139,7 @@ const generateNavBar = (session) => {
                 '<ul class="dropdown-menu">' +
                 '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
                 '<li><a href="#">Veislių ataskaita</a></li>' +
-                '<li><a href="#">Gyvūnų ataskaita</a></li>' +
+                '<li><a href="/ataskaitos/gyvunai">Gyvūnų ataskaita</a></li>' +
                 '<li><a href="/ataskaitos/vartotojai">Vartotojų ataskaita</a></li>' +
                 '</ul></li>';
         }

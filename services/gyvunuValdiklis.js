@@ -278,7 +278,65 @@ const edit = (request, reply) => {
   reply.redirect('../gyvunai/');
 };
 
+const generateTypeSelect2 = (data) => {
+  let temp = '';
+  data.forEach((tipas) => {
+    temp += `<input type="radio" name="tipas" value="${tipas.gyvuno_tipas}" required="true"> ${tipas.gyvuno_tipas}<br>`;
+  });
+  temp += `<input type="radio" name="tipas" value="0" required="true"> visi<br>`;
+  return temp;
+};
+
+const chooseReport = (request, reply) => {
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  connection.query('select * from tipas group by gyvuno_tipas', (err, result) => {
+    reply.view('./gyvunai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect2(result)}});
+  });
+};
+
+const returnReport = (request, reply) => {
+  let data = {};
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+  if (request.payload.tipas == 0) {
+    connection.query('select gyvunas.vardas, gyvunas.tevas, gyvunas.motina, gyvunas.spalva, gyvunas.amzius, vartotojai.vartotojo_vardas as vartotojas, tipas.gyvuno_tipas as tipas ' +
+      'from vartotojai, tipas, gyvunas where gyvunas.vartotojas_id = vartotojai.id and gyvunas.tipas_id = tipas.id and tipas.gyvuno_tipas = "šuo" or tipas.gyvuno_tipas = "katinas" ' +
+      'group by gyvunas.id order by gyvunas.vardas', request.payload.tipas, (err, result) => {
+        if (result.length === 0) {
+          data.error = true;
+        }
+        data.gyvunai = result;
+        reply.view('./gyvunai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+      });
+  }
+  else {
+    connection.query('select gyvunas.vardas, gyvunas.tevas, gyvunas.motina, gyvunas.spalva, gyvunas.amzius, vartotojai.vartotojo_vardas as vartotojas, tipas.gyvuno_tipas as tipas ' +
+      'from vartotojai, tipas, gyvunas where gyvunas.vartotojas_id = vartotojai.id and gyvunas.tipas_id = tipas.id and tipas.gyvuno_tipas = ? ' +
+      'group by gyvunas.id order by gyvunas.vardas', request.payload.tipas, (err, result) => {
+        if (result.length === 0) {
+          data.error = true;
+        }
+        data.gyvunai = result;
+        reply.view('./gyvunai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+      });
+  }
+};
+
 module.exports = {
+  returnReport,
+  chooseReport,
+  generateTypeSelect2,
   edit,
   editView,
   generateEdits,
