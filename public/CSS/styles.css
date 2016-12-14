@@ -149,3 +149,36 @@ div {
     padding-left: 5px;
     text-align: left;
 }
+
+.message-view {
+    display: inline-block;
+    width: 50%;
+    margin: 50px 50px 50px 50px;
+    padding: 5px 5px 5px 5px;
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+}
+
+.pm {
+    width: 90%;
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    text-align: left;
+    padding: 5px 5px 5px 5px;
+    padding-left: 20px;
+    margin: 5px 5px 5px 5px;
+    display: inline-block;
+}
+
+.msg-txt{
+    width: 90%;
+}
+
+.error2 {
+    width: 80%;
+    margin: auto;
+    color: red;
+    text-align: center;
+}

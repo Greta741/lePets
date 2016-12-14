@@ -1,0 +1,71 @@
+{{{data.head}}}
+<body>
+{{{data.navbar}}}
+
+<div style="text-align: center">
+    <div class="message-view" style="text-align: center">
+        <button class="btn-success" style="cursor: pointer" data-toggle="modal" data-target="#messageModal">Rašyti naują žinutę</button>
+        {{#if data.messages}}
+        <h2>Gautos žinutės:</h2>
+        {{#each data.messages}}
+            <div class="pm">
+                <h4>Siuntėjas: {{{this.username}}}</h4>
+                <h5>Tema: {{{this.tema}}}</h5>
+                <h5>Išsiuntimo laikas: {{{this.issiuntimo_laikas}}}</h5>
+                <textarea class="msg-txt" rows="3" readonly>{{{this.tekstas}}}</textarea>
+            </div>
+        {{/each}}
+        {{else}}
+        <h2>Gautų žinučių nėra</h2>
+        {{/if}}
+    </div>
+</div>
+
+<div id="messageModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nauja žinutė</h4>
+            </div>
+            <div class="modal-body">
+                <div id="message-error" class="error2"></div>
+                <div class="form-group">
+                    <label for="adresatas">Adresato vartotojo vardas:</label>
+                    <input type="text" class="form-control" id="adresatas" required="">
+                </div>
+                <div class="form-group">
+                    <label for="tema">Žinutės tema:</label>
+                    <input type="text" class="form-control" id="tema" required="">
+                </div>
+                <div class="form-group">
+                    <label for="zinute">Žinutės tekstas:</label>
+                    <textarea class="form-control" rows="5" id="zinute" required=""></textarea>
+                </div>
+                <button type="submit" onClick="sendMessage()" class="btn btn-success">Siųsti</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    const sendMessage = () => {
+        var adresatas = document.getElementById('adresatas').value;
+        var tema = document.getElementById('tema').value;
+        var zinute = document.getElementById('zinute').value;
+        if (adresatas == '' || tema == '' || zinute == '') {
+            document.getElementById('message-error').innerHTML = 'Visi laukai turi būti užpildyti.';
+        } else if (/^[A-Za-z0-9]{3,50}$/.test(adresatas) && /^[A-Za-z0-9 ]{3,50}$/.test(tema) && /^[A-Za-z0-9,.() ]{2,500}$/.test(zinute)) {
+            $.post('./sendmessage', {adresatas:  adresatas, tema: tema, zinute: zinute}, (result) => {
+                if (result.message == 'adresato nera') {
+                    document.getElementById('message-error').innerHTML = 'Tokio vartotojo nėra.';
+                } else {
+                    location.reload();
+                }
+            });
+        } else {
+            document.getElementById('message-error').innerHTML = 'Leidžiami tik raidės, skaičiai ir skyrybos ženklai';
+        }
+    }
+</script>

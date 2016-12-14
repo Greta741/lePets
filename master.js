@@ -270,6 +270,18 @@ server.route({
     handler: vartotojai.returnReport,
 });
 
+server.route({
+    method: 'GET',
+    path: '/messages',
+    handler: vartotojai.messagesView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/sendmessage',
+    handler: vartotojai.sendMessage,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
