@@ -72,10 +72,26 @@
                 </div>
             </div>
         {{/each}}
-
+        </div>
     </div>
     <div class="pets main">
         <h2>Gyvūnai</h2>
+         {{#each data.pets}}
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="pet-div">
+                    {{{this.nuotrauka}}}
+                    <div class="pet-info">
+                        {{this.vardas}} <br>
+                        {{#if this.amzius}}
+                            {{this.amzius}}
+                        {{else}}
+                            Mažiau nei metai.
+                        {{/if}}
+                    </div>
+                    {{{this.button}}}
+                </div>
+            </div>
+         {{/each}}
     </div>
 
 {{/if}}

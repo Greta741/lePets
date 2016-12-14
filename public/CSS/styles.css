@@ -83,3 +83,49 @@ div {
 .breed {
     width: 100%;
 }
+
+.pet-div {
+    background-color: #f4f4f4;
+    margin: 10px;
+}
+
+.pet-img {
+    width: 100%;
+    height: 200px;
+    background-position: center; 
+    background-size: 300px;
+}
+
+.pet-button {
+    background: none;
+    border: none;
+    width: 100%;
+    font-size: 20;
+    background-color: #e0e0e0;
+    color: white;
+}
+
+.pet-button:focus {
+    outline: none;
+}
+
+.pet-button:hover {
+    background-color: #e5e5e5;
+}
+
+.pets {
+    border: none !important;
+}
+
+.message {
+    width: 30%;
+    margin: auto;
+    text-align: center;
+}
+
+.error {
+    width: 30%;
+    margin: auto;
+    color: red;
+    text-align: center;
+}
