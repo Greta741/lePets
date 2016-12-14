@@ -405,6 +405,18 @@ const generateImageDivs = (data, canDelete) => {
   return data;
 };
 
+const generatePetsDiv = (data) => {
+  data.forEach((pet) => {
+    if (pet.nuotrauka) {
+      pet.nuotrauka = `<div class="pet-img" style="background-image: url('${pet.nuotrauka}'')"></div>`;
+    } else {
+      pet.nuotrauka = `<div class="pet-img" style="background-image: url('../public/noImg.jpg')"></div>`;
+    }
+    pet.button = `<button class="pet-button" onclick="window.location.href='./gyvunai/${pet.id}'">Peržiūrėti</butto>`;
+  });
+  return data;
+};
+
 const showOwnerPage = (request, reply) => {
    if (!request.state.session) {
     reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
@@ -437,7 +449,11 @@ const showOwnerPage = (request, reply) => {
                       data.pastai = pastai;
                       data.naujienos = generateImageDivs(naujienos, true);
                       data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
-                      reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                      connection.query('select id, vardas, nuotrauka, amzius from gyvunas where vartotojas_id = ?', request.state.session.user_id, (err, gyvunai) => {
+                        data.pets = generatePetsDiv(gyvunai);
+                        console.log(data.pets);
+                        reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                      });
                     });
                   });
               });
@@ -472,7 +488,12 @@ const showPageById = (request, reply) => {
                   data.pastai = pastai;
                   data.naujienos = generateImageDivs(naujienos);
                   data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
-                  reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                  connection.query('select gyvunas.id, gyvunas.vardas, gyvunas.nuotrauka, gyvunas.amzius from gyvunas, ' +
+                    'vartotojai, veislynai where vartotojas_id = veislynai.vartotojo_id and vartotojai.id = gyvunas.vartotojas_id ' +
+                    'and veislynai.id = ?', id, (err, gyvunai) => {
+                    data.pets = generatePetsDiv(gyvunai);
+                    reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+                  });
                 });
               });
           });
