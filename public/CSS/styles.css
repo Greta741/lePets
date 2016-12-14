@@ -112,3 +112,20 @@ div {
 .pet-button:hover {
     background-color: #e5e5e5;
 }
+
+.pets {
+    border: none !important;
+}
+
+.message {
+    width: 30%;
+    margin: auto;
+    text-align: center;
+}
+
+.error {
+    width: 30%;
+    margin: auto;
+    color: red;
+    text-align: center;
+}

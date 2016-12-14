@@ -17,6 +17,14 @@ const generateTypeSelect = (data) => {
   return temp;
 };
 
+const generateTypeSelect2 = (data) => {
+  let temp = '';
+  data.forEach((tipas) => {
+    temp += `<input type="radio" name="tipas" value="${tipas.gyvuno_tipas}" required="true"> ${tipas.gyvuno_tipas}<br>`;
+  });
+  return temp;
+};
+
 const generateDivs = (data, types) => {
   let temp = {};
   temp.pavadinimas = `<input type="text" id="pavadinimas" name="pavadinimas" class="form-control input-sm" required="true" value="${data.pavadinimas}">`;
@@ -408,7 +416,7 @@ const generateImageDivs = (data, canDelete) => {
 const generatePetsDiv = (data) => {
   data.forEach((pet) => {
     if (pet.nuotrauka) {
-      pet.nuotrauka = `<div class="pet-img" style="background-image: url('${pet.nuotrauka}'')"></div>`;
+      pet.nuotrauka = `<div class="pet-img" style="background-image: url('${pet.nuotrauka}')"></div>`;
     } else {
       pet.nuotrauka = `<div class="pet-img" style="background-image: url('../public/noImg.jpg')"></div>`;
     }
@@ -448,10 +456,11 @@ const showOwnerPage = (request, reply) => {
                       data.telefonai = telefonai;
                       data.pastai = pastai;
                       data.naujienos = generateImageDivs(naujienos, true);
-                      data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                      if (veislynas[0].nuotraukos_url) {
+                        data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                      }
                       connection.query('select id, vardas, nuotrauka, amzius from gyvunas where vartotojas_id = ?', request.state.session.user_id, (err, gyvunai) => {
                         data.pets = generatePetsDiv(gyvunai);
-                        console.log(data.pets);
                         reply.view('./veislynai/veislynas.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
                       });
                     });
@@ -487,7 +496,9 @@ const showPageById = (request, reply) => {
                   data.telefonai = telefonai;
                   data.pastai = pastai;
                   data.naujienos = generateImageDivs(naujienos);
-                  data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                  if (veislynas[0].nuotraukos_url) {
+                    data.image = `<img class="v-image" src="${veislynas[0].nuotraukos_url}" alt="img"></img>`
+                  }
                   connection.query('select gyvunas.id, gyvunas.vardas, gyvunas.nuotrauka, gyvunas.amzius from gyvunas, ' +
                     'vartotojai, veislynai where vartotojas_id = veislynai.vartotojo_id and vartotojai.id = gyvunas.vartotojas_id ' +
                     'and veislynai.id = ?', id, (err, gyvunai) => {
@@ -598,11 +609,21 @@ const reportView = (request, reply) => {
     return;
   }
   connection.query('select * from tipas group by gyvuno_tipas', (err, result) => {
-    reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect(result)}});
+    reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data : {tipas : generateTypeSelect2(result)}});
   });
 };
 
+
+const formatDateArray = (data) => {
+  data.forEach((item) => {
+    item.registracijos_data = formatDate(item.registracijos_data);
+    item.paskutinio_aktyvumo_data = formatDate(item.paskutinio_aktyvumo_data);
+  });
+  return data;
+}
+
 const report = (request, reply) => {
+  let data = {};
   if (!request.state.session) {
     reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
     return;
@@ -610,6 +631,20 @@ const report = (request, reply) => {
     reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
     return;
   }
+  connection.query('select veislynai.pavadinimas, vartotojai.vartotojo_vardas as savininkas, tipas.gyvuno_tipas as tipas, veislynai.registracijos_data, ' +
+    'veislynai.paskutinio_aktyvumo_data, veislynai.gyvunu_skaicius, count(gyvunas.apdovanojimas_id) as apdovanojimu_skaicius ' +
+    'from veislynai, vartotojai, tipas, gyvunas where veislynai.vartotojo_id = vartotojai.id and veislynai.tipo_id = tipas.id ' +
+    'and gyvunas.vartotojas_id = vartotojai.id and tipas.gyvuno_tipas = ? group by vartotojai.id order by veislynai.pavadinimas', request.payload.tipas, (err, result) => {
+      result = formatDateArray(result);
+      if (result.length === 0) {
+        data.error = true;
+      }
+      data.veislynai = result;
+      reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
+
+
+  
   const isivaizduojamiDuomenys = [
     {
       pavadinimas: 'Grumpy cat veislynas',
@@ -639,7 +674,7 @@ const report = (request, reply) => {
       parduodamu_skaicius: 5,
     },
   ];
-  reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {veislynai: isivaizduojamiDuomenys}});
+  
 };
 
 module.exports = {

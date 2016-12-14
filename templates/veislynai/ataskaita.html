@@ -40,12 +40,16 @@
                     <td>{{this.registracijos_data}}</td>
                     <td>{{this.paskutinio_aktyvumo_data}}</td>
                     <td>{{this.gyvunu_skaicius}}</td>
-                    <td>{{this.parduodamu_skaicius}}</td>
+                    <td>{{this.apdovanojimu_skaicius}}</td>
                 </tr>
             {{/each}}      
         </tbody>
     </table>
   </div>
+{{/if}}
+
+{{#if data.error}}
+    <div class="error">Nieko nepavyko rasti.</div>
 {{/if}}
 
 </body>
