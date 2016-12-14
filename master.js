@@ -83,9 +83,21 @@ server.route({
 });
 
 server.route({
+    method: 'GET',
+    path: '/redpoveis/{id?}',
+    handler: veisles.editSubbreedView,
+});
+
+server.route({
     method: 'POST',
     path: '/redveis/{id?}',
     handler: veisles.editBreed,
+});
+
+server.route({
+    method: 'POST',
+    path: '/redpoveis/{id?}',
+    handler: veisles.editSubBreed,
 });
 
 server.route({
