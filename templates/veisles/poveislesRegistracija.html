@@ -1,0 +1,39 @@
+{{{htmlData.head}}}
+<body>
+    {{{htmlData.navbar}}}
+    <div id="main-content">
+        {{{data.errors}}}
+        <div class="simple-form" id="formContainer">
+            <form action="" method="post" id="poveis-form">
+                <div>
+                    <select class="form-control" id="veisle" value="" name="veisle">
+                        {{#each data.veisle}}
+                            <option value="{{this.id}}">{{this.pavadinimas}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="field" for="pavadinimas">Veislės pavadinimas</label>
+                        <input type="text" id="pavadinimas" name="pavadinimas" 
+                        class="form-control input-sm" required="true" value="">
+                </div>
+
+                <div>
+                    <label class="field" for="aprasymas">Veislės aprašymas</label>
+                    <textarea type="text" class="form-control" id="aprasymas" rows="4" name="aprasymas" value=""></textarea>
+                </div>
+
+                <div>
+                    <label class="field" for="nuotraukos_url">Nuotrauka</label>
+                    {{#if data.nuotraukos_url}}
+                        {{{data.nuotraukos_url}}}
+                    {{else}}
+                        <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
+                    {{/if}}
+                </div>
+                <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
+            </form>
+        </div>
+    </div>
+</body>

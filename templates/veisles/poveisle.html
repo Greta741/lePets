@@ -1,0 +1,16 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+{{#if data.poveisle}}
+<div id="main-content" class="main">
+    <h1>{{data.poveisle.pavadinimas}}</h1>
+    {{#if data.image}}
+        {{{data.image}}}
+    {{/if}}
+    <div><strong>Aprašymas: </strong>{{data.poveisle.aprasymas}}</div>
+    <div><strong>Registracijos data: </strong>{{data.poveisle.registravimo_data}}</div>
+    <div><strong>Paskutinį kartą redaguota: </strong>{{data.poveisle.redagavimo_data}}</div>
+    <div><strong>Gyvūnų skaičius: </strong>{{data.poveisle.gyvunu_kiekis}}</div>
+    <div><a href="/redpoveis/{{data.poveisle.id}}" class="btn btn-default">Redaguoti</a></div>
+{{/if}}
+</body>
