@@ -66,6 +66,18 @@ server.route({
 
 server.route({
     method: 'GET',
+    path: '/naujapoveisle',
+    handler: veisles.registerSubBreedView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/naujapoveisle',
+    handler: veisles.insertNewSubBreed,
+});
+
+server.route({
+    method: 'GET',
     path: '/redveis/{id?}',
     handler: veisles.editView,
 });
@@ -80,6 +92,12 @@ server.route({
     method: 'GET',
     path: '/veisle/{id?}',
     handler: veisles.showPage,
+});
+
+server.route({
+    method: 'GET',
+    path: '/poveisle/{id?}',
+    handler: veisles.showSubbreedPage,
 });
 
 /* Veislių valdiklio routes pabaiga  */

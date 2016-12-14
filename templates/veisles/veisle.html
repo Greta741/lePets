@@ -15,5 +15,14 @@
     <div><strong>Poveislių skaičius: </strong>{{data.veisle.poveisliu_kiekis}}</div>
     <div><strong>Gyvūnų skaičius: </strong>{{data.veisle.gyvunu_kiekis}}</div>
     <div><a href="/redveis/{{data.veisle.id}}" class="btn btn-default">Redaguoti</a></div>
+    <div><h2>Poveislės</h2></div>
+    <div>
+        {{#each data.poveisles}}
+            <a class="btn btn-default breed" href="/poveisle/{{this.id}}">
+                <h2>{{this.pavadinimas}}</h2>
+                <b>Gyvūnų kiekis: </b> {{this.gyvunu_kiekis}}<br>
+            </a>
+        {{/each}}
+    </div>
 {{/if}}
 </body>
