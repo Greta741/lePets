@@ -1,0 +1,82 @@
+{{{htmlData.head}}}
+<body>
+    {{{htmlData.navbar}}}
+    <div id="main-content" class="main">
+        <div class="simple-form" id="formContainer">
+            <form action="" method="post">
+                <div class="inner-form">
+                    <label class="field" for="Gyvunas">Gyvūnas</label>
+                    <div>
+                        <label class="field" for="vardas">Vardas</label>
+                        <input type="text" maxlength="50" id="vardas" name="vardas" class="form-control input-sm" required="true" value="{{{data.gyvunas.vardas}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="amzius">Amžius (metais)</label>
+                            <input type="number" step="1" min="0" max="99" id="amzius" name="amzius" class="form-control input-sm" required="true" value="{{{data.gyvunas.amzius}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="nuotrauka">Nuotrauka</label>
+                            <input type="URL" maxlength="500" id="nuotrauka" name="nuotrauka" class="form-control input-sm" value="{{{data.gyvunas.nuotrauka}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="tevas">Tėvas</label>
+                            <input type="text" maxlength="50" id="tevas" name="tevas" class="form-control input-sm" required="true" value="{{{data.gyvunas.tevas}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="motina">Motina</label>
+                            <input type="text" maxlength="50" id="motina" name="motina" class="form-control input-sm" required="true" value="{{{data.gyvunas.motina}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="spalva">Spalva</label>
+                            <input type="text" maxlength="50" id="spalva" name="spalva" class="form-control input-sm" required="true" value="{{{data.gyvunas.spalva}}}">
+                    </div>
+                </div>
+
+                <div class="inner-form">
+                    <label class="field" for="pardavimas">Pardavimo informacija</label>
+                    <div>
+                        <label class="field" for="kaina">Kaina</label>
+                            <input type="number" step="any" min="0" id="kaina" name="kaina" class="form-control input-sm" required="true" value="{{{data.pardavimas.kaina}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="pardavejo_vardas">Pardavėjo vardas</label>
+                            <input type="text" maxlength="50" id="pardavejo_vardas" name="pardavejo_vardas" class="form-control input-sm" required="true" value="{{{data.pardavimas.pardavejo_vardas}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="telefonas">Telefonas</label>
+                            <input type="number" min="860000000" max="869999999" step="1" id="telefonas" name="telefonas" class="form-control input-sm" required="true" value="{{{data.pardavimas.telefono_numeris}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="aprasymas">Aprašymas</label>
+                            <textarea id="aprasymas" name="aprasymas" rows="15" maxlength="500" class="form-control input-sm" required="true">{{{data.pardavimas.aprasymas}}}</textarea>
+                    </div>
+                </div>
+
+                <div class="inner-form">
+                    <label class="field" for="info">Informacija, apie atsiėmimo vietą</label>
+                    <div>
+                        <label class="field" for="miestas">Miestas</label>
+                            <input type="text" maxlength="100" id="miestas" name="miestas" class="form-control input-sm" required="true" value="{{{data.vieta.miestas}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="gatve">Gatvė</label>
+                            <input type="text" maxlength="100" id="gatve" name="gatve" class="form-control input-sm" required="true" value="{{{data.vieta.gatve}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="namo_numeris">Namo numeris</label>
+                            <input type="number" step="1" min="0" max="9999" id="namo_numeris" name="namo_numeris" class="form-control input-sm" required="true" value="{{{data.vieta.namo_numeris}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="buto_numeris">Buto numeris</label>
+                            <input type="number" step="1" min="0" max="9999" id="buto_numeris" name="buto_numeris" class="form-control input-sm" required="true" value="{{{data.vieta.buto_numeris}}}">
+                    </div>
+                    <div>
+                        <label class="field" for="salis">Šalis</label>
+                            <input type="text" maxlength="100" id="salis" name="salis" class="form-control input-sm" required="true" value="{{{data.vieta.salis}}}">
+                    </div>
+                </div>
+                <input type="submit" class="submit btn btn-success" name="submit" value="Atnaujinti">
+            </form>
+        </div>
+    <div>
+</body>
