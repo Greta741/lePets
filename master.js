@@ -66,6 +66,18 @@ server.route({
 
 server.route({
     method: 'GET',
+    path: '/redveis/{id?}',
+    handler: veisles.editView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/redveis/{id?}',
+    handler: veisles.editBreed,
+});
+
+server.route({
+    method: 'GET',
     path: '/veisle/{id?}',
     handler: veisles.showPage,
 });

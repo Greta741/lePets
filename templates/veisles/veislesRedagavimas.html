@@ -9,13 +9,13 @@
                     <label class="field" for="gyv_tip_radio">Gyvūno tipas</label>
                     <div class="radio" id="gyv_tip_radio" required="true" name="gyv_tip_radio">
                         <label>
-                            <input type="radio" id="gyv_tip_radio" value="šuo" name="gyv_tip_radio">
+                            <input type="radio" id="gyv_tip_radio" value="šuo" name="gyv_tip_radio"{{data.dog}}>
                             šuo
                         </label>
                     </div>
                     <div class="radio" id="gyv_tip_radio2" required="true">
                         <label>
-                            <input type="radio" id="gyv_tip_radio2" value="katė" name="gyv_tip_radio">
+                            <input type="radio" id="gyv_tip_radio2" value="katė" name="gyv_tip_radio"{{data.cat}}>
                             katė
                         </label>
                     </div>
@@ -27,35 +27,33 @@
                         {{{data.pavadinimas}}}
                     {{else}}
                         <input type="text" id="pavadinimas" name="pavadinimas" 
-                        class="form-control input-sm" required="true" value="">
+                        class="form-control input-sm" required="true" value="{{data.veisle.pavadinimas}}">
                     {{/if}}
                 </div>
                 <div>
                     <label class="field" for="gyv_dyd_select">Gyvūno dydis</label>
                     <select class="form-control" id="gyv-gyv_dyd_select-select" value="" name="gyv_dyd_select">
-                        <option value="XS">XS</option>
-                        <option value="S">S</option>
-                        <option value="M">M</option>
-                        <option value="L">L</option>
-                        <option value="XL">XL</option>
-                        <option value="2XL">2XL</option>
-                        <option value="3XL">3XL</option>
-                        <option value="4XL">4XL</option>
+                        <option value="XS" {{data.XS}}>XS</option>
+                        <option value="S" {{data.S}}>S</option>
+                        <option value="M" {{data.M}}>M</option>
+                        <option value="L" {{data.L}}>L</option>
+                        <option value="XL" {{data.XL}}>XL</option>
+                        <option value="2XL" {{data.XL2}}>2XL</option>
+                        <option value="3XL" {{data.XL3}}>3XL</option>
+                        <option value="4XL" {{data.XL4}}>4XL</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="field" for="aprasymas">Veislės aprašymas</label>
-                    <textarea type="text" class="form-control" id="aprasymas" rows="4" name="aprasymas" value=""></textarea>
+                    <textarea type="text" class="form-control" id="aprasymas" 
+                    rows="4" name="aprasymas" value="">{{data.veisle.aprasymas}}</textarea>
                 </div>
 
                 <div>
                     <label class="field" for="nuotraukos_url">Nuotrauka</label>
-                    {{#if data.nuotraukos_url}}
-                        {{{data.nuotraukos_url}}}
-                    {{else}}
-                        <input type="URL" id="nuotraukos_url" name="nuotraukos_url" class="form-control input-sm" value="">
-                    {{/if}}
+                    <input type="URL" id="nuotraukos_url" name="nuotraukos_url"
+                        class="form-control input-sm" value="{{data.nuotraukos_url}}">
                 </div>
                 <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">
             </form>
