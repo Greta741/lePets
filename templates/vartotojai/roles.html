@@ -1,0 +1,66 @@
+{{{data.head}}}
+<body>
+{{{data.navbar}}}
+
+<script>
+    var selected = [];
+    var i = 0;
+</script>
+
+<div style="text-align: center">
+    <div class="roles-div">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Vartotojas</th>
+                    <th>El. paštas</th>
+                    <th>Rolė</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each usersData.users}}
+                <script>
+                    selected[i] = {
+                        user_id: '{{{this.user_id}}}',
+                        role: '{{{this.role}}}'
+                    };
+                    i++;
+                </script>
+                <tr>
+                    <td>{{{this.username}}}</td>
+                    <td>{{{this.email}}}</td>
+                    <td>
+                        <select id="{{{this.user_id}}}" class="form-control" onchange="changeRole(this.id, this.value)">
+                            <option id="{{{this.user_id}}}a">Registruotas vartotojas</option>
+                            <option id="{{{this.user_id}}}b">Veislyno savininkas</option>
+                            <option id="{{{this.user_id}}}c">Moderatorius</option>
+                            <option id="{{{this.user_id}}}d">Administratorius</option>
+                        </select>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+
+<script>
+    for (var j = 0; j < selected.length; j++) {
+        if (selected[j].role == 'Registruotas vartotojas') {
+            document.getElementById(`${selected[j].user_id}a`).setAttribute('selected', '1');
+        } else if (selected[j].role == 'Veislyno savininkas') {
+            document.getElementById(`${selected[j].user_id}b`).setAttribute('selected', '1');
+        } else if (selected[j].role == 'Moderatorius') {
+            document.getElementById(`${selected[j].user_id}c`).setAttribute('selected', '1');
+        } else if (selected[j].role == 'Administratorius') {
+            document.getElementById(`${selected[j].user_id}d`).setAttribute('selected', '1');
+        }
+    }
+
+    const changeRole = (id, value) => {
+        $.post('./changeRole', {id: id, value: value}, (result) => {
+            location.reload();
+        });
+    }
+</script>

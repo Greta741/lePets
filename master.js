@@ -191,6 +191,18 @@ server.route({
     handler: vartotojai.editProfile,
 });
 
+server.route({
+    method: 'GET',
+    path: '/rolesview',
+    handler: vartotojai.rolesView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/changeRole',
+    handler: vartotojai.changeRole,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,

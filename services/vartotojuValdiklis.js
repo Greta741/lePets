@@ -154,7 +154,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/profile">Redaguoti profilį</a></li>';
         }
         if (session.vartotojuRoliuKeitimas == 'yes') {
-            htmlData.navbar += '<li><a href="#">Keisti roles</a></li>';
+            htmlData.navbar += '<li><a href="/rolesview">Keisti roles</a></li>';
         }
         if (session.veislynoPatvirtinimas == 'yes') {
             htmlData.navbar += '<li><a href="#">Patvirtinti veislynus</a></li>';
@@ -179,44 +179,97 @@ const generateNavBar = (session) => {
 };
 
 const profileView = (request, reply) => {
-    connection.query(`select * from vartotojai where vartotojo_vardas='${request.state.session.username}'`, {}, (err, res) => {
-        var birthdate = res[0].gimimo_data;
-        var dateString = '';
-        if (birthdate != null) {
-            var date = new Date(birthdate);
-            date.setDate(date.getDate()+1);
-            dateString = date.toISOString().substring(0, 10);
-        }
-        var userData = {
-            vartotojo_vardas: res[0].vartotojo_vardas,
-            el_pastas: res[0].el_pastas,
-            telefono_nr: res[0].telefono_nr,
-            gimimo_data: dateString,
-            vardas: res[0].vardas,
-            pavarde: res[0].pavarde,
-            lytis: res[0].lytis,
-            salis: res[0].salis,
-            miestas: res[0].miestas,
-        }
-        var data = generateNavBar(request.state.session);
-        reply.view('./vartotojai/profile.html', {data, userData});
-    });
+    if (request.state.session.asmeninioProfilioPerziuraRedagavimas == 'yes') {
+        connection.query(`select * from vartotojai where vartotojo_vardas='${request.state.session.username}'`, {}, (err, res) => {
+            var birthdate = res[0].gimimo_data;
+            var dateString = '';
+            if (birthdate != null) {
+                var date = new Date(birthdate);
+                date.setDate(date.getDate() + 1);
+                dateString = date.toISOString().substring(0, 10);
+            }
+            var userData = {
+                vartotojo_vardas: res[0].vartotojo_vardas,
+                el_pastas: res[0].el_pastas,
+                telefono_nr: res[0].telefono_nr,
+                gimimo_data: dateString,
+                vardas: res[0].vardas,
+                pavarde: res[0].pavarde,
+                lytis: res[0].lytis,
+                salis: res[0].salis,
+                miestas: res[0].miestas,
+            }
+            var data = generateNavBar(request.state.session);
+            reply.view('./vartotojai/profile.html', {data, userData});
+        });
+    } else {
+        reply('negalima');
+    }
 };
 
 const editProfile = (request, reply) => {
-    const newData = {
-        el_pastas: request.payload['newData[email]'],
-        telefono_nr: request.payload['newData[tel]'],
-        gimimo_data: request.payload['newData[birthdate]'],
-        vardas: request.payload['newData[vardas]'],
-        pavarde: request.payload['newData[pav]'],
-        salis: request.payload['newData[count]'],
-        miestas: request.payload['newData[city]'],
-        lytis: request.payload['newData[gender]'],
+    if (request.state.session.asmeninioProfilioPerziuraRedagavimas == 'yes') {
+        const newData = {
+            el_pastas: request.payload['newData[email]'],
+            telefono_nr: request.payload['newData[tel]'],
+            gimimo_data: request.payload['newData[birthdate]'],
+            vardas: request.payload['newData[vardas]'],
+            pavarde: request.payload['newData[pav]'],
+            salis: request.payload['newData[count]'],
+            miestas: request.payload['newData[city]'],
+            lytis: request.payload['newData[gender]'],
+        }
+        connection.query(`update vartotojai set ? where vartotojo_vardas='${request.state.session.username}'`, newData, (err, res) => {
+            reply();
+        });
+    } else {
+        reply("negalima");
     }
-    connection.query(`update vartotojai set ? where vartotojo_vardas='${request.state.session.username}'`, newData, (err, res) => {
+};
+
+const rolesView  = (request, reply) => {
+    if (request.state.session.vartotojuRoliuKeitimas == 'yes') {
+        var usersData = {
+            users: []
+        };
+        connection.query('select vartotojo_vardas, vartotojai.id as vart_id, el_pastas, roles.id, roles.pavadinimas from vartotojai, ' +
+            'roles where vartotojai.roles_id = roles.id', {}, (err, res) => {
+            for (var i = 0; i < res.length; i++) {
+                usersData.users[i] = {
+                    username: res[i].vartotojo_vardas,
+                    user_id: res[i].vart_id,
+                    email: res[i].el_pastas,
+                    roles_id: res[i].id,
+                    role: res[i].pavadinimas
+                }
+            }
+            var data = generateNavBar(request.state.session);
+            reply.view('./vartotojai/roles.html', {data, usersData});
+        });
+    } else {
         reply();
-    });
+    }
+}
+
+const changeRole = (request, reply) => {
+    if (request.state.session.vartotojuRoliuKeitimas == 'yes') {
+        var id;
+        if (request.payload.value == "Registruotas vartotojas") {
+            id = 10;
+        } else if (request.payload.value == "Moderatorius") {
+            id = 11;
+        } else if (request.payload.value == "Administratorius") {
+            id = 12;
+        } else if (request.payload.value == "Veislyno savininkas") {
+            id = 13;
+        }
+        connection.query(`update vartotojai set vartotojai.roles_id=${id} where 
+        vartotojai.id=${request.payload.id}`, {}, (err, res) => {
+            reply();
+        });
+    } else {
+        reply();
+    }
 };
 
 const hashString = (myString, callback) => {
@@ -240,4 +293,6 @@ module.exports = {
     logoutUser: logoutUser,
     profileView: profileView,
     editProfile: editProfile,
+    rolesView: rolesView,
+    changeRole: changeRole,
 };
