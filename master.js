@@ -7,6 +7,7 @@ const vartotojai = require('./services/vartotojuValdiklis.js');
 const gyvunai = require('./services/gyvunuValdiklis.js');
 const paieska = require('./services/paieskosValdiklis.js');
 const veisles = require('./services/veisliuValdiklis.js');
+const prenumeratos = require('./services/prenumeratuValdiklis.js');
 
 const server = new Hapi.Server();
 
@@ -45,6 +46,14 @@ server.route({
         reply.view('index.html', {data});
     },
 });
+
+/* Prenumeratų valdiklio routes  */
+server.route({
+    method: 'GET',
+    path: '/naujapren',
+    handler: prenumeratos.registerSubscriptionView,
+});
+/* Prenumeratų valdiklio routes pabaiga  */
 
 /* Veislių valdiklio routes  */
 server.route({
