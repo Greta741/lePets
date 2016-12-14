@@ -118,7 +118,7 @@ const generateNavBar = (session) => {
         '<ul class="nav navbar-nav">';
 
     if (session != undefined) {
-        if (session.veislynoRegistravimas == 'yes') {
+        if (session.veislynoRegistravimas == 'yes' || session.asmeninioPuslapioRedagavimas == 'yes') {
             htmlData.navbar += '<li><a href="/veislynas">Veislynai</a></li>';
         }
         if (session.gyvunoPerziura == 'yes') {
