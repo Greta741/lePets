@@ -388,6 +388,10 @@ const messagesView = (request, reply) => {
                 tekstas: res[i].tekstas,
                 issiuntimo_laikas: date,
             };
+            var perz = new Date().toISOString();
+            connection.query(`update asmenines_zinutes set perziurejimo_laikas='${perz}', busena='perziuretas' 
+                where id=${data.messages[i].id}`, {}, (err ,res) => {
+            });
         }
         reply.view('./vartotojai/messages.html', {data});
     });

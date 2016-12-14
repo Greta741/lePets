@@ -4,7 +4,7 @@
 <div style="text-align: center">
     <h1>Profilio redagavimas</h1>
     <div class="profile-div">
-        <div id="register-error" class="error"></div>
+        <div id="message-error" class="error2"></div>
         <div class="form-group">
             <label for="username">Vartotojo vardas:</label>
             <input type="text" class="form-control" id="username" value="{{{userData.vartotojo_vardas}}}" readonly>
@@ -69,8 +69,21 @@
             city: document.getElementById('city').value,
             gender: document.getElementById('gender').value,
         }
-        $.post('./editProfile', {newData}, (result) => {
-            location.reload();
-        });
+
+        var noErrors;
+        if (/^[A-Za-z0-9@.]{3,50}$/.test(newData.email) && /^[0-9+]{0,50}$/.test(newData.tel)
+            && /^[A-Za-z]{0,50}$/.test(newData.vardas) && /^[A-Za-z]{0,50}$/.test(newData.pav)
+            && /^[A-Za-z]{0,50}$/.test(newData.count) && /^[A-Za-z]{0,50}$/.test(newData.city)
+            && /^[A-Za-z]{0,50}$/.test(newData.gender)) {
+            noErrors = true;
+        }
+
+        if (!noErrors) {
+            document.getElementById('message-error').innerHTML = 'Yra neleistinų simbolių';
+        } else {
+            $.post('./editProfile', {newData}, (result) => {
+                location.reload();
+            });
+        }
     }
 </script>
