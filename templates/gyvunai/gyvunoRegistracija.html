@@ -2,19 +2,19 @@
 <script>
     function displayBreads(test) {
         if (test == 1) {
-            document.getElementById("veisle").style.display = "block";
-            document.getElementById("b").required = true;
+            document.getElementById("veisle").style.visibility = "visible";
+            document.getElementById("veisles_pasirinkimas").required = true;
         }
         if (test == 0) {
-            document.getElementById("veisle").style.display = "none";
-            document.getElementById("b").required = false;
+            document.getElementById("veisle").style.visibility = "hidden";
+            document.getElementById("veisles_pasirinkimas").required = false;
         }
     }
 </script>
 <script>
     function displayApdovanojimas(test) {
         if (test == 1) {
-            document.getElementById("apdovanojimas").style.display = "block";
+            document.getElementById("apdovanojimas").style.visibility = "visible";
             document.getElementById("apdovanojimas_data").required = true;
             document.getElementById("uzimta_vieta").required = true;
             document.getElementById("prizas").required = true;
@@ -24,7 +24,7 @@
             document.getElementById("konkurso_salis").required = true;
         }
         if (test == 0) {
-            document.getElementById("apdovanojimas").style.display = "none";
+            document.getElementById("apdovanojimas").style.visibility = "hidden";
             document.getElementById("apdovanojimas_data").required = false;
             document.getElementById("uzimta_vieta").required = false;
             document.getElementById("prizas").required = false;
@@ -195,24 +195,24 @@
 
                 <div class="inner-form">
                     <label class="field" for="kilm">Ar kilmingas?</label><br>
-                    <input type="radio" name="kilme" value="1" required="true" onclick="displayBreads(1)">Taip<br>
+                    <input type="radio" name="kilme" value="1" required="true" onclick="displayBreads(1)" checked>Taip<br>
                     <input type="radio" name="kilme" value="0" required="true" onclick="displayBreads(0)">Ne<br>
                 </div>
 
-                <div class="inner-form" id="veisle" style="display: none">
+                <div class="inner-form" id="veisle">
                     <label class="field" for="veisle">Veislė</label><br>
                     {{#each data.veisle}}
-                        <input type="radio" id="b" name="veisle" value="{{{this.id}}}" required="true"> {{this.pavadinimas}}<br>
+                        <input type="radio" id="veisles_pasirinkimas" name="veisle" value="{{{this.id}}}">{{this.pavadinimas}}<br>
                     {{/each}}
                 </div>
 
                 <div class="inner-form">
                     <label class="field" for="apd">Ar turi apdovanojimą?</label><br>
-                    <input type="radio" name="apdov" value="1" required="true" onclick="displayApdovanojimas(1)">Taip<br>
+                    <input type="radio" name="apdov" value="1" required="true" onclick="displayApdovanojimas(1)" checked>Taip<br>
                     <input type="radio" name="apdov" value="0" required="true" onclick="displayApdovanojimas(0)">Ne<br>
                 </div>
 
-                <div class="inner-form" id="apdovanojimas" style="display: none">
+                <div class="inner-form" id="apdovanojimas">
                     <label class="field" for="apdova">Apdovanojimo informacija</label><br>
 
                     <div>

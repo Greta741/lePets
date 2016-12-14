@@ -33,6 +33,10 @@ const showAllAnimals = (request, reply) => {
     });
 };
 
+/*const showAnimalById = (request, reply) => {
+  reply.view('./gyvunai/gyvunai.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+};*/
+
 const formatDate = (data) => {
   const date = new Date(data);
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -42,14 +46,6 @@ const generateTypeSelect = (data) => {
   let temp = '';
   data.forEach((tipas) => {
     temp += `<input type="radio" name="tipas" value="${tipas.id}" required="true"> ${tipas.gyvuno_tipas} ${tipas.lytis}<br>`;
-  });
-  return temp;
-};
-
-const generateBreedSelect = (data) => {
-  let temp = '';
-  data.forEach((veisle) => {
-    temp += `<input type="radio" id="b" name="veisle" value="${veisle.id}" required="true"> ${veisle.pavadinimas}<br>`;
   });
   return temp;
 };
@@ -66,6 +62,8 @@ const registerView = (request, reply) => {
 };
 
 const insertNew = (data, reply) => {
+  const user_id = data.state.session.user_id;
+  console.log(data.state.session);
   data = data.payload;
   const atsiemimo_vieta = {
       miestas: data.miestas,
@@ -73,7 +71,7 @@ const insertNew = (data, reply) => {
       namo_numeris: data.namo_numeris,
       buto_numeris: data.buto_numeris,
       salis: data.salis,
-    };
+  };
   const pardavimas = {
       kaina: data.kaina,
       pardavejo_vardas: data.pardavejo_vardas,
@@ -83,7 +81,7 @@ const insertNew = (data, reply) => {
   };
   const gyvunas = {
       tipas_id: data.tipas,
-      vartotojas_id: 1,
+      vartotojas_id: user_id,
       vardas: data.vardas,
       nuotrauka: data.nuotrauka,
       tevas: data.tevas,
@@ -129,10 +127,13 @@ const insertNew = (data, reply) => {
     });
   }
   // jeigu ivesta tik apdovanojimas
-  else if ((data.kilme == 0 && data.apdov == 1)) {
+  else if (data.kilme == 0 && data.apdov == 1) {
     connection.query('insert into atsiemimo_vieta set ?', atsiemimo_vieta, (err, result1) => {
+      console.log(err);
       pardavimas.atsiemimo_vieta_id = result1.insertId;    
       connection.query('insert into pardavimas set ?', pardavimas, (err, result2) => {
+        console.log(err);
+        gyvunas.pardavimas_id = result2.insertId;
         const apdovanojimas = {
           data: data.apdovanojimas_data,
           uzimta_vieta: data.uzimta_vieta,
@@ -143,9 +144,10 @@ const insertNew = (data, reply) => {
           konkurso_salis: data.konkurso_salis,
         };
         connection.query('insert into apdovanojimas set ?', apdovanojimas, (err, result3) => {
+          console.log(err);
           gyvunas.apdovanojimas_id = result3.insertId;
-          gyvunas.pardavimas_id = result2.insertId;
           connection.query('insert into gyvunas set ?', gyvunas, (err, result) => {
+            console.log(err);
           });
         });
       });
@@ -167,7 +169,6 @@ const insertNew = (data, reply) => {
 };
 
 module.exports = {
-  generateBreedSelect,
   generateTypeSelect,
   formatDate,
   showAllAnimals,
