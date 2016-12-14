@@ -66,7 +66,6 @@ const registerView = (request, reply) => {
 };
 
 const insertNew = (data, reply) => {
-  const user_id = data.state.session.user_id;
   data = data.payload;
   const atsiemimo_vieta = {
       miestas: data.miestas,
@@ -84,7 +83,7 @@ const insertNew = (data, reply) => {
   };
   const gyvunas = {
       tipas_id: data.tipas,
-      vartotojas_id: user_id,
+      vartotojas_id: 1,
       vardas: data.vardas,
       nuotrauka: data.nuotrauka,
       tevas: data.tevas,
