@@ -642,39 +642,15 @@ const report = (request, reply) => {
       data.veislynai = result;
       reply.view('./veislynai/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
     });
+    updatePetsCount(request.state.session.user_id);
+};
 
-
-  
-  const isivaizduojamiDuomenys = [
-    {
-      pavadinimas: 'Grumpy cat veislynas',
-      savininkas: 'Pats grumpy cat',
-      tipas: 'Katės',
-      registracijos_data: '2016-10-01',
-      paskutinio_aktyvumo_data: '2016-12-09',
-      gyvunu_skaicius: 10,
-      parduodamu_skaicius: 5,
-    },
-    {
-      pavadinimas: 'Grumpy cat veislynas 2',
-      savininkas: 'Pats grumpy cat',
-      tipas: 'Katės',
-      registracijos_data: '2016-10-01',
-      paskutinio_aktyvumo_data: '2016-12-09',
-      gyvunu_skaicius: 10,
-      parduodamu_skaicius: 5,
-    },
-    {
-      pavadinimas: 'Grumpy cat veislynas 3',
-      savininkas: 'Pats grumpy cat',
-      tipas: 'Katės',
-      registracijos_data: '2016-10-01',
-      paskutinio_aktyvumo_data: '2016-12-09',
-      gyvunu_skaicius: 10,
-      parduodamu_skaicius: 5,
-    },
-  ];
-  
+const updatePetsCount = (id) => {
+  getId(id, (result) => {
+    if (result) {
+       connection.query('update veislynai set gyvunu_skaicius = gyvunu_skaicius + 1 where id = ?', result);
+    }
+  });
 };
 
 module.exports = {
