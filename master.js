@@ -203,6 +203,18 @@ server.route({
     handler: vartotojai.changeRole,
 });
 
+server.route({
+    method: 'GET',
+    path: '/veislynuregistracijos',
+    handler: vartotojai.veislynuRegView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/keistiVeislynoStatusa',
+    handler: vartotojai.keistiVeislynoStatusa,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,

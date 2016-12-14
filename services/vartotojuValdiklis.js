@@ -157,7 +157,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/rolesview">Keisti roles</a></li>';
         }
         if (session.veislynoPatvirtinimas == 'yes') {
-            htmlData.navbar += '<li><a href="#">Patvirtinti veislynus</a></li>';
+            htmlData.navbar += '<li><a href="/veislynuregistracijos">Patvirtinti veislynus</a></li>';
         }
         if (session.asmeniniuZinuciuSiuntimas == 'yes') {
             htmlData.navbar += '<li><a href="#">Žinutės</a></li>';
@@ -272,6 +272,50 @@ const changeRole = (request, reply) => {
     }
 };
 
+const veislynuRegView = (request, reply) => {
+    if (request.state.session.veislynoPatvirtinimas == 'yes') {
+        var veislynuData = {
+            data: []
+        }
+        connection.query('select pavadinimas, id, registracijos_data from veislynai where veislynai.ar_patvirtintas = 0 ' +
+            'order by registracijos_data', {}, (err, res) => {
+            for (var i = 0; i < res.length; i++) {
+                var fullDate = res[i].registracijos_data;
+                var dateString = '';
+                var date = new Date(fullDate);
+                date.setDate(date.getDate() + 1);
+                dateString = date.toISOString().substring(0, 10);
+                veislynuData.data[i] = {
+                    pavadinimas: res[i].pavadinimas,
+                    id: res[i].id,
+                    registracijos_data: dateString
+                };
+            }
+            var data = generateNavBar(request.state.session);
+            reply.view('./vartotojai/veislynuregistracijos.html', {data, veislynuData});
+        });
+    } else {
+        reply();
+    }
+};
+
+const keistiVeislynoStatusa = (request, reply) => {
+    if (request.state.session.vartotojuRoliuKeitimas == 'yes') {
+        var decisionId;
+        if (request.payload.decision == 'accept') {
+            decisionId = 1;
+        } else {
+            decisionId = 2;
+        }
+        connection.query(`update veislynai set veislynai.ar_patvirtintas=${decisionId} where 
+        veislynai.id=${request.payload.id}`, {}, (err, res) => {
+            reply();
+        });
+    } else {
+        reply();
+    }
+}
+
 const hashString = (myString, callback) => {
     bcrypt.genSalt(saltRounds, (err, salt) => {
         bcrypt.hash(myString, salt, (error, hash) => {
@@ -295,4 +339,6 @@ module.exports = {
     editProfile: editProfile,
     rolesView: rolesView,
     changeRole: changeRole,
+    veislynuRegView: veislynuRegView,
+    keistiVeislynoStatusa: keistiVeislynoStatusa,
 };
