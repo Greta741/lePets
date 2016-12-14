@@ -63,7 +63,6 @@ const registerView = (request, reply) => {
 
 const insertNew = (data, reply) => {
   const user_id = data.state.session.user_id;
-  console.log(data.state.session);
   data = data.payload;
   const atsiemimo_vieta = {
       miestas: data.miestas,
