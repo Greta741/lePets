@@ -285,6 +285,18 @@ server.route({
     handler: vartotojai.returnReport,
 });
 
+server.route({
+    method: 'GET',
+    path: '/messages',
+    handler: vartotojai.messagesView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/sendmessage',
+    handler: vartotojai.sendMessage,
+});
+
 server.state('session', {
     ttl: 24 * 60 * 60 * 1000,
     isSecure: false,
@@ -352,6 +364,18 @@ server.route({
     method: 'POST',
     path: '/paieska',
     handler: paieska.searchResult,
+});
+
+server.route({
+    method: 'GET',
+    path: '/issamipaieska',
+    handler: paieska.detailSearchView,
+});
+
+server.route({
+    method: 'POST',
+    path: '/issamipaieska',
+    handler: paieska.detailSearchResult,
 });
 
 /* Paieškos valdiklio routes pabaiga */

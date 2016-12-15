@@ -10,42 +10,64 @@
         data.password = document.getElementById('pwd').value;
         data.confPassword = document.getElementById('pwd-conf').value;
 
-        var areThereErrors;
+        var areEmpty;
+        var noErrors;
 
         if (data.password !== data.confPassword || data.username == '' || data.email == '' || data.password == '') {
-            areThereErrors = true;
+            areEmpty = true;
         }
 
-        if (!areThereErrors) {
-            $.post('./register', {data}, (result) => {
+        if (/^[A-Za-z0-9]{3,50}$/.test(data.username) && /^[A-Za-z0-9,.@]{3,50}$/.test(data.email)
+            && /^[A-Za-z0-9]{3,50}$/.test(data.password) && /^[A-Za-z0-9]{3,50}$/.test(data.confPassword)) {
+            noErrors = true;
+        }
 
-                location.reload();
-            });
+        if (areEmpty) {
+            document.getElementById('register-error').innerHTML = "Laukeliai negali būti tušti";
+        } else if (!noErrors) {
+            document.getElementById('register-error').innerHTML = "Yra neleistinų simbolių.";
         } else {
-            document.getElementById('register-error').innerHTML = "Blogai suvesti duomenys";
+            $.post('./register', {data}, (result) => {
+                if (result.message == 'egzistuoja') {
+                    document.getElementById('register-error').innerHTML = "Vartotojas su tokiu vardu ar el. paštu jau yra.";
+                } else {
+                    location.reload();
+                }
+            });
         }
-    }
+    };
 
     const login = () => {
         var data = {};
         data.username = document.getElementById('username-login').value;
         data.password = document.getElementById('pwd-login').value;
         var areThereErrors;
+        var noErrors;
+
+        if (/^[A-Za-z0-9]{3,50}$/.test(data.username) && /^[A-Za-z0-9]{3,50}$/.test(data.password)) {
+            noErrors = true;
+        }
 
         if (data.username == '' ||  data.password == '') {
             areThereErrors = true;
             console.log("errors");
         }
 
-        if (!areThereErrors) {
-            $.post('./login', {data}, (result) => {
-
-                location.reload();
-            });
+        if (areThereErrors) {
+            document.getElementById('login-error').innerHTML = "Yra tuščių laukelių.";
+        } else if (!noErrors) {
+            document.getElementById('login-error').innerHTML = "Yra neleistinų simbolių.";
         } else {
-            document.getElementById('login-error').innerHTML = "Blogai suvesti duomenys";
+            $.post('./login', {data}, (result) => {
+                if (result.message == 'vartotojas nerastas') {
+                    document.getElementById('login-error').innerHTML = "Vartotojas nerastas";
+                } else if (result.message == 'slaptazodis neteisingas') {
+                    document.getElementById('login-error').innerHTML = "Neteisingas slaptažodis";
+                } else {
+                    location.reload();
+                }
+            });
         }
-
     }
 </script>
 
@@ -57,7 +79,7 @@
                 <h4 class="modal-title">Registracija</h4>
             </div>
             <div class="modal-body">
-                <div id="register-error" class="error"></div>
+                <div id="register-error" class="error2"></div>
                 <div class="form-group">
                     <label for="username">Vartotojo vardas:</label>
                     <input type="text" class="form-control" id="username" required="">
@@ -88,7 +110,7 @@
                 <h4 class="modal-title">Prisijungimas</h4>
             </div>
             <div class="modal-body">
-                <div id="login-error" class="error"></div>
+                <div id="login-error" class="error2"></div>
                 <div class="form-group">
                     <label for="username-login">Vartotojo vardas:</label>
                     <input type="text" class="form-control" id="username-login" required="">

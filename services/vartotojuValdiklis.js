@@ -28,14 +28,21 @@ const registerUser = (request, reply) => {
                 prieigos_raktas: hashedString2,
                 busena: 'aktyvus'
             }
-            connection.query('insert into prisijungimo_duomenys set ?', loginInfo, (err, result) => {
-                newUser.prisijung_id = result.insertId;
-                connection.query('insert into vartotojai set ?', newUser, (err, result) => {})
+            connection.query(`select vartotojai.id from vartotojai where vartotojo_vardas='${newUser.vartotojo_vardas}' or 
+                el_pastas='${newUser.el_pastas}'`, {}, (err, res) => {
+                if (res.length == 0) {
+                    connection.query('insert into prisijungimo_duomenys set ?', loginInfo, (err, result) => {
+                        newUser.prisijung_id = result.insertId;
+                        connection.query('insert into vartotojai set ?', newUser, (err, result) => {})
+                    });
+                    reply();
+                } else {
+                    reply({message: 'egzistuoja'});
+                }
             });
+
         })
     })
-
-    reply().state('data', 'thisisacookiestring');
 };
 
 const loginUser = (request, reply) => {
@@ -87,13 +94,12 @@ const loginUser = (request, reply) => {
                             })
                         });
                     } else {
-                        reply('slaptažodis neteisingas');
+                        reply({message: 'slaptazodis neteisingas'});
                     }
                 });
             } else {
-                reply('vartotojas nerastas');
+                reply({message: 'vartotojas nerastas'});
             }
-
     });
 };
 
@@ -161,7 +167,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/veislynuregistracijos">Patvirtinti veislynus</a></li>';
         }
         if (session.asmeniniuZinuciuSiuntimas == 'yes') {
-            htmlData.navbar += '<li><a href="#">Žinutės</a></li>';
+            htmlData.navbar += '<li><a href="/messages">Žinutės</a></li>';
         }
         if (session.prenumeratosRegistravimas == 'yes') {
             htmlData.navbar += '<li><a href="/naujapren">Prenumerata</a></li>';
@@ -250,7 +256,7 @@ const rolesView  = (request, reply) => {
     } else {
         reply();
     }
-}
+};
 
 const changeRole = (request, reply) => {
     if (request.state.session.vartotojuRoliuKeitimas == 'yes') {
@@ -324,7 +330,7 @@ const keistiVeislynoStatusa = (request, reply) => {
 };
 
 const chooseReport = (request, reply) => {
-    if (request.state.session.perziuretiAtaskaitas == 'yes') {
+    if (request.state.session && request.state.session.perziuretiAtaskaitas == 'yes') {
         var data = generateNavBar(request.state.session);
         data.select = 1;
         reply.view('./vartotojai/ataskaita.html', {data});
@@ -365,7 +371,55 @@ const returnReport = (request, reply) => {
             reply.view('./vartotojai/ataskaita.html', {data});
         });
     }
+};
+
+const messagesView = (request, reply) => {
+    connection.query('select vartotojai.id, asmenines_zinutes.id, vartotojo_vardas, tema, tekstas, issiuntimo_laikas ' +
+        `from vartotojai, asmenines_zinutes where asmenines_zinutes.adresatas = ${request.state.session.user_id} ` +
+        'and vartotojai.id = asmenines_zinutes.siuntejas order by issiuntimo_laikas desc', {}, (err, res) => {
+        var data = generateNavBar(request.state.session);
+        data.messages = [];
+        for (var i = 0; i < res.length; i++) {
+            var tmpdata = res[i].issiuntimo_laikas.toISOString();
+            var date = tmpdata.substring(0, 10) + ' ' + tmpdata.substring(11, 19);
+            data.messages[i] = {
+                id: res[i].id,
+                username: res[i].vartotojo_vardas,
+                tema: res[i].tema,
+                tekstas: res[i].tekstas,
+                issiuntimo_laikas: date,
+            };
+            var perz = new Date().toISOString();
+            connection.query(`update asmenines_zinutes set perziurejimo_laikas='${perz}', busena='perziuretas' 
+                where id=${data.messages[i].id}`, {}, (err ,res) => {
+            });
+        }
+        reply.view('./vartotojai/messages.html', {data});
+    });
 }
+
+const sendMessage = (request, reply) => {
+    if (request.state.session.asmeniniuZinuciuSiuntimas) {
+        connection.query(`select id, vartotojai.vartotojo_vardas from vartotojai where 
+        vartotojo_vardas='${request.payload.adresatas}'`, {}, (err, res) => {
+            if (res.length == 1) {
+                const newMessage = {
+                    adresatas: res[0].id,
+                    siuntejas: request.state.session.user_id,
+                    tekstas: request.payload.zinute,
+                    tema: request.payload.tema
+                }
+                connection.query('insert into asmenines_zinutes set ?', newMessage, (err, res) => {
+                    reply();
+                });
+            } else {
+                reply({message: 'adresato nera'});
+            }
+        });
+    } else {
+        reply('negalima');
+    }
+};
 
 const hashString = (myString, callback) => {
     bcrypt.genSalt(saltRounds, (err, salt) => {
@@ -394,4 +448,6 @@ module.exports = {
     keistiVeislynoStatusa: keistiVeislynoStatusa,
     chooseReport: chooseReport,
     returnReport: returnReport,
+    messagesView: messagesView,
+    sendMessage: sendMessage,
 };
