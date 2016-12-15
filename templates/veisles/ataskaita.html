@@ -1,0 +1,92 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+
+{{#if nera}}
+<div id="main-content">
+    <div class="simple-form" id="formContainer">
+	<form action="" method="post">
+        <div>
+            <label class="field" for="tipas">Tipas</label><br>
+            <div class="radio" id="tip_radio" required="true" name="tipas">
+                <label>
+                    <input type="radio" id="tip_radio" value="veisle" name="tipas">
+                    Veislės
+                </label>
+            </div>
+            <div class="radio" id="tip_radio2" required="true" name="tipas">
+                <label>
+                    <input type="radio" id="tip_radio2" value="poveisle" name="tipas">
+                    Poveislės
+                </label>
+            </div>
+        </div>
+        <input type="submit" class="submit btn btn-success" name="submit" value="Rodyti">
+    </form>
+    </div>
+</div>
+{{/if}}
+
+{{#if data.veisles}}
+<div id="main-content">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Pavadinimas</th>
+            <th>Gyvuno tipas</th>
+            <th>Dydis</th>
+            <th>Aprašymas</th>
+            <th>Registravimo data</th>
+            <th>Redagavimo data</th>
+            <th>Poveislių kiekis</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each data.veisles}}
+                <tr>
+                    <td>{{this.pavadinimas}}</td>
+                    <td>{{this.gyvūno_tipas}}</td>
+                    <td>{{this.dydis}}</td>
+                    <td>{{this.aprasymas}}</td>
+                    <td>{{this.registravimo_data}}</td>
+                    <td>{{this.redagavimo_data}}</td>
+                    <td>{{this.poveisliu_kiekis}}</td>
+                </tr>
+            {{/each}}      
+        </tbody>
+    </table>
+  </div>
+{{/if}}
+
+{{#if data.poveisles}}
+<div id="main-content">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Veislė</th>
+            <th>Pavadinimas</th>
+            <th>Aprašymas</th>
+            <th>Registravimo data</th>
+            <th>Redagavimo data</th>
+        </tr>
+        </thead>
+        <tbody>
+            {{#each data.poveisles}}
+                <tr>
+                    <td>{{this.veisle}}</td>
+                    <td>{{this.pavadinimas}}</td>
+                    <td>{{this.aprasymas}}</td>
+                    <td>{{this.registravimo_data}}</td>
+                    <td>{{this.redagavimo_data}}</td>
+                </tr>
+            {{/each}}      
+        </tbody>
+    </table>
+  </div>
+{{/if}}
+
+{{#if data.error}}
+    <div class="error">Nieko nepavyko rasti.</div>
+{{/if}}
+
+</body>

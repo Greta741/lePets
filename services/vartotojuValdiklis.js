@@ -145,7 +145,7 @@ const generateNavBar = (session) => {
                 '<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ataskaitos<span class="caret"></span></a>' +
                 '<ul class="dropdown-menu">' +
                 '<li><a href="/ataskaitos/veislynai">Veislynų ataskaita</a></li>' +
-                '<li><a href="#">Veislių ataskaita</a></li>' +
+                '<li><a href="/ataskaitos/veisles">Veislių ataskaita</a></li>' +
                 '<li><a href="/ataskaitos/gyvunai">Gyvūnų ataskaita</a></li>' +
                 '<li><a href="/ataskaitos/vartotojai">Vartotojų ataskaita</a></li>' +
                 '</ul></li>';

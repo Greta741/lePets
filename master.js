@@ -140,6 +140,18 @@ server.route({
     handler: veisles.showSubbreedPage,
 });
 
+server.route({
+    method: 'GET',
+    path: '/ataskaitos/veisles',
+    handler: veisles.chooseReport,
+});
+
+server.route({
+    method: 'POST',
+    path: '/ataskaitos/veisles',
+    handler: veisles.report,
+});
+
 /* Veislių valdiklio routes pabaiga  */
 
 /* Veislynų valdiklio routes  */

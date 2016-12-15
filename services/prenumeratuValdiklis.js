@@ -10,6 +10,10 @@ const connection = mysql.createConnection({
 connection.connect();
 
 const registerSubscriptionView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   connection.query('select * from veisle', (err, veisle) => {
     connection.query('select * from poveisle', (err, poveisle) => {
       let data = {};
@@ -27,6 +31,10 @@ const getMaxId = (callback) => {
 };
 
 const registerSubscription = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   payload = request.payload;
 
   let data = {};
@@ -99,6 +107,10 @@ const formatDate = (data) => {
 };
 
 const allSubscriptions = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const data = {};
   connection.query('select * from prenumerata where vartotojas = ?', request.state.session.user_id, (err, prenumerata) => {
     if (prenumerata.length === 0) {
@@ -121,6 +133,10 @@ const allSubscriptions = (request, reply) => {
 };
 
 const subscriptionView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  }
   const id = request.params.id;
   connection.query('select * from prenumeratos_parinktys where id = ?', id, (err, parinktys) => {
     connection.query('select * from gyvunas', (err, gyvunai) => {
@@ -130,60 +146,47 @@ const subscriptionView = (request, reply) => {
       let i = 0;
       const length = gyvunai.length;
       let deti = true;
-       console.log(parinktys);
       gyvunai.forEach((item) => {
         connection.query('select * from pardavimas where id = ?', item.pardavimas_id, (err, pardavimas) => {
-            console.log(pardavimas);
           connection.query('select * from atsiemimo_vieta where id = ?', pardavimas[0].atsiemimo_vieta_id, (err, atsVieta) => {
-              console.log(atsVieta);
             if(parinktys[0].veisle !== null && parinktys[0].veisle !== item.veislės_id) {
                 deti = false;
-                // console.log(parinktys.veisle);
             }
 
             if(parinktys[0].tipas !== null && parinktys[0].tipas !== item.tipas_id) {
                 deti = false;
-                // console.log(parinktys[0].tipas);
             }
 
             if(parinktys[0].max_kaina !== null && parinktys[0].max_kaina <= pardavimas.kaina) {
                 deti = false;
-                // console.log(parinktys[0].max_kaina);
             }
 
             if(parinktys[0].min_kaina !== null && parinktys[0].min_kaina >= pardavimas.kaina) {
                 deti = false;
-                // console.log(parinktys[0].min_kaina);
             }
 
             if(parinktys[0].max_amzius !== null && parinktys[0].max_amzius <= item.amzius) {
                 deti = false;
-                // console.log(parinktys[0].max_amzius);
             }
 
             if(parinktys[0].min_amzius !== null && parinktys[0].min_amzius >= item.amzius) {
                 deti = false;
-                // console.log(parinktys[0].min_amzius);
             }
 
             if(parinktys[0].turi_apdovanojima !== null && item.apdovanojimas_id === null) {
                 deti = false;
-                // console.log(parinktys[0].turi_apdovanojima);
             }
 
             if(parinktys[0].nurodytas_tevas !== null && item.tevas === null) {
                 deti = false;
-                // console.log(parinktys[0].nurodytas_tevas);
             }
 
             if(parinktys[0].nurodyta_motina !== null && item.motina === null) {
                 deti = false;
-                // console.log(parinktys[0].nurodyta_motina);
             }
 
             if(parinktys[0].su_nuotrauka !== null && item.nuotrauka === null) {
                 deti = false;
-                // console.log(parinktys[0].su_nuotrauka);
             }
 
             if(parinktys[0].miestas !== null && parinktys[0].miestas !== atsVieta[0].miestas) {
