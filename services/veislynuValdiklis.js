@@ -712,4 +712,5 @@ module.exports = {
   remove,
   reportView,
   report,
+  updatePetsCount,
 }
