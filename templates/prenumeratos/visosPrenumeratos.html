@@ -1,0 +1,18 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+    <div id="main-content" class="main">
+        <h1>Visos sistemoje užregistruotos prenumeratos</h1>
+        {{{data.errors}}}
+        <div class="simple-form main" id="formContainer">
+            <a href="/naujapren" class="btn btn-default">Registruoti naują prenumeratą</a>
+        </div>
+        {{#each data.prenumeratos}}
+            <a class="btn btn-default breed" href="/prenumerata/{{this.parinktys}}">
+                <h2>{{this.pavadinimas}}</h2>
+                <b>Registruota: </b> {{this.registravimo_data}}<br>
+                <b>Galioja iki: </b> {{this.galioja_iki}}<br>
+            </a>
+        {{/each}}
+    </div>
+</body>

@@ -20,7 +20,7 @@ const allBreeds = (request, reply) => {
       else {
         data.veisles = veisles;
         data.veisles.forEach((item) => {
-          item.redagavimo_data = formatDate(item.gimimo_data);
+          item.redagavimo_data = formatDate(item.redagavimo_data);
         });
         reply.view('./veisles/visosVeisles.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
       }      

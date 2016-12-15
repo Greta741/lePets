@@ -1,0 +1,15 @@
+{{{htmlData.head}}}
+<body>
+{{{htmlData.navbar}}}
+    <div id="main-content" class="main">
+        <h1>Gyvūnai atitinkantys parametrus</h1>
+        {{{data.errors}}}
+        {{#each data.gyvunas}}
+            <a class="btn btn-default breed" href="/veisle/{{this.id}}">
+                <h2>{{this.vardas}}</h2>
+                <b>Registruota: </b> {{this.registravimo_data}}<br>
+                <b>Galioja iki: </b> {{this.galioja_iki}}<br>
+            </a>
+        {{/each}}
+    </div>
+</body>

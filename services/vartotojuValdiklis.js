@@ -137,6 +137,7 @@ const generateNavBar = (session) => {
         if (session.paieskaPagalRaktazodi == 'yes') {
             htmlData.navbar += '<li><a href="/paieska"><span class="glyphicon glyphicon-search"></span> Gyvūnų paieška</a></li>';
         }
+        
         htmlData.navbar += '</ul>';
         htmlData.navbar += '<ul class="nav navbar-nav navbar-right">';
         if (session.perziuretiAtaskaitas == 'yes') {
@@ -169,7 +170,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/messages">Žinutės</a></li>';
         }
         if (session.prenumeratosRegistravimas == 'yes') {
-            htmlData.navbar += '<li><a href="#">Prenumerata</a></li>';
+            htmlData.navbar += '<li><a href="/visospren">Prenumerata</a></li>';
         }
 
         htmlData.navbar += '<li><a href="/logout">Atsijungti</a></li>' +
