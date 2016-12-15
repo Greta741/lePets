@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const vartotojai = require('./vartotojuValdiklis.js');
+const veislynai = require('./veislynuValdiklis.js');
 
 const connection = mysql.createConnection({
   host: 'localhost',
@@ -147,8 +148,8 @@ const registerView = (request, reply) => {
 };
 
 const insertNew = (data, reply) => {
-  if (!request.state.session) {
-    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+  if (!data.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(data.state.session), data: {message: 'Negalima, prisijunkite.'}});
     return;
   }
   const user_id = data.state.session.user_id;
@@ -248,7 +249,7 @@ const insertNew = (data, reply) => {
       });
     });
   }
-
+  veislynai.updatePetsCount(user_id);
   reply.redirect('./gyvunai/');
 };
 

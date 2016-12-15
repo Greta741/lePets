@@ -139,6 +139,12 @@ div {
     text-align: center;
 }
 
+.error2 {
+    margin: auto;
+    color: red;
+    text-align: center;
+}
+
 .report-selection {
     display: inline-block;
     border-width: 1px;
