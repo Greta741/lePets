@@ -310,7 +310,7 @@ const veislynuRegView = (request, reply) => {
 };
 
 const keistiVeislynoStatusa = (request, reply) => {
-    if (request.state.session.vartotojuRoliuKeitimas == 'yes') {
+    if (request.state.session.veislynoPatvirtinimas == 'yes') {
         var decisionId;
         if (request.payload.decision == 'accept') {
             decisionId = 1;
