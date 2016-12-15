@@ -14,6 +14,7 @@
                 <div>
                     <label class="field" for="veisle">Veislė</label>
                     <select class="form-control" id="veisle" value="" name="veisle">
+                        <option value="">Nėra veislės</option>
                         {{#each data.veisle}}
                             <option value="{{this.id}}">{{this.pavadinimas}}</option>
                         {{/each}}
@@ -23,6 +24,7 @@
                 <div>
                     <label class="field" for="poveisle">Poveislė</label>
                     <select class="form-control" id="poveisle" value="" name="poveisle">
+                        <option value="">Nėra poveislės</option>
                         {{#each data.poveisle}}
                             <option value="{{this.id}}">{{this.pavadinimas}}</option>
                         {{/each}}
@@ -31,13 +33,13 @@
 
                 <div>
                     <label class="field" for="gyv_tip_radio">Gyvūno tipas</label>
-                    <div class="radio" id="gyv_tip_radio" required="true" name="gyv_tip_radio">
+                    <div class="radio" id="gyv_tip_radio" name="gyv_tip_radio">
                         <label>
                             <input type="radio" id="gyv_tip_radio" value="šuo" name="gyv_tip_radio">
                             šuo
                         </label>
                     </div>
-                    <div class="radio" id="gyv_tip_radio2" required="true">
+                    <div class="radio" id="gyv_tip_radio2">
                         <label>
                             <input type="radio" id="gyv_tip_radio2" value="katė" name="gyv_tip_radio">
                             katė
@@ -47,55 +49,54 @@
 
                 <div>
                     <label class="field" for="max_kaina">Maksimali kaina €</label>
-                    <input class="form-control input-sm" type="number" name="max_kaina" min="0" max="99999999999" step="10" value="100">
+                    <input class="form-control input-sm" type="number" name="max_kaina" min="0" max="99999999999" step="10">
                 </div>
 
                 <div>
                     <label class="field" for="min_kaina">Minimali kaina €</label>
-                    <input class="form-control input-sm" type="number" name="min_kaina" min="0" max="99999999999" step="10" value="0">
+                    <input class="form-control input-sm" type="number" name="min_kaina" min="0" max="99999999999" step="10">
                 </div>
 
                 <div>
                     <label class="field" for="max_amzius">Maksimalus amžius (metais)</label>
-                    <input class="form-control input-sm" type="number" name="max_amzius" min="0" max="99999999999" step="10" value="3">
+                    <input class="form-control input-sm" type="number" name="max_amzius" min="0" max="99999999999" step="10">
                 </div>
 
                 <div>
                     <label class="field" for="min_amzius">Minimalus amžius (metais)</label>
-                    <input class="form-control input-sm" type="number" name="min_amzius" min="0" max="99999999999" step="10" value="0">
+                    <input class="form-control input-sm" type="number" name="min_amzius" min="0" max="99999999999" step="10">
                 </div>
                 <br>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="turi_apdovanojima" value="true">
+                        <input type="checkbox" name="turi_apdovanojima" value="1">
                         Gyvūnas turi bent vieną apdovanojimą
                     </label>
                 </div>
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="nurodytas_tevas" value="true">
+                        <input type="checkbox" name="nurodytas_tevas" value="1">
                         Nurodytas tėvas
                     </label>
                 </div>
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="nurodyta_motina" value="true">
+                        <input type="checkbox" name="nurodyta_motina" value="1">
                         Nurodyta motina
                     </label>
                 </div>
 
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox" name="su_nuotrauka" value="true">
+                        <input type="checkbox" name="su_nuotrauka" value="1">
                         Su nuotrauka
                     </label>
                 </div>
 
                 <div>
                     <label class="field" for="miestas">Miestas</label>
-                    <input type="text" id="miestas" name="miestas" 
-                    class="form-control input-sm" required="true" value="">
+                    <input type="text" id="miestas" name="miestas" class="form-control input-sm" value="">
                 </div>
                 
                 <input type="submit" class="submit btn btn-success" name="submit" value="Registruoti">

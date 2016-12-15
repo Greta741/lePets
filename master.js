@@ -53,6 +53,12 @@ server.route({
     path: '/naujapren',
     handler: prenumeratos.registerSubscriptionView,
 });
+
+server.route({
+    method: 'POST',
+    path: '/naujapren',
+    handler: prenumeratos.registerSubscription,
+});
 /* Prenumeratų valdiklio routes pabaiga  */
 
 /* Veislių valdiklio routes  */
