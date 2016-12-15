@@ -172,7 +172,11 @@ const insertNewSubBreed = (request, reply) => {
     };
     data.image = `<img class="v-image" src="${payload.nuotraukos_url}" alt="img"></img>`;
     connection.query('insert into nuotrauka set ?', nuotrauka, (err, result) => {
-      reply.view('./veisles/poveislesRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
+      connection.query('select poveisliu_kiekis from veisle where id', payload.veisle, (err, pov_kiekis) => {
+        connection.query('update veisle set poveisliu_kiekis = ? where id = ?', [++pov_kiekis[0].poveisliu_kiekis, payload.veisle], (err, result) => {
+          reply.view('./veisles/poveislesRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
+        });
+      });
     });
   });
 };
