@@ -287,6 +287,46 @@ const showSubbreedPage = (request, reply) => {
   });
 }
 
+const chooseReport = (request, reply) => {
+    let nera = true;
+    reply.view('./veisles/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), nera});
+};
+
+const report = (request, reply) => {
+   if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
+
+  let data = {};
+
+  if(request.payload.tipas == 'veisle') {
+    connection.query('select * from veisle', (err, veisle) => {
+      data.veisles = veisle;
+      data.veisles.forEach((item) => {
+        item.registravimo_data = formatDate(item.registravimo_data);
+        item.redagavimo_data = formatDate(item.redagavimo_data);
+      });
+      
+      reply.view('./veisles/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
+  } else if(request.payload.tipas == 'poveisle'){
+    connection.query('select * from poveisle', (err, poveisle) => {
+      data.poveisles = poveisle;
+      data.poveisles.forEach((item) => {
+          item.registravimo_data = formatDate(item.registravimo_data);
+          item.redagavimo_data = formatDate(item.redagavimo_data);
+          // item.veisle = veisPav[0].pavadinimas;
+      });
+      data.poveisles = poveisle;
+      reply.view('./veisles/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
+  }
+};
+
 module.exports = {
   allBreeds,
   registerView,
@@ -299,4 +339,6 @@ module.exports = {
   editSubBreed,
   showPage,
   showSubbreedPage,
+  chooseReport,
+  report,
 }
