@@ -452,7 +452,7 @@ const generatePetsDiv = (data) => {
     } else {
       pet.nuotrauka = `<div class="pet-img" style="background-image: url('../public/noImg.jpg')"></div>`;
     }
-    pet.button = `<button class="pet-button" onclick="window.location.href='./gyvunai/${pet.id}'">Peržiūrėti</butto>`;
+    pet.button = `<button class="pet-button" onclick="window.location.href='../gyvunai/${pet.id}'">Peržiūrėti</butto>`;
   });
   return data;
 };
