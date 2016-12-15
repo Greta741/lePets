@@ -122,12 +122,87 @@ const allSubscriptions = (request, reply) => {
 
 const subscriptionView = (request, reply) => {
   const id = request.params.id;
-  connection.query('select * from prenumeratos_parinktys where id', id, (err, parinktys) => {
-    connection.query('select * from gyvunas where veislės_id = ?', [parinktys[0].veisle], (err, gyvunas) => {
-        
-      let data = {};
-      data.gyvunas = gyvunas;
-      reply.view('./prenumeratos/prenumerata.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+  connection.query('select * from prenumeratos_parinktys where id = ?', id, (err, parinktys) => {
+    connection.query('select * from gyvunas', (err, gyvunai) => {
+      
+      var data = {};
+      data.gyvunas = [];
+      let i = 0;
+      const length = gyvunai.length;
+      let deti = true;
+       console.log(parinktys);
+      gyvunai.forEach((item) => {
+        connection.query('select * from pardavimas where id = ?', item.pardavimas_id, (err, pardavimas) => {
+            console.log(pardavimas);
+          connection.query('select * from atsiemimo_vieta where id = ?', pardavimas[0].atsiemimo_vieta_id, (err, atsVieta) => {
+              console.log(atsVieta);
+            if(parinktys[0].veisle !== null && parinktys[0].veisle !== item.veislės_id) {
+                deti = false;
+                // console.log(parinktys.veisle);
+            }
+
+            if(parinktys[0].tipas !== null && parinktys[0].tipas !== item.tipas_id) {
+                deti = false;
+                // console.log(parinktys[0].tipas);
+            }
+
+            if(parinktys[0].max_kaina !== null && parinktys[0].max_kaina <= pardavimas.kaina) {
+                deti = false;
+                // console.log(parinktys[0].max_kaina);
+            }
+
+            if(parinktys[0].min_kaina !== null && parinktys[0].min_kaina >= pardavimas.kaina) {
+                deti = false;
+                // console.log(parinktys[0].min_kaina);
+            }
+
+            if(parinktys[0].max_amzius !== null && parinktys[0].max_amzius <= item.amzius) {
+                deti = false;
+                // console.log(parinktys[0].max_amzius);
+            }
+
+            if(parinktys[0].min_amzius !== null && parinktys[0].min_amzius >= item.amzius) {
+                deti = false;
+                // console.log(parinktys[0].min_amzius);
+            }
+
+            if(parinktys[0].turi_apdovanojima !== null && item.apdovanojimas_id === null) {
+                deti = false;
+                // console.log(parinktys[0].turi_apdovanojima);
+            }
+
+            if(parinktys[0].nurodytas_tevas !== null && item.tevas === null) {
+                deti = false;
+                // console.log(parinktys[0].nurodytas_tevas);
+            }
+
+            if(parinktys[0].nurodyta_motina !== null && item.motina === null) {
+                deti = false;
+                // console.log(parinktys[0].nurodyta_motina);
+            }
+
+            if(parinktys[0].su_nuotrauka !== null && item.nuotrauka === null) {
+                deti = false;
+                // console.log(parinktys[0].su_nuotrauka);
+            }
+
+            if(parinktys[0].miestas !== null && parinktys[0].miestas !== atsVieta[0].miestas) {
+                deti = false;
+            }
+
+            if(deti) {
+                item.registravimo_data = formatDate(item.registravimo_data);
+                data.gyvunas.push(item);
+            }
+            
+            deti = true;
+            i++;
+            if(length === i) {
+                reply.view('./prenumeratos/prenumerata.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+            }
+          });
+        });
+      });
     });
   });
 };
