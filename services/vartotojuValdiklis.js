@@ -170,7 +170,7 @@ const generateNavBar = (session) => {
             htmlData.navbar += '<li><a href="/messages">Žinutės</a></li>';
         }
         if (session.prenumeratosRegistravimas == 'yes') {
-            htmlData.navbar += '<li><a href="/naujapren">Prenumerata</a></li>';
+            htmlData.navbar += '<li><a href="/visospren">Prenumerata</a></li>';
         }
 
         htmlData.navbar += '<li><a href="/logout">Atsijungti</a></li>' +

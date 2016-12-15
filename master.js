@@ -50,6 +50,12 @@ server.route({
 /* Prenumeratų valdiklio routes  */
 server.route({
     method: 'GET',
+    path: '/visospren',
+    handler: prenumeratos.allSubscriptions,
+});
+
+server.route({
+    method: 'GET',
     path: '/naujapren',
     handler: prenumeratos.registerSubscriptionView,
 });
@@ -58,6 +64,12 @@ server.route({
     method: 'POST',
     path: '/naujapren',
     handler: prenumeratos.registerSubscription,
+});
+
+server.route({
+    method: 'Get',
+    path: '/prenumerata/{id?}',
+    handler: prenumeratos.subscriptionView,
 });
 /* Prenumeratų valdiklio routes pabaiga  */
 

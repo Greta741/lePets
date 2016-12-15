@@ -93,7 +93,48 @@ const registerSubscription = (request, reply) => {
     });
 };
 
+const formatDate = (data) => {
+  const date = new Date(data);
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+};
+
+const allSubscriptions = (request, reply) => {
+  const data = {};
+  connection.query('select * from prenumerata where vartotojas = ?', request.state.session.user_id, (err, prenumerata) => {
+    if (prenumerata.length === 0) {
+      data.message = 'Prenumeratų sistemoje nėra.';
+      reply.view('./prenumeratos/visosPrenumeratos.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+      return;       
+    }
+    else {
+      data.prenumeratos = prenumerata;
+      let i = 1;
+      data.prenumeratos.forEach((item) => {
+        item.registravimo_data = formatDate(item.registravimo_data);
+        item.galioja_iki = formatDate(item.galioja_iki);
+        item.pavadinimas = 'Prenumerata Nr. ' + i;
+        i++;
+      });
+      reply.view('./prenumeratos/visosPrenumeratos.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    }      
+  });
+};
+
+const subscriptionView = (request, reply) => {
+  const id = request.params.id;
+  connection.query('select * from prenumeratos_parinktys where id', id, (err, parinktys) => {
+    connection.query('select * from gyvunas where veislės_id = ?', [parinktys[0].veisle], (err, gyvunas) => {
+        
+      let data = {};
+      data.gyvunas = gyvunas;
+      reply.view('./prenumeratos/prenumerata.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
+    });
+  });
+};
+
 module.exports = {
+    allSubscriptions,
     registerSubscriptionView,
     registerSubscription,
+    subscriptionView,
 }
