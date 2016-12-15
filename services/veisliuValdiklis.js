@@ -28,10 +28,24 @@ const allBreeds = (request, reply) => {
 };
 
 const registerView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   reply.view('./veisles/veislesRegistracija.html', {htmlData: vartotojai.generateNavBar(request.state.session)});
 };
 
 const registerSubBreedView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   connection.query('select * from veisle', (err, veisle) => {
     let data = {};
     data.veisle = veisle;
@@ -40,6 +54,13 @@ const registerSubBreedView = (request, reply) => {
 };
 
 const editView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const id = request.params.id;
 
   let data = {};
@@ -98,6 +119,13 @@ const editView = (request, reply) => {
 };
 
 const editSubbreedView = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const id = request.params.id;
 
   let data = {};
@@ -125,6 +153,13 @@ const editSubbreedView = (request, reply) => {
 };
 
 const insertNew = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   payload = request.payload;
   const veisle = {
     redagavimo_data: new Date(),
@@ -133,8 +168,8 @@ const insertNew = (request, reply) => {
     dydis: payload.gyv_dyd_select,
     aprasymas: payload.aprasymas,
     registravimo_data: new Date(),
-    gyvunu_kiekis: 2,
-    poveisliu_kiekis: 2,
+    gyvunu_kiekis: 0,
+    poveisliu_kiekis: 0,
   };
 
   let data = {};
@@ -152,6 +187,13 @@ const insertNew = (request, reply) => {
   });
 };
 const insertNewSubBreed = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   payload = request.payload;
   const poveisle = {
     veisle: payload.veisle,
@@ -159,7 +201,7 @@ const insertNewSubBreed = (request, reply) => {
     pavadinimas: payload.pavadinimas,
     aprasymas: payload.aprasymas,
     registravimo_data: new Date(),
-    gyvunu_kiekis: 2,
+    gyvunu_kiekis: 0,
   };
   console.log(poveisle);
   let data = {};
@@ -182,6 +224,13 @@ const insertNewSubBreed = (request, reply) => {
 };
 
 const editBreed = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const id = request.params.id;
   const payload = request.payload;
   const veisle = {
@@ -191,8 +240,8 @@ const editBreed = (request, reply) => {
     dydis: payload.gyv_dyd_select,
     aprasymas: payload.aprasymas,
     registravimo_data: payload.registravimo_data,
-    gyvunu_kiekis: 2,
-    poveisliu_kiekis: 2,
+    gyvunu_kiekis: 0,
+    poveisliu_kiekis: 0,
   };
 
   let data = {};
@@ -213,6 +262,13 @@ const editBreed = (request, reply) => {
 };
 
 const editSubBreed = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   const id = request.params.id;
   const payload = request.payload;
   const poveisle = {
@@ -221,8 +277,8 @@ const editSubBreed = (request, reply) => {
     pavadinimas: payload.pavadinimas,
     aprasymas: payload.aprasymas,
     registravimo_data: payload.registravimo_data,
-    gyvunu_kiekis: 2,
-    poveisliu_kiekis: 2,
+    gyvunu_kiekis: 0,
+    poveisliu_kiekis: 0,
   };
   console.log(poveisle);
   let data = {};
@@ -292,6 +348,13 @@ const showSubbreedPage = (request, reply) => {
 }
 
 const chooseReport = (request, reply) => {
+  if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.perziuretiAtaskaitas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
     let nera = true;
     reply.view('./veisles/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), nera});
 };
@@ -304,7 +367,13 @@ const report = (request, reply) => {
     reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
     return;
   }
-
+if (!request.state.session) {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima, prisijunkite.'}});
+    return;
+  } else if (request.state.session.veislesRegistravimas !== 'yes') {
+    reply.view('message.html', {htmlData: vartotojai.generateNavBar(request.state.session), data: {message: 'Negalima'}});
+    return;
+  }
   let data = {};
 
   if(request.payload.tipas == 'veisle') {
@@ -323,7 +392,6 @@ const report = (request, reply) => {
       data.poveisles.forEach((item) => {
           item.registravimo_data = formatDate(item.registravimo_data);
           item.redagavimo_data = formatDate(item.redagavimo_data);
-          // item.veisle = veisPav[0].pavadinimas;
       });
       data.poveisles = poveisle;
       reply.view('./veisles/ataskaita.html', {htmlData: vartotojai.generateNavBar(request.state.session), data});
